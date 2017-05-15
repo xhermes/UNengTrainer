@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import me.xeno.unengtrainer.R;
+import me.xeno.unengtrainer.util.ActivityUtils;
+import me.xeno.unengtrainer.view.fragment.MainControlFragment;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -49,6 +51,26 @@ public class MainActivity extends BaseActivity
         toggle.syncState();
 
         mNavigationView.setNavigationItemSelectedListener(this);
+
+
+
+        MainControlFragment mainControlFragment =
+                (MainControlFragment) getSupportFragmentManager().findFragmentById(
+                        R.id.contentFrame);
+
+
+        if (mainControlFragment == null) {
+            mainControlFragment = MainControlFragment.newInstance();
+
+            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
+                    mainControlFragment, R.id.contentFrame);
+        }
+
+
+
+
+
+
     }
 
     @Override
@@ -81,14 +103,14 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_bluetooth) {
-            Toast.makeText(this, "蓝牙", Toast.LENGTH_LONG).show();
-            return true;
-        }
-        if (id == R.id.action_favourite) {
-            Toast.makeText(this, "收藏", Toast.LENGTH_LONG).show();
-            return true;
-        }
+//        if (id == R.id.action_bluetooth) {
+//            Toast.makeText(this, "蓝牙", Toast.LENGTH_LONG).show();
+//            return true;
+//        }
+//        if (id == R.id.action_favorite) {
+//            Toast.makeText(this, "收藏", Toast.LENGTH_LONG).show();
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }

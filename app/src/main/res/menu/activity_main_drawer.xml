@@ -6,19 +6,23 @@
             android:id="@+id/nav_data"
             android:icon="@drawable/ic_data"
             android:title="查看数据" />
+        <item
+            android:id="@+id/nav_favourite"
+            android:icon="@drawable/ic_data"
+            android:title="我的收藏" />
     </group>
 
-    <!--<item android:title="Communicate">-->
-        <!--<menu>-->
-            <!--<item-->
-                <!--android:id="@+id/nav_share"-->
-                <!--android:icon="@drawable/ic_menu_share"-->
-                <!--android:title="Share" />-->
-            <!--<item-->
-                <!--android:id="@+id/nav_send"-->
-                <!--android:icon="@drawable/ic_menu_send"-->
-                <!--android:title="Send" />-->
-        <!--</menu>-->
-    <!--</item>-->
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_setting"
+                android:icon="@drawable/ic_menu_share"
+                android:title="设置" />
+            <item
+                android:id="@+id/nav_equipment"
+                android:icon="@drawable/ic_menu_send"
+                android:title="我的设备" />
+        </menu>
+    </item>
 
 </menu>

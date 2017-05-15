@@ -8,6 +8,7 @@
 
     <dimen name="text_size_sub_title">20dp</dimen>
     <dimen name="text_size_title">30dp</dimen>
+    <dimen name="text_size_button">18dp</dimen>
     <dimen name="text_size_content">16dp</dimen>
     <dimen name="text_size_small">14dp</dimen>
     <dimen name="text_size_tiny">12dp</dimen>

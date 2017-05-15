@@ -11,4 +11,7 @@
     <color name="grey33">#333333</color>
     <color name="grey66">#666666</color>
     <color name="grey99">#999999</color>
+    <color name="greyBackground">#f1f1f1</color>
+
+    <color name="ripplePrimaryButton">#999999</color>
 </resources>
