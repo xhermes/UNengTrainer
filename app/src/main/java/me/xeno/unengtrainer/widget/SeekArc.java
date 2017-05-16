@@ -503,7 +503,8 @@ public class SeekArc extends View {
         int thumbHalfWidth = (int) mThumb.getIntrinsicWidth() / 2;
         mTouchInside = isEnabled;
         if (mTouchInside) {
-            mTouchIgnoreRadius = (float) mArcRadius / 4;
+            //mTouchIgnoreRadius = (float) mArcRadius / 4;
+            mTouchIgnoreRadius = (float) mArcRadius / 2;
         } else {
             // Don't use the exact radius makes interaction too tricky
             mTouchIgnoreRadius = mArcRadius

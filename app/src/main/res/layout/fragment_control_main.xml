@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:seekarc="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -9,80 +9,140 @@
 
 
     <!--<me.rorschach.library.ShaderSeekArc-->
-        <!--android:id="@+id/seek_arc"-->
-        <!--android:layout_width="300dp"-->
-        <!--android:layout_height="300dp"-->
-        <!--android:layout_gravity="center"-->
-        <!--app:arcWidthRate="0.1"-->
-        <!--app:endAngle="0"-->
-        <!--app:endColor="@color/colorPrimary"-->
-        <!--app:endValue="90"-->
-        <!--app:lineColor="@color/colorPrimary"-->
-        <!--app:markColor="@color/colorPrimary"-->
-        <!--app:markSize="30"-->
-        <!--app:progress="24"-->
-        <!--app:progressTextColor="@color/colorPrimary"-->
-        <!--app:progressTextSize="35"-->
-        <!--app:showMark="true"-->
-        <!--app:showProgress="true"-->
-        <!--app:startAngle="-180"-->
-        <!--app:startColor="@color/colorPrimary"-->
-        <!--app:startValue="-90" />-->
+    <!--android:id="@+id/seek_arc"-->
+    <!--android:layout_width="300dp"-->
+    <!--android:layout_height="300dp"-->
+    <!--android:layout_gravity="center"-->
+    <!--app:arcWidthRate="0.1"-->
+    <!--app:endAngle="0"-->
+    <!--app:endColor="@color/colorPrimary"-->
+    <!--app:endValue="90"-->
+    <!--app:lineColor="@color/colorPrimary"-->
+    <!--app:markColor="@color/colorPrimary"-->
+    <!--app:markSize="30"-->
+    <!--app:progress="24"-->
+    <!--app:progressTextColor="@color/colorPrimary"-->
+    <!--app:progressTextSize="35"-->
+    <!--app:showMark="true"-->
+    <!--app:showProgress="true"-->
+    <!--app:startAngle="-180"-->
+    <!--app:startColor="@color/colorPrimary"-->
+    <!--app:startValue="-90" />-->
+
 
     <me.xeno.unengtrainer.widget.SeekArc
         android:id="@+id/seekArc"
         android:layout_width="300dp"
         android:layout_height="300dp"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="center"
+        android:layout_marginTop="50dp"
         android:padding="30dp"
+        seekarc:arcWidth="3dp"
+        seekarc:progressColor="@color/colorAccent"
+        seekarc:progressWidth="3dp"
         seekarc:rotation="180"
         seekarc:startAngle="90"
         seekarc:sweepAngle="180"
-        seekarc:progressColor="@color/colorPrimary"
-        seekarc:touchInside="false" />
+        seekarc:touchInside="true" />
 
     <LinearLayout
+        android:id="@+id/angle_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/seekArc"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                style="@style/TextContentGrey99"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="摆角" />
+            <TextView
+                android:id="@+id/swing_angle"
+                style="@style/TextContentGrey99"
+                android:layout_marginLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+            <TextView
+                style="@style/TextContentGrey99"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="仰角" />
+            <TextView
+                android:id="@+id/elevation_angle"
+                style="@style/TextContentGrey99"
+                android:layout_marginLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
+        android:id="@+id/elevation_angle_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/angle_layout">
+
+        <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
+            android:id="@+id/mySeekBar"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:splitTrack="false"
+            app:seekBarRotation="CW270" />
+    </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+
+
+    <LinearLayout
+        android:layout_below="@id/elevation_angle_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginLeft="30dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <TextView
-            style="@style/TextSubTitleGrey66"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="right"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:text="摆角" />
+            android:text="0"
+            style="@style/TextTinyGrey99"/>
 
         <android.support.v7.widget.AppCompatSeekBar
             android:layout_width="218dp"
             android:layout_height="50dp"
             android:layout_gravity="center_horizontal" />
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
 
         <TextView
-            style="@style/TextSubTitleGrey66"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="right"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:text="仰角" />
+            android:text="100"
+            style="@style/TextTinyGrey99"/>
 
-        <android.support.v7.widget.AppCompatSeekBar
-            android:layout_width="218dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_horizontal" />
+        <TextView
+            style="@style/TextContentGrey99"
+            android:layout_width="100dp"
+            android:layout_marginLeft="10dp"
+            android:layout_height="wrap_content"
+            android:text="左轮速" />
+
+
     </LinearLayout>
 
     <LinearLayout
@@ -92,17 +152,13 @@
         android:orientation="horizontal">
 
         <TextView
-            style="@style/TextSubTitleGrey66"
-            android:layout_width="100dp"
+            style="@style/TextContentGrey99"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="right"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
             android:text="左轮速" />
 
         <android.support.v7.widget.AppCompatSeekBar
             android:layout_width="218dp"
-
             android:layout_height="50dp"
             android:layout_gravity="center_horizontal" />
     </LinearLayout>
@@ -132,4 +188,4 @@
         android:layout_width="match_parent"
         android:layout_height="100dp" />
 
-</LinearLayout>
+</RelativeLayout>
