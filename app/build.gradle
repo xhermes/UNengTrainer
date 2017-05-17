@@ -34,4 +34,5 @@ dependencies {
 //    compile 'com.github.rorschach:ShaderSeekArc:v1.11'
 //    compile 'com.github.Triggertrap:SeekArc:v1.1'
     compile 'com.h6ah4i.android.widget.verticalseekbar:verticalseekbar:0.7.2'
+    compile 'com.afollestad.material-dialogs:core:0.9.4.5'
 }

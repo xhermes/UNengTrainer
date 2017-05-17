@@ -12,29 +12,44 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
+
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import me.xeno.unengtrainer.R;
+import me.xeno.unengtrainer.util.ActivityUtils;
 import me.xeno.unengtrainer.view.adapter.MainPagerAdapter;
+import me.xeno.unengtrainer.view.adapter.ShortcutAdapter;
+import me.xeno.unengtrainer.view.fragment.BluetoothFragment;
 import me.xeno.unengtrainer.view.fragment.MainControlFragment;
 import me.xeno.unengtrainer.view.fragment.ShortcutFragment;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        BluetoothFragment.OnConnectSuccessListener {
+
+    private MainControlFragment mMainControlFragment;
+    private BluetoothFragment mBlueToothFragment;
 
 
     private FloatingActionButton mFloatingActionBtn;
     private Toolbar mToolbar;
-    private TabLayout mTabLayout;
+    //    private TabLayout mTabLayout;
     private DrawerLayout mDrawer;
     private NavigationView mNavigationView;
 
-    private ViewPager mViewPager;
-    private MainPagerAdapter mPagerAdapter;
+    private View mBottomActionBar;
+    private View mFavouriteBtn;
+    private View mSettingBtn;
 
-    private List<Fragment> mFragmentList = new ArrayList<>();
+//    private ViewPager mViewPager;
+//    private MainPagerAdapter mPagerAdapter;
+
+//    private List<Fragment> mFragmentList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,14 +64,19 @@ public class MainActivity extends BaseActivity
     @Override
     protected void findViewById() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mTabLayout = (TabLayout) findViewById(R.id.tab);
+//        mTabLayout = (TabLayout) findViewById(R.id.tab);
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
-        mViewPager = (ViewPager) findViewById(R.id.view_pager);
+//        mViewPager = (ViewPager) findViewById(R.id.view_pager);
+
+        mBottomActionBar = findViewById(R.id.bottom_action_bar);
+        mFavouriteBtn = findViewById(R.id.favourite_btn);
     }
 
     @Override
     protected void initView() {
+
+        mToolbar.setTitle("未连接");
         setSupportActionBar(mToolbar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -65,9 +85,19 @@ public class MainActivity extends BaseActivity
         toggle.syncState();
 
         mNavigationView.setNavigationItemSelectedListener(this);
+        mFavouriteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new MaterialDialog.Builder(MainActivity.this)
+                        .title("收藏")
+                        // second parameter is an optional layout manager. Must be a LinearLayoutManager or GridLayoutManager.
+                        .adapter(new ShortcutAdapter(), null)
+                        .show();
+            }
+        });
 
         prepareFragments();
-        mTabLayout.setupWithViewPager(mViewPager);
+//        mTabLayout.setupWithViewPager(mViewPager);
     }
 
     @Override
@@ -76,15 +106,41 @@ public class MainActivity extends BaseActivity
     }
 
     private void prepareFragments() {
-        MainControlFragment fragment1 = new MainControlFragment();
-        ShortcutFragment fragment2 = new ShortcutFragment();
+//        MainControlFragment fragment1 = new MainControlFragment();
+//        ShortcutFragment fragment2 = new ShortcutFragment();
+//
+//        mFragmentList.add(fragment1);
+//        mFragmentList.add(fragment2);
+//
+//        BluetoothFragment bluetoothFragment =
+//                (BluetoothFragment) getSupportFragmentManager().findFragmentById(
+//                        R.id.frame_content);
 
-        mFragmentList.add(fragment1);
-        mFragmentList.add(fragment2);
 
-        mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), mFragmentList);
-        mViewPager.setAdapter(mPagerAdapter);
+        showBlueToothFragment();
+        setmBottomBarVisibility(View.GONE);
 
+//        mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), mFragmentList);
+//        mViewPager.setAdapter(mPagerAdapter);
+
+    }
+
+    public void setmBottomBarVisibility(int visibility) {
+        mBottomActionBar.setVisibility(visibility);
+    }
+
+    public void showMainControlFragment() {
+        if (mMainControlFragment == null) {
+            mMainControlFragment = MainControlFragment.newInstance();
+        }
+        ActivityUtils.replaceFragment(getSupportFragmentManager(), mMainControlFragment, R.id.frame_content);
+    }
+
+    public void showBlueToothFragment() {
+        if (mBlueToothFragment == null) {
+            mBlueToothFragment = BluetoothFragment.newInstance();
+        }
+        ActivityUtils.replaceFragment(getSupportFragmentManager(), mBlueToothFragment, R.id.frame_content);
     }
 
     @Override
@@ -112,10 +168,10 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_bluetooth) {
-//            Toast.makeText(this, "蓝牙", Toast.LENGTH_LONG).show();
-//            return true;
-//        }
+        if (id == R.id.action_clear) {
+            Toast.makeText(this, "置零", Toast.LENGTH_LONG).show();
+            return true;
+        }
 //        if (id == R.id.action_favorite) {
 //            Toast.makeText(this, "收藏", Toast.LENGTH_LONG).show();
 //            return true;
@@ -130,12 +186,20 @@ public class MainActivity extends BaseActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if  (id == R.id.nav_data) {
+        if (id == R.id.nav_data) {
 
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return false;
+    }
+
+    @Override
+    public void onConnect() {
+        showMainControlFragment();
+        setmBottomBarVisibility(View.VISIBLE);
+        mToolbar.setTitle("机器00001");
+
     }
 }

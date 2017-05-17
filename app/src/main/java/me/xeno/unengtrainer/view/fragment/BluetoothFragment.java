@@ -1,6 +1,7 @@
 package me.xeno.unengtrainer.view.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,6 +22,8 @@ public class BluetoothFragment extends Fragment {
 
     public static final String ARGUMENT_EDIT_TASK_ID = "EDIT_TASK_ID";
 
+    private OnConnectSuccessListener mCallback;
+
     private TextView mConnectBtn;
 
     private TextView mDescription;
@@ -38,6 +41,11 @@ public class BluetoothFragment extends Fragment {
         super.onResume();
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCallback = (OnConnectSuccessListener) context;
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -51,6 +59,13 @@ public class BluetoothFragment extends Fragment {
 //            public void onClick(View v) {
 //            }
 //        });
+
+        mConnectBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback.onConnect();
+            }
+        });
     }
 
     @Nullable
@@ -64,5 +79,10 @@ public class BluetoothFragment extends Fragment {
         setRetainInstance(true);
         return root;
     }
+
+    public interface OnConnectSuccessListener {
+        void onConnect();
+    }
+
 
 }

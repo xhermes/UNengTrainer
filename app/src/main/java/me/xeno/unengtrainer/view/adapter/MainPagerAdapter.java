@@ -12,7 +12,7 @@ import java.util.List;
 
 public class MainPagerAdapter extends FragmentPagerAdapter {
 
-    public static final String[] TABS = {"控制器", "快捷方式"};
+    public static final String[] TABS = {"控制器", "收藏"};
 
     public static final int PAGE_MAIN_CONTROL = 0;
     public static final int PAGE_SHORTCUT = 1;

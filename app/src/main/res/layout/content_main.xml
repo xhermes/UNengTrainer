@@ -8,48 +8,61 @@
     tools:context="me.xeno.unengtrainer.view.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/view_pager"
+    <!--<android.support.v4.view.ViewPager-->
+        <!--android:id="@+id/view_pager"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
+
+    <FrameLayout
+        android:id="@+id/frame_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/bottom_action_bar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/white"
-        android:elevation="2dp"
-        android:orientation="horizontal">
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true">
 
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:paddingTop="11dp"
-            android:paddingBottom="11dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/selector_button_white"
-            app:srcCompat="@drawable/ic_favourite"
-            android:layout_weight="1" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/white"
+            android:layout_alignParentBottom="true"
+            android:elevation="2dp"
+            android:orientation="horizontal">
 
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:paddingTop="11dp"
-            android:paddingBottom="11dp"
-            android:layout_marginLeft="15dp"
-            android:background="@drawable/selector_button_white"
-            app:srcCompat="@drawable/ic_settings"
-            android:layout_weight="1" />
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/favourite_btn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="15dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_button_white"
+                android:paddingBottom="11dp"
+                android:paddingTop="11dp"
+                app:srcCompat="@drawable/ic_favourite" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/send_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        app:srcCompat="@drawable/ic_send" />
+            <ImageView
+                android:id="@+id/setting_btn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_button_white"
+                android:paddingBottom="11dp"
+                android:paddingTop="11dp"
+                app:srcCompat="@drawable/ic_settings" />
+        </LinearLayout>
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/send_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            app:srcCompat="@drawable/ic_send" />
+    </RelativeLayout>
 
 </RelativeLayout>

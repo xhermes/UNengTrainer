@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:seekarc="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/greyBackground"
+    android:orientation="horizontal">
+
+<RelativeLayout
+    android:id="@+id/control_panel_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="visible"
     android:orientation="vertical">
 
 
@@ -59,17 +66,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <TextView
                 style="@style/TextContentGrey99"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="摆角" />
+
             <TextView
                 android:id="@+id/swing_angle"
-                style="@style/TextContentGrey99"
-                android:layout_marginLeft="10dp"
+                style="@style/TextMainControlNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:text="12" />
         </LinearLayout>
 
@@ -78,17 +87,19 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:orientation="horizontal">
+
             <TextView
                 style="@style/TextContentGrey99"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="仰角" />
+
             <TextView
                 android:id="@+id/elevation_angle"
-                style="@style/TextContentGrey99"
-                android:layout_marginLeft="10dp"
+                style="@style/TextMainControlNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:text="12" />
         </LinearLayout>
     </LinearLayout>
@@ -97,9 +108,9 @@
         android:id="@+id/elevation_angle_bar"
         android:layout_width="wrap_content"
         android:layout_height="100dp"
-        android:layout_marginTop="10dp"
+        android:layout_below="@id/angle_layout"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/angle_layout">
+        android:layout_marginTop="10dp">
 
         <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
             android:id="@+id/mySeekBar"
@@ -111,81 +122,88 @@
 
 
     <LinearLayout
+        android:id="@+id/left_speed_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/elevation_angle_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="20dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <TextView
+            style="@style/TextTinyGrey99"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0"
-            style="@style/TextTinyGrey99"/>
+            android:text="0" />
 
         <android.support.v7.widget.AppCompatSeekBar
-            android:layout_width="218dp"
+            android:layout_width="180dp"
             android:layout_height="50dp"
             android:layout_gravity="center_horizontal" />
 
         <TextView
+            style="@style/TextTinyGrey99"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="100"
-            style="@style/TextTinyGrey99"/>
+            android:text="100" />
 
         <TextView
             style="@style/TextContentGrey99"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="左轮速" />
+
+        <TextView
+            android:id="@+id/left_speed"
+            style="@style/TextMainControlNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_height="wrap_content"
-            android:text="左轮速" />
-
-
+            android:text="12" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/left_speed_layout"
+        android:layout_marginLeft="20dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
+
+        <TextView
+            style="@style/TextTinyGrey99"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0" />
+
+        <android.support.v7.widget.AppCompatSeekBar
+            android:layout_width="180dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            style="@style/TextTinyGrey99"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100" />
 
         <TextView
             style="@style/TextContentGrey99"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="左轮速" />
-
-        <android.support.v7.widget.AppCompatSeekBar
-            android:layout_width="218dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_horizontal" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <TextView
-            style="@style/TextSubTitleGrey66"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
+            android:layout_marginLeft="20dp"
             android:text="右轮速" />
 
-        <android.support.v7.widget.AppCompatSeekBar
-            android:layout_width="218dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_horizontal" />
+        <TextView
+            android:id="@+id/right_speed"
+            style="@style/TextMainControlNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="12" />
     </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="100dp" />
-
 </RelativeLayout>
+
+</LinearLayout>

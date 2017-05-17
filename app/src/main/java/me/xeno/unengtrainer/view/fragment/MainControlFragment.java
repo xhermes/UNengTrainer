@@ -16,9 +16,7 @@ import me.xeno.unengtrainer.R;
  */
 public class MainControlFragment extends Fragment {
 
-    public static final String ARGUMENT_EDIT_TASK_ID = "EDIT_TASK_ID";
-
-    private TextView mConnectBtn;
+    private View mControlPanelLayout;
 
     private TextView mDescription;
 
@@ -42,6 +40,8 @@ public class MainControlFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+
+
 //        mFloatingActionBtn =
 //                (FloatingActionButton) getActivity().findViewById(R.id.fab_edit_task_done);
 //        fab.setImageResource(R.drawable.ic_done);
@@ -58,9 +58,16 @@ public class MainControlFragment extends Fragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_control_main, container, false);
 
+        mControlPanelLayout = root.findViewById(R.id.control_panel_root);
+
+        initView();
+
         setHasOptionsMenu(true);
         setRetainInstance(true);
         return root;
+    }
+
+    private void initView() {
     }
 
 }
