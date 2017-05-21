@@ -30,9 +30,11 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
 
-    compile 'com.clj.fastble:FastBleLib:1.1.1'
+    compile 'com.clj.fastble:FastBleLib:1.1.1'//bluetooth lib
 //    compile 'com.github.rorschach:ShaderSeekArc:v1.11'
 //    compile 'com.github.Triggertrap:SeekArc:v1.1'
+    compile "io.reactivex.rxjava2:rxjava:2.1.0"
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     compile 'com.h6ah4i.android.widget.verticalseekbar:verticalseekbar:0.7.2'
     compile 'com.afollestad.material-dialogs:core:0.9.4.5'
 }

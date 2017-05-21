@@ -1,7 +1,9 @@
 package me.xeno.unengtrainer.view.fragment;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,11 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import me.xeno.unengtrainer.R;
+import com.afollestad.materialdialogs.MaterialDialog;
 
-/**
- * Main UI for the add task screen. Users can enter a task title and description.
- */
+import me.xeno.unengtrainer.R;
+import me.xeno.unengtrainer.application.DataManager;
+
+
 public class BluetoothFragment extends Fragment {
 
     public static final String ARGUMENT_EDIT_TASK_ID = "EDIT_TASK_ID";
@@ -63,7 +66,10 @@ public class BluetoothFragment extends Fragment {
         mConnectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallback.onConnect();
+                //TODO
+//                mCallback.onConnect();
+
+                requestEnableBluetooth();
             }
         });
     }
@@ -78,6 +84,17 @@ public class BluetoothFragment extends Fragment {
         setHasOptionsMenu(true);
         setRetainInstance(true);
         return root;
+    }
+
+    public void requestEnableBluetooth() {
+        //TODO needs more test on different phones
+
+//        Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//        // 设置蓝牙可见性，最多300秒
+//        intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
+//        getActivity().startActivity(intent);
+
+        DataManager.getInstance().getBleManager().enableBluetooth();
     }
 
     public interface OnConnectSuccessListener {
