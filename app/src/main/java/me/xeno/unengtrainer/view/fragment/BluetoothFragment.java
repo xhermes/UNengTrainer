@@ -17,8 +17,12 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import java.lang.ref.WeakReference;
+
 import me.xeno.unengtrainer.R;
 import me.xeno.unengtrainer.application.DataManager;
+import me.xeno.unengtrainer.view.activity.BaseActivity;
+import me.xeno.unengtrainer.view.activity.BluetoothListActivity;
 
 
 public class BluetoothFragment extends Fragment {
@@ -94,7 +98,12 @@ public class BluetoothFragment extends Fragment {
 //        intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
 //        getActivity().startActivity(intent);
 
-        DataManager.getInstance().getBleManager().enableBluetooth();
+        if(DataManager.getInstance().getBleManager().isBlueEnable()) {
+            //go to BluetoothListActivity if bluetooth enable
+            BluetoothListActivity.goFromActivity(new WeakReference<>((BaseActivity) getActivity()));
+        } else {
+            DataManager.getInstance().getBleManager().enableBluetooth();
+        }
     }
 
     public interface OnConnectSuccessListener {

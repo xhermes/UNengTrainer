@@ -1,11 +1,11 @@
-package me.xeno.unengtrainer.view;
+package me.xeno.unengtrainer.view.activity;
 
-import android.content.Intent;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+
+import java.lang.ref.WeakReference;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -20,7 +20,7 @@ import me.xeno.unengtrainer.util.RxUtils;
 
 public class SplashActivity extends BaseActivity {
 
-    private static final int SPLASH_ENTER_TIME = 4;
+    private static final int SPLASH_ENTER_TIME = 2;
 
     private Disposable mTimerDisposable;
 
@@ -40,14 +40,14 @@ public class SplashActivity extends BaseActivity {
             mTimerDisposable = RxUtils.timer(SPLASH_ENTER_TIME).subscribe(new Consumer<Long>() {
                 @Override
                 public void accept(@io.reactivex.annotations.NonNull Long aLong) throws Exception {
-                    Intent intent = new Intent();
-                    intent.setClass(SplashActivity.this, MainActivity.class);
-                    startActivity(intent);
+                  MainActivity.goFromActivity(new WeakReference<BaseActivity>(SplashActivity.this));
+                    finish();
                 }
             });
         } else {
             dialogNotSupport();
         }
+
     }
 
     @Override
