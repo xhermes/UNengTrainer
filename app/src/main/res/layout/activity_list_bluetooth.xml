@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/greyBackground"
     android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar_layout"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -29,10 +31,21 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <me.xeno.unengtrainer.widget.EmptyRecyclerView
-        android:id="@+id/recycler"
+    <FrameLayout
+        android:id="@+id/frame_content"
+        android:layout_below="@id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/refresh"
+        app:srcCompat="@drawable/ic_refresh"
+        android:layout_width="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_height="wrap_content" />
 
-</LinearLayout>
+
+</RelativeLayout>

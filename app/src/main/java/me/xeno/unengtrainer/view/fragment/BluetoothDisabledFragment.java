@@ -1,21 +1,14 @@
 package me.xeno.unengtrainer.view.fragment;
 
-import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.lang.ref.WeakReference;
 
@@ -23,9 +16,10 @@ import me.xeno.unengtrainer.R;
 import me.xeno.unengtrainer.application.DataManager;
 import me.xeno.unengtrainer.view.activity.BaseActivity;
 import me.xeno.unengtrainer.view.activity.BluetoothListActivity;
+import me.xeno.unengtrainer.view.activity.TestActivity;
 
 
-public class BluetoothFragment extends Fragment {
+public class BluetoothDisabledFragment extends Fragment {
 
     public static final String ARGUMENT_EDIT_TASK_ID = "EDIT_TASK_ID";
 
@@ -35,11 +29,11 @@ public class BluetoothFragment extends Fragment {
 
     private TextView mDescription;
 
-    public static BluetoothFragment newInstance() {
-        return new BluetoothFragment();
+    public static BluetoothDisabledFragment newInstance() {
+        return new BluetoothDisabledFragment();
     }
 
-    public BluetoothFragment() {
+    public BluetoothDisabledFragment() {
         // Required empty public constructor
     }
 
@@ -82,7 +76,7 @@ public class BluetoothFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_bluetooth, container, false);
+        View root = inflater.inflate(R.layout.fragment_bluetooth_disabled, container, false);
         mConnectBtn = (TextView) root.findViewById(R.id.connect_btn);
 
         setHasOptionsMenu(true);
@@ -101,6 +95,7 @@ public class BluetoothFragment extends Fragment {
         if(DataManager.getInstance().getBleManager().isBlueEnable()) {
             //go to BluetoothListActivity if bluetooth enable
             BluetoothListActivity.goFromActivity(new WeakReference<>((BaseActivity) getActivity()));
+
         } else {
             DataManager.getInstance().getBleManager().enableBluetooth();
         }

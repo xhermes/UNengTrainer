@@ -25,6 +25,11 @@ public class BluetoothListAdapter extends RecyclerView.Adapter<BluetoothHolder> 
         notifyDataSetChanged();
     }
 
+    public void addDataToList(BleDevice device) {
+        dataList.add(device);
+        notifyDataSetChanged();
+    }
+
     @Override
     public BluetoothHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.holder_bluetooth, null);

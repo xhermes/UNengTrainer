@@ -16,19 +16,25 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.lang.ref.WeakReference;
 
+import io.reactivex.Observable;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import me.xeno.unengtrainer.R;
 import me.xeno.unengtrainer.util.ActivityUtils;
-import me.xeno.unengtrainer.util.Logger;
+import me.xeno.unengtrainer.util.ToastUtils;
 import me.xeno.unengtrainer.view.adapter.ShortcutAdapter;
-import me.xeno.unengtrainer.view.fragment.BluetoothFragment;
+import me.xeno.unengtrainer.view.fragment.BluetoothDisabledFragment;
 import me.xeno.unengtrainer.view.fragment.MainControlFragment;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        BluetoothFragment.OnConnectSuccessListener {
+        BluetoothDisabledFragment.OnConnectSuccessListener {
 
     private MainControlFragment mMainControlFragment;
-    private BluetoothFragment mBlueToothFragment;
+    private BluetoothDisabledFragment mBlueToothDisabledFragment;
 
     private FloatingActionButton mFloatingActionBtn;
     private Toolbar mToolbar;
@@ -98,8 +104,8 @@ public class MainActivity extends BaseActivity
 //        mFragmentList.add(fragment1);
 //        mFragmentList.add(fragment2);
 //
-//        BluetoothFragment bluetoothFragment =
-//                (BluetoothFragment) getSupportFragmentManager().findFragmentById(
+//        BluetoothDisabledFragment bluetoothFragment =
+//                (BluetoothDisabledFragment) getSupportFragmentManager().findFragmentById(
 //                        R.id.frame_content);
 
         showBlueToothFragment();
@@ -122,10 +128,10 @@ public class MainActivity extends BaseActivity
     }
 
     public void showBlueToothFragment() {
-        if (mBlueToothFragment == null) {
-            mBlueToothFragment = BluetoothFragment.newInstance();
+        if (mBlueToothDisabledFragment == null) {
+            mBlueToothDisabledFragment = BluetoothDisabledFragment.newInstance();
         }
-        ActivityUtils.replaceFragment(getSupportFragmentManager(), mBlueToothFragment, R.id.frame_content);
+        ActivityUtils.replaceFragment(getSupportFragmentManager(), mBlueToothDisabledFragment, R.id.frame_content);
     }
 
     @Override
@@ -170,11 +176,12 @@ public class MainActivity extends BaseActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
 
+        mDrawer.closeDrawer(GravityCompat.START);
+
         int id = item.getItemId();
         if (id == R.id.nav_bluetooth) {
-            BluetoothListActivity.goFromActivity(new WeakReference<BaseActivity>(this));
+            BluetoothListActivity.goFromActivity(new WeakReference<BaseActivity>(MainActivity.this));
         }
-        mDrawer.closeDrawer(GravityCompat.START);
         return false;
     }
 
