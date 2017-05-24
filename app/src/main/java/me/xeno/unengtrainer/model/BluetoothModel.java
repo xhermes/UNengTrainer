@@ -10,6 +10,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.schedulers.Schedulers;
 import me.xeno.unengtrainer.application.DataManager;
+import me.xeno.unengtrainer.util.Logger;
 
 /**
  * Created by xeno on 2017/5/15.
@@ -17,7 +18,7 @@ import me.xeno.unengtrainer.application.DataManager;
 
 public class BluetoothModel {
 
-    private static final int SCAN_TIME_OUT_MILLIS = 5000;
+    private static final int SCAN_TIME_OUT_MILLIS = 10000;
 
     public void sendInstrustion() {
 

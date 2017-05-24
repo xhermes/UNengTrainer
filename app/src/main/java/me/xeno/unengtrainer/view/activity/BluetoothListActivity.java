@@ -2,7 +2,9 @@ package me.xeno.unengtrainer.view.activity;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,6 +33,7 @@ import me.xeno.unengtrainer.R;
 import me.xeno.unengtrainer.application.DataManager;
 import me.xeno.unengtrainer.model.BleDevice;
 import me.xeno.unengtrainer.model.BluetoothModel;
+import me.xeno.unengtrainer.receiver.BluetoothReceiver;
 import me.xeno.unengtrainer.util.ActivityUtils;
 import me.xeno.unengtrainer.util.CommonUtils;
 import me.xeno.unengtrainer.util.Logger;
@@ -43,9 +46,11 @@ import me.xeno.unengtrainer.widget.EmptyRecyclerView;
  * Created by Administrator on 2017/5/21.
  */
 
-public class BluetoothListActivity extends BaseActivity {
+public class BluetoothListActivity extends BaseActivity
+        implements BluetoothDisabledFragment.BluetoothDisabledListener,
+        BluetoothReceiver.OnBluetoothStateChangeListener{
 
-    private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
+    private BluetoothReceiver mBluetoothReceiver;
 
     private Toolbar mToolbar;
 
@@ -80,7 +85,9 @@ public class BluetoothListActivity extends BaseActivity {
 
         initFloatingActionBar();
 
-        if(DataManager.getInstance().getBleManager().isBlueEnable()) {
+        initBluetoothReceiver();
+
+        if (DataManager.getInstance().getBleManager().isBlueEnable()) {
             showDeviceListFragment();
 //            scanForDeviceList();
         } else {
@@ -97,10 +104,16 @@ public class BluetoothListActivity extends BaseActivity {
         mFloatingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkLocationPermissionV23();
                 scanForDeviceList();
             }
         });
+    }
+
+    private void initBluetoothReceiver() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+        mBluetoothReceiver = new BluetoothReceiver(this);
+        registerReceiver(mBluetoothReceiver, intentFilter);
     }
 
     public void showDeviceListFragment() {
@@ -118,7 +131,7 @@ public class BluetoothListActivity extends BaseActivity {
     }
 
     private void scanForDeviceList() {
-        if(DataManager.getInstance().getBleManager().isBlueEnable()) {
+        if (DataManager.getInstance().getBleManager().isBlueEnable()) {
             scanDevice();
         } else {
             //request enable bluetooth
@@ -127,6 +140,7 @@ public class BluetoothListActivity extends BaseActivity {
     }
 
     private void scanDevice() {
+        Logger.info("scanDevice---->");
         mFloatingBtn.startAnimation(mRotateAnimation);
 
         BluetoothModel model = new BluetoothModel();
@@ -138,7 +152,7 @@ public class BluetoothListActivity extends BaseActivity {
 
             @Override
             public void onNext(@NonNull BleDevice device) {
-                Logger.debug("onNext" + device.getName());
+                Logger.info("onNext" + device.getName());
                 mDeviceListFragment.addDeviceToList(device);
             }
 
@@ -155,38 +169,6 @@ public class BluetoothListActivity extends BaseActivity {
         });
     }
 
-
-    public void checkLocationPermissionV23() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            int permission = 0;
-
-            permission = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
-
-            Logger.info("permission=" + permission);
-
-            if (permission != PackageManager.PERMISSION_GRANTED) {
-                requestLocationPermissionV23();
-            } else {
-
-            }
-        }
-    }
-
-    @TargetApi(Build.VERSION_CODES.M)
-    public void requestLocationPermissionV23() {
-        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_LOCATION_PERMISSION);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CODE_LOCATION_PERMISSION) {
-            int grantResult = grantResults[0];
-            boolean granted = grantResult == PackageManager.PERMISSION_GRANTED;
-            Logger.info("onRequestPermissionsResult granted=" + granted);
-        }
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -199,8 +181,9 @@ public class BluetoothListActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(CommonUtils.isNotNull(mScanDisposable) && !mScanDisposable.isDisposed())
+        if (CommonUtils.isNotNull(mScanDisposable) && !mScanDisposable.isDisposed())
             mScanDisposable.dispose();
+        unregisterReceiver(mBluetoothReceiver);
     }
 
     public static void goFromActivity(WeakReference<BaseActivity> reference) {
@@ -210,5 +193,23 @@ public class BluetoothListActivity extends BaseActivity {
             activity.startActivity(intent);
             setJumpingAnim(activity, BaseActivity.ANIM_RIGHT_IN_LEFT_OUT);
         }
+    }
+
+    @Override
+    public void onConnectBtnClick() {
+        requestEnableBluetooth();
+    }
+
+    public void requestEnableBluetooth() {
+        DataManager.getInstance().getBleManager().enableBluetooth();
+    }
+
+    @Override
+    public void onBluetoothTurnOff() {
+        showBlueToothDisabledFragment();
+    }
+    @Override
+    public void onBluetoothTurnOn() {
+        showDeviceListFragment();
     }
 }

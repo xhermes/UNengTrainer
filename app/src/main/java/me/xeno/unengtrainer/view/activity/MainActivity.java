@@ -1,6 +1,10 @@
 package me.xeno.unengtrainer.view.activity;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -23,7 +27,9 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.xeno.unengtrainer.R;
+import me.xeno.unengtrainer.application.DataManager;
 import me.xeno.unengtrainer.util.ActivityUtils;
+import me.xeno.unengtrainer.util.Logger;
 import me.xeno.unengtrainer.util.ToastUtils;
 import me.xeno.unengtrainer.view.adapter.ShortcutAdapter;
 import me.xeno.unengtrainer.view.fragment.BluetoothDisabledFragment;
@@ -31,7 +37,9 @@ import me.xeno.unengtrainer.view.fragment.MainControlFragment;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        BluetoothDisabledFragment.OnConnectSuccessListener {
+        BluetoothDisabledFragment.BluetoothDisabledListener {
+
+    private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
 
     private MainControlFragment mMainControlFragment;
     private BluetoothDisabledFragment mBlueToothDisabledFragment;
@@ -70,6 +78,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     protected void initView() {
+        checkLocationPermissionV23();
 
         mToolbar.setTitle("未连接");
         setSupportActionBar(mToolbar);
@@ -179,10 +188,41 @@ public class MainActivity extends BaseActivity
         mDrawer.closeDrawer(GravityCompat.START);
 
         int id = item.getItemId();
-        if (id == R.id.nav_bluetooth) {
-            BluetoothListActivity.goFromActivity(new WeakReference<BaseActivity>(MainActivity.this));
-        }
+//        if (id == R.id.nav_bluetooth) {
+//            BluetoothListActivity.goFromActivity(new WeakReference<BaseActivity>(MainActivity.this));
+//        }
         return false;
+    }
+
+    public void checkLocationPermissionV23() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            int permission = 0;
+
+            permission = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+
+            Logger.info("permission=" + permission);
+
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                requestLocationPermissionV23();
+            } else {
+
+            }
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    public void requestLocationPermissionV23() {
+        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_LOCATION_PERMISSION);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_LOCATION_PERMISSION) {
+            int grantResult = grantResults[0];
+            boolean granted = grantResult == PackageManager.PERMISSION_GRANTED;
+            Logger.info("onRequestPermissionsResult granted=" + granted);
+        }
     }
 
     private void initDrawer() {
@@ -203,10 +243,8 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void onConnect() {
-        showMainControlFragment();
-        setmBottomBarVisibility(View.VISIBLE);
-        mToolbar.setTitle("机器00001");
-
+    public void onConnectBtnClick() {
+        BluetoothListActivity.goFromActivity(new WeakReference<BaseActivity>(this));
     }
+
 }

@@ -12,4 +12,6 @@
     <dimen name="text_size_content">16dp</dimen>
     <dimen name="text_size_small">14dp</dimen>
     <dimen name="text_size_tiny">12dp</dimen>
+
+    <dimen name="sepearate_line_height">1px</dimen>
 </resources>

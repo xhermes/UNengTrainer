@@ -43,6 +43,7 @@ public class BluetoothListAdapter extends RecyclerView.Adapter<BluetoothHolder> 
 
         holder.getNameView().setText(device.getName());
         holder.getAddressView().setText(device.getAddress());
+
     }
 
     @Override

@@ -23,7 +23,7 @@ public class BluetoothDisabledFragment extends Fragment {
 
     public static final String ARGUMENT_EDIT_TASK_ID = "EDIT_TASK_ID";
 
-    private OnConnectSuccessListener mCallback;
+    private BluetoothDisabledListener mCallback;
 
     private TextView mConnectBtn;
 
@@ -45,7 +45,7 @@ public class BluetoothDisabledFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mCallback = (OnConnectSuccessListener) context;
+        mCallback = (BluetoothDisabledListener) context;
     }
 
     @Override
@@ -64,10 +64,7 @@ public class BluetoothDisabledFragment extends Fragment {
         mConnectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO
-//                mCallback.onConnect();
-
-                requestEnableBluetooth();
+                mCallback.onConnectBtnClick();
             }
         });
     }
@@ -84,25 +81,8 @@ public class BluetoothDisabledFragment extends Fragment {
         return root;
     }
 
-    public void requestEnableBluetooth() {
-        //TODO needs more test on different phones
-
-//        Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-//        // 设置蓝牙可见性，最多300秒
-//        intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
-//        getActivity().startActivity(intent);
-
-        if(DataManager.getInstance().getBleManager().isBlueEnable()) {
-            //go to BluetoothListActivity if bluetooth enable
-            BluetoothListActivity.goFromActivity(new WeakReference<>((BaseActivity) getActivity()));
-
-        } else {
-            DataManager.getInstance().getBleManager().enableBluetooth();
-        }
-    }
-
-    public interface OnConnectSuccessListener {
-        void onConnect();
+    public interface BluetoothDisabledListener {
+        void onConnectBtnClick();
     }
 
 
