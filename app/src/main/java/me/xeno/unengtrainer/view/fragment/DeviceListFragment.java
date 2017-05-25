@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.clj.fastble.data.ScanResult;
 import com.github.jdsjlzx.ItemDecoration.DividerDecoration;
 import com.github.jdsjlzx.interfaces.OnItemClickListener;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
@@ -75,8 +76,8 @@ public class DeviceListFragment extends Fragment {
 
     }
 
-    public void addDeviceToList(BleDevice device) {
-        mAdapter.addDataToList(device);
+    public void addDeviceToList(ScanResult scanResult) {
+        mAdapter.addDataToList(scanResult);
     }
 
 }

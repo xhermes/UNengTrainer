@@ -144,16 +144,16 @@ public class BluetoothListActivity extends BaseActivity
         mFloatingBtn.startAnimation(mRotateAnimation);
 
         BluetoothModel model = new BluetoothModel();
-        model.scanForDevices().subscribe(new Observer<BleDevice>() {
+        model.scanForDevices().subscribe(new Observer<ScanResult>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
                 mScanDisposable = d;
             }
 
             @Override
-            public void onNext(@NonNull BleDevice device) {
-                Logger.info("onNext" + device.getName());
-                mDeviceListFragment.addDeviceToList(device);
+            public void onNext(@NonNull ScanResult scanResult) {
+                Logger.info("onNext" + scanResult.getDevice().getName());
+                mDeviceListFragment.addDeviceToList(scanResult);
             }
 
             @Override

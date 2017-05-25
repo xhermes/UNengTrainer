@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
     android:layout_width="match_parent"
-    android:layout_height="300dp">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/icon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_centerVertical="true"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
@@ -17,7 +18,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_marginBottom="15dp"
         android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
         android:layout_toRightOf="@id/icon"
         android:orientation="vertical">
 
@@ -37,8 +40,31 @@
             android:text="address" />
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/check"
+        android:visibility="gone"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="15dp"
+        app:srcCompat="@drawable/ic_check" />
+    
+    <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+        android:id="@+id/connecting"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="15dp"
+        android:indeterminate="true"
+        app:mpb_progressStyle="circular"
+        app:mpb_indeterminateTint="@color/colorPrimary"
+        app:mpb_indeterminateTintMode="src_in"
+        style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal"/>
+
     <View
         style="@style/SeparateLine"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>
