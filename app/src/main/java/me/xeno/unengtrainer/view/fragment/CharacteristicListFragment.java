@@ -16,20 +16,20 @@ import me.xeno.unengtrainer.R;
 import me.xeno.unengtrainer.view.adapter.DeviceRecyclerAdapter;
 
 /**
- * Main UI for the add task screen. Users can enter a task title and description.
+ * //TODO 选中某个service后，展示characteristic的列表页
  */
-public class DeviceListFragment extends Fragment {
+public class CharacteristicListFragment extends Fragment {
 
     private View mRootView;
 
     private LRecyclerView mRecyclerView;
     private DeviceRecyclerAdapter mAdapter;
 
-    public static DeviceListFragment newInstance() {
-        return new DeviceListFragment();
+    public static CharacteristicListFragment newInstance() {
+        return new CharacteristicListFragment();
     }
 
-    public DeviceListFragment() {
+    public CharacteristicListFragment() {
         // Required empty public constructor
     }
 

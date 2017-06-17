@@ -1,5 +1,7 @@
 package me.xeno.unengtrainer.view.fragment;
 
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattService;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,22 +16,31 @@ import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 
 import me.xeno.unengtrainer.R;
 import me.xeno.unengtrainer.view.adapter.DeviceRecyclerAdapter;
+import me.xeno.unengtrainer.view.adapter.ServiceRecyclerAdapter;
 
 /**
- * Main UI for the add task screen. Users can enter a task title and description.
+ * //TODO 选中设备后，展示该设备所有service的列表页
  */
-public class DeviceListFragment extends Fragment {
+public class ServiceListFragment extends Fragment {
 
     private View mRootView;
 
     private LRecyclerView mRecyclerView;
-    private DeviceRecyclerAdapter mAdapter;
+    private ServiceRecyclerAdapter mAdapter;
 
-    public static DeviceListFragment newInstance() {
-        return new DeviceListFragment();
+    private BluetoothGatt mBluetoothGatt;
+
+    public static ServiceListFragment newInstance(BluetoothGatt bluetoothGatt) {
+        ServiceListFragment fragment = new ServiceListFragment();
+//        Bundle bundle = new Bundle();
+//        bundle.putParcelable("bluetoothGatt", bluetoothGatt);
+//        //fragment保存参数，传入一个Bundle对象
+//        fragmentOne.setArguments(bundle);
+//        return fragmentOne;
+        return new ServiceListFragment();
     }
 
-    public DeviceListFragment() {
+    public ServiceListFragment() {
         // Required empty public constructor
     }
 
@@ -64,14 +75,14 @@ public class DeviceListFragment extends Fragment {
         mRecyclerView.setPullRefreshEnabled(false);
 //        mRecyclerView.setRefreshProgressStyle(ProgressStyle.TriangleSkewSpin); //设置下拉刷新Progress的样式
 //        mRecyclerView.setArrowImageView(R.drawable.ic_refresh);
-        mAdapter = new DeviceRecyclerAdapter();
+        mAdapter = new ServiceRecyclerAdapter();
         LRecyclerViewAdapter lRecyclerViewAdapter = new LRecyclerViewAdapter(mAdapter);
         mRecyclerView.setAdapter(lRecyclerViewAdapter);
 
     }
 
-    public void addDeviceToList(ScanResult scanResult) {
-        mAdapter.addDataToList(scanResult);
+    public void addServiceToList(BluetoothGattService bluetoothGattService) {
+        mAdapter.addDataToList(bluetoothGattService);
     }
 
 }

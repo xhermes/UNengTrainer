@@ -19,6 +19,7 @@ import me.xeno.unengtrainer.application.DataManager;
 import me.xeno.unengtrainer.model.BleDevice;
 import me.xeno.unengtrainer.model.BluetoothModel;
 import me.xeno.unengtrainer.model.ConnectionWrapper;
+import me.xeno.unengtrainer.util.Logger;
 import me.xeno.unengtrainer.util.ToastUtils;
 import me.xeno.unengtrainer.view.holder.BluetoothHolder;
 
@@ -26,7 +27,7 @@ import me.xeno.unengtrainer.view.holder.BluetoothHolder;
  * Created by xeno on 2017/5/22.
  */
 
-public class BluetoothListAdapter extends RecyclerView.Adapter<BluetoothHolder>  {
+public class DeviceRecyclerAdapter extends RecyclerView.Adapter<BluetoothHolder>  {
 
     public static boolean AUTO_CONNECT = true;
 
@@ -75,10 +76,10 @@ public class BluetoothListAdapter extends RecyclerView.Adapter<BluetoothHolder> 
     }
 
     private void connectDevice(ScanResult scanResult, boolean autoConnect) {
-
+        Logger.info("connectDevice()-------------->" + scanResult.getDevice().getAddress());
 
         BluetoothModel model = new BluetoothModel();
-        model.connect(scanResult, autoConnect)
+        model.connect(mContext, scanResult, autoConnect)
                 .subscribe(new Observer<ConnectionWrapper>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
@@ -97,6 +98,9 @@ public class BluetoothListAdapter extends RecyclerView.Adapter<BluetoothHolder> 
                     case ConnectionWrapper.MSG_CODE_CONNECT_FAIL:
                         break;
                     case ConnectionWrapper.MSG_CODE_CONNECT_SUCCESS:
+                        break;
+                    case ConnectionWrapper.MSG_CODE_SERVICES_DISCOVERD:
+                        //TODO
                         break;
                 }
             }

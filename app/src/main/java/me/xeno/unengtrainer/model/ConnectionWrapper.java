@@ -15,6 +15,8 @@ public class ConnectionWrapper {
     public static final int MSG_CODE_CONNECT_SUCCESS = 211;
     public static final int MSG_CODE_CONNECT_FAIL = 511;
 
+    public static final int MSG_CODE_SERVICES_DISCOVERD = 212;
+
 
     private int msgCode;
     private String message;

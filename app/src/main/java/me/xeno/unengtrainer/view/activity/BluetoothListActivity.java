@@ -1,13 +1,8 @@
 package me.xeno.unengtrainer.view.activity;
 
-import android.Manifest;
-import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -16,31 +11,23 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.clj.fastble.data.ScanResult;
-import com.clj.fastble.scan.ListScanCallback;
 
 import java.lang.ref.WeakReference;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 import me.xeno.unengtrainer.R;
 import me.xeno.unengtrainer.application.DataManager;
-import me.xeno.unengtrainer.model.BleDevice;
 import me.xeno.unengtrainer.model.BluetoothModel;
 import me.xeno.unengtrainer.receiver.BluetoothReceiver;
 import me.xeno.unengtrainer.util.ActivityUtils;
 import me.xeno.unengtrainer.util.CommonUtils;
 import me.xeno.unengtrainer.util.Logger;
-import me.xeno.unengtrainer.view.adapter.BluetoothListAdapter;
 import me.xeno.unengtrainer.view.fragment.BluetoothDisabledFragment;
+import me.xeno.unengtrainer.view.fragment.CharacteristicListFragment;
 import me.xeno.unengtrainer.view.fragment.DeviceListFragment;
-import me.xeno.unengtrainer.widget.EmptyRecyclerView;
+import me.xeno.unengtrainer.view.fragment.ServiceListFragment;
 
 /**
  * Created by Administrator on 2017/5/21.
@@ -56,6 +43,8 @@ public class BluetoothListActivity extends BaseActivity
 
     private BluetoothDisabledFragment mBlueToothDisabledFragment;
     private DeviceListFragment mDeviceListFragment;
+    private ServiceListFragment mServiceListFragment;
+    private CharacteristicListFragment mCharacteristicListFragment;
 
     private FloatingActionButton mFloatingBtn;
 
@@ -128,6 +117,20 @@ public class BluetoothListActivity extends BaseActivity
             mBlueToothDisabledFragment = BluetoothDisabledFragment.newInstance();
         }
         ActivityUtils.replaceFragment(getSupportFragmentManager(), mBlueToothDisabledFragment, R.id.frame_content);
+    }
+
+    public void showServiceRecyclerFragment() {
+        if (mServiceListFragment == null) {
+            mServiceListFragment = ServiceListFragment.newInstance();
+        }
+        ActivityUtils.replaceFragment(getSupportFragmentManager(), mServiceListFragment, R.id.frame_content);
+    }
+
+    public void showCharacteristicRecyclerFragment() {
+        if (mCharacteristicListFragment == null) {
+            mCharacteristicListFragment = CharacteristicListFragment.newInstance();
+        }
+        ActivityUtils.replaceFragment(getSupportFragmentManager(), mCharacteristicListFragment, R.id.frame_content);
     }
 
     private void scanForDeviceList() {
