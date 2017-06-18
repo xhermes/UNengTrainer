@@ -244,7 +244,18 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onConnectBtnClick() {
-        BluetoothListActivity.goFromActivity(new WeakReference<BaseActivity>(this));
+        BluetoothListActivity.goFromActivityForResult(new WeakReference<BaseActivity>(this), BluetoothListActivity.REQUEST_CODE);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK) {
+            if(requestCode == BluetoothListActivity.REQUEST_CODE) {
+                //得到选中的device，连接
+            }
+        }
     }
 
 }

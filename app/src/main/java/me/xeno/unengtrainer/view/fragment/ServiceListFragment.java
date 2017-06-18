@@ -19,8 +19,11 @@ import me.xeno.unengtrainer.view.adapter.DeviceRecyclerAdapter;
 import me.xeno.unengtrainer.view.adapter.ServiceRecyclerAdapter;
 
 /**
- * //TODO 选中设备后，展示该设备所有service的列表页
+ * 在DeviceListFragment中选中BLE设备后，不需要再进入service和characteristic列表选择，直接使用拟定好的UUID找到
+ * 对应机器发送与接收指令的service和characteristic
+ * @deprecated
  */
+
 public class ServiceListFragment extends Fragment {
 
     private View mRootView;

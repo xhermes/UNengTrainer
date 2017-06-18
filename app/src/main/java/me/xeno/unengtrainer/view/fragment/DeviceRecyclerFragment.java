@@ -1,5 +1,6 @@
 package me.xeno.unengtrainer.view.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,19 +19,28 @@ import me.xeno.unengtrainer.view.adapter.DeviceRecyclerAdapter;
 /**
  * Main UI for the add task screen. Users can enter a task title and description.
  */
-public class DeviceListFragment extends Fragment {
+public class DeviceRecyclerFragment extends Fragment {
 
     private View mRootView;
 
     private LRecyclerView mRecyclerView;
     private DeviceRecyclerAdapter mAdapter;
 
-    public static DeviceListFragment newInstance() {
-        return new DeviceListFragment();
+    private OnDeviceSelectListener mListener;
+
+    public static DeviceRecyclerFragment newInstance() {
+        DeviceRecyclerFragment fragment = new DeviceRecyclerFragment();
+        return fragment;
     }
 
-    public DeviceListFragment() {
+    public DeviceRecyclerFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mListener = (OnDeviceSelectListener) context;
     }
 
     @Override
@@ -64,7 +74,7 @@ public class DeviceListFragment extends Fragment {
         mRecyclerView.setPullRefreshEnabled(false);
 //        mRecyclerView.setRefreshProgressStyle(ProgressStyle.TriangleSkewSpin); //设置下拉刷新Progress的样式
 //        mRecyclerView.setArrowImageView(R.drawable.ic_refresh);
-        mAdapter = new DeviceRecyclerAdapter();
+        mAdapter = new DeviceRecyclerAdapter(mListener);
         LRecyclerViewAdapter lRecyclerViewAdapter = new LRecyclerViewAdapter(mAdapter);
         mRecyclerView.setAdapter(lRecyclerViewAdapter);
 
@@ -72,6 +82,10 @@ public class DeviceListFragment extends Fragment {
 
     public void addDeviceToList(ScanResult scanResult) {
         mAdapter.addDataToList(scanResult);
+    }
+
+    public interface OnDeviceSelectListener {
+        void onSelect(ScanResult scanResult);
     }
 
 }

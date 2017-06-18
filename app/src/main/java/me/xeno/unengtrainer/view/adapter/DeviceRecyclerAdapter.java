@@ -21,6 +21,7 @@ import me.xeno.unengtrainer.model.BluetoothModel;
 import me.xeno.unengtrainer.model.ConnectionWrapper;
 import me.xeno.unengtrainer.util.Logger;
 import me.xeno.unengtrainer.util.ToastUtils;
+import me.xeno.unengtrainer.view.fragment.DeviceRecyclerFragment;
 import me.xeno.unengtrainer.view.holder.BluetoothHolder;
 
 /**
@@ -32,8 +33,13 @@ public class DeviceRecyclerAdapter extends RecyclerView.Adapter<BluetoothHolder>
     public static boolean AUTO_CONNECT = true;
 
     private Context mContext;
+    private DeviceRecyclerFragment.OnDeviceSelectListener mListener;
 
     private List<ScanResult> dataList = new ArrayList<>();
+
+    public DeviceRecyclerAdapter(DeviceRecyclerFragment.OnDeviceSelectListener listener) {
+        mListener = listener;
+    }
 
     public void setDataList(List<ScanResult> dataList) {
         this.dataList = dataList;
@@ -65,7 +71,8 @@ public class DeviceRecyclerAdapter extends RecyclerView.Adapter<BluetoothHolder>
         holder.getRootView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                connectDevice(scanResult, AUTO_CONNECT);
+//                connectDevice(scanResult, AUTO_CONNECT);
+                mListener.onSelect(scanResult);
             }
         });
     }

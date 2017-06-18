@@ -26,7 +26,7 @@ import me.xeno.unengtrainer.util.CommonUtils;
 import me.xeno.unengtrainer.util.Logger;
 import me.xeno.unengtrainer.view.fragment.BluetoothDisabledFragment;
 import me.xeno.unengtrainer.view.fragment.CharacteristicListFragment;
-import me.xeno.unengtrainer.view.fragment.DeviceListFragment;
+import me.xeno.unengtrainer.view.fragment.DeviceRecyclerFragment;
 import me.xeno.unengtrainer.view.fragment.ServiceListFragment;
 
 /**
@@ -35,14 +35,17 @@ import me.xeno.unengtrainer.view.fragment.ServiceListFragment;
 
 public class BluetoothListActivity extends BaseActivity
         implements BluetoothDisabledFragment.BluetoothDisabledListener,
-        BluetoothReceiver.OnBluetoothStateChangeListener{
+        BluetoothReceiver.OnBluetoothStateChangeListener,
+        DeviceRecyclerFragment.OnDeviceSelectListener{
+
+    public static final int REQUEST_CODE = 1;
 
     private BluetoothReceiver mBluetoothReceiver;
 
     private Toolbar mToolbar;
 
     private BluetoothDisabledFragment mBlueToothDisabledFragment;
-    private DeviceListFragment mDeviceListFragment;
+    private DeviceRecyclerFragment mDeviceListFragment;
     private ServiceListFragment mServiceListFragment;
     private CharacteristicListFragment mCharacteristicListFragment;
 
@@ -107,7 +110,7 @@ public class BluetoothListActivity extends BaseActivity
 
     public void showDeviceListFragment() {
         if (mDeviceListFragment == null) {
-            mDeviceListFragment = DeviceListFragment.newInstance();
+            mDeviceListFragment = DeviceRecyclerFragment.newInstance();
         }
         ActivityUtils.replaceFragment(getSupportFragmentManager(), mDeviceListFragment, R.id.frame_content);
     }
@@ -121,7 +124,7 @@ public class BluetoothListActivity extends BaseActivity
 
     public void showServiceRecyclerFragment() {
         if (mServiceListFragment == null) {
-            mServiceListFragment = ServiceListFragment.newInstance();
+//            mServiceListFragment = ServiceListFragment.newInstance();
         }
         ActivityUtils.replaceFragment(getSupportFragmentManager(), mServiceListFragment, R.id.frame_content);
     }
@@ -189,11 +192,11 @@ public class BluetoothListActivity extends BaseActivity
         unregisterReceiver(mBluetoothReceiver);
     }
 
-    public static void goFromActivity(WeakReference<BaseActivity> reference) {
+    public static void goFromActivityForResult(WeakReference<BaseActivity> reference, int requestCode) {
         BaseActivity activity = reference.get();
         if (activity != null) {
             Intent intent = new Intent(activity, BluetoothListActivity.class);
-            activity.startActivity(intent);
+            activity.startActivityForResult(intent, requestCode);
             setJumpingAnim(activity, BaseActivity.ANIM_RIGHT_IN_LEFT_OUT);
         }
     }
@@ -214,5 +217,13 @@ public class BluetoothListActivity extends BaseActivity
     @Override
     public void onBluetoothTurnOn() {
         showDeviceListFragment();
+    }
+
+    @Override
+    public void onSelect(ScanResult scanResult) {
+        Intent intent = new Intent();
+        intent.putExtra("scanResult", scanResult);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }
