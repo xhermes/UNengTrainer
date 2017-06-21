@@ -16,21 +16,26 @@ import com.clj.fastble.data.ScanResult;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 
+import io.reactivex.Observer;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 import me.xeno.unengtrainer.R;
+import me.xeno.unengtrainer.model.BluetoothModel;
 import me.xeno.unengtrainer.util.ToastUtils;
 import me.xeno.unengtrainer.view.adapter.DeviceRecyclerAdapter;
 
 /**
  * show discovered device list.
  */
-public class DeviceRecyclerFragment extends BaseMainFragment {
+public class DeviceRecyclerFragment extends BaseMainFragment implements DeviceRecyclerAdapter.OnDeviceSelectListener {
 
     private View mRootView;
 
     private LRecyclerView mRecyclerView;
     private DeviceRecyclerAdapter mAdapter;
+    private View mEmptyView;
 
-    private OnDeviceSelectListener mListener;
+    private Disposable mSearchingDisposable;
 
     public static DeviceRecyclerFragment newInstance() {
         DeviceRecyclerFragment fragment = new DeviceRecyclerFragment();
@@ -54,6 +59,7 @@ public class DeviceRecyclerFragment extends BaseMainFragment {
             mRootView = inflater.inflate(R.layout.fragment_list_device, container, false);
         }
         mRecyclerView = (LRecyclerView) mRootView.findViewById(R.id.recycler);
+        mEmptyView = mRootView.findViewById(R.id.empty);
 
         setHasOptionsMenu(true);
         setRetainInstance(true);
@@ -64,6 +70,7 @@ public class DeviceRecyclerFragment extends BaseMainFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initRecyclerView();
+        startSearching();
     }
 
     @Override
@@ -86,20 +93,47 @@ public class DeviceRecyclerFragment extends BaseMainFragment {
     private void initRecyclerView() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setPullRefreshEnabled(false);
+        mRecyclerView.setEmptyView(mEmptyView);
 //        mRecyclerView.setRefreshProgressStyle(ProgressStyle.TriangleSkewSpin); //设置下拉刷新Progress的样式
 //        mRecyclerView.setArrowImageView(R.drawable.ic_refresh);
-        mAdapter = new DeviceRecyclerAdapter(mListener);
+        mAdapter = new DeviceRecyclerAdapter(this);
         LRecyclerViewAdapter lRecyclerViewAdapter = new LRecyclerViewAdapter(mAdapter);
         mRecyclerView.setAdapter(lRecyclerViewAdapter);
 
+    }
+
+    private void startSearching() {
+        BluetoothModel model = new BluetoothModel();
+        model.scanForDevices().subscribe(new Observer<ScanResult>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+                //TODO dispose searching task when fragment exits
+                mSearchingDisposable = d;
+            }
+
+            @Override
+            public void onNext(@NonNull ScanResult scanResult) {
+                addDeviceToList(scanResult);
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 
     public void addDeviceToList(ScanResult scanResult) {
         mAdapter.addDataToList(scanResult);
     }
 
-    public interface OnDeviceSelectListener {
-        void onSelect(ScanResult scanResult);
-    }
+    @Override
+    public void onSelect(ScanResult scanResult) {
 
+    }
 }

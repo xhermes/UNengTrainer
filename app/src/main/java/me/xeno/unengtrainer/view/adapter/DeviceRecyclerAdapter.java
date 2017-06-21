@@ -33,11 +33,11 @@ public class DeviceRecyclerAdapter extends RecyclerView.Adapter<BluetoothHolder>
     public static boolean AUTO_CONNECT = true;
 
     private Context mContext;
-    private DeviceRecyclerFragment.OnDeviceSelectListener mListener;
+    private OnDeviceSelectListener mListener;
 
     private List<ScanResult> dataList = new ArrayList<>();
 
-    public DeviceRecyclerAdapter(DeviceRecyclerFragment.OnDeviceSelectListener listener) {
+    public DeviceRecyclerAdapter(OnDeviceSelectListener listener) {
         mListener = listener;
     }
 
@@ -122,5 +122,9 @@ public class DeviceRecyclerAdapter extends RecyclerView.Adapter<BluetoothHolder>
 
             }
         });
+    }
+
+    public interface OnDeviceSelectListener {
+        void onSelect(ScanResult scanResult);
     }
 }
