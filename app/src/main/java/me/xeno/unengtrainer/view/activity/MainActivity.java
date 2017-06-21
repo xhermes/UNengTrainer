@@ -33,18 +33,19 @@ import me.xeno.unengtrainer.util.Logger;
 import me.xeno.unengtrainer.util.ToastUtils;
 import me.xeno.unengtrainer.view.adapter.ShortcutAdapter;
 import me.xeno.unengtrainer.view.fragment.BluetoothDisabledFragment;
+import me.xeno.unengtrainer.view.fragment.DeviceRecyclerFragment;
 import me.xeno.unengtrainer.view.fragment.MainControlFragment;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener,
-        BluetoothDisabledFragment.BluetoothDisabledListener {
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
 
     private MainControlFragment mMainControlFragment;
     private BluetoothDisabledFragment mBlueToothDisabledFragment;
+    private DeviceRecyclerFragment mDeviceRecyclerFragment;
 
-    private FloatingActionButton mFloatingActionBtn;
+//    private FloatingActionButton mFloatingActionBtn;
     private Toolbar mToolbar;
     //    private TabLayout mTabLayout;
     private DrawerLayout mDrawer;
@@ -119,7 +120,7 @@ public class MainActivity extends BaseActivity
 
         showBlueToothFragment();
         setmBottomBarVisibility(View.GONE);
-
+        mNavigationView.setCheckedItem(R.id.nav_bluetooth);
 //        mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), mFragmentList);
 //        mViewPager.setAdapter(mPagerAdapter);
 
@@ -129,20 +130,6 @@ public class MainActivity extends BaseActivity
         mBottomActionBar.setVisibility(visibility);
     }
 
-    public void showMainControlFragment() {
-        if (mMainControlFragment == null) {
-            mMainControlFragment = MainControlFragment.newInstance();
-        }
-        ActivityUtils.replaceFragment(getSupportFragmentManager(), mMainControlFragment, R.id.frame_content);
-    }
-
-    public void showBlueToothFragment() {
-        if (mBlueToothDisabledFragment == null) {
-            mBlueToothDisabledFragment = BluetoothDisabledFragment.newInstance();
-        }
-        ActivityUtils.replaceFragment(getSupportFragmentManager(), mBlueToothDisabledFragment, R.id.frame_content);
-    }
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -150,34 +137,8 @@ public class MainActivity extends BaseActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+            //TODO 改成点两次返回退出app
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_clear) {
-            Toast.makeText(this, "置零", Toast.LENGTH_LONG).show();
-            return true;
-        }
-//        if (id == R.id.action_favorite) {
-//            Toast.makeText(this, "收藏", Toast.LENGTH_LONG).show();
-//            return true;
-//        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -191,7 +152,7 @@ public class MainActivity extends BaseActivity
 //        if (id == R.id.nav_bluetooth) {
 //            BluetoothListActivity.goFromActivity(new WeakReference<BaseActivity>(MainActivity.this));
 //        }
-        return false;
+        return true;
     }
 
     public void checkLocationPermissionV23() {
@@ -242,20 +203,25 @@ public class MainActivity extends BaseActivity
         }
     }
 
-    @Override
-    public void onConnectBtnClick() {
-        BluetoothListActivity.goFromActivityForResult(new WeakReference<BaseActivity>(this), BluetoothListActivity.REQUEST_CODE);
-    }
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK) {
-            if(requestCode == BluetoothListActivity.REQUEST_CODE) {
-                //得到选中的device，连接
-            }
+    public void showMainControlFragment() {
+        if (mMainControlFragment == null) {
+            mMainControlFragment = MainControlFragment.newInstance();
         }
+        ActivityUtils.replaceFragment(getSupportFragmentManager(), mMainControlFragment, R.id.frame_content);
+    }
+    public void showBlueToothFragment() {
+        if (mBlueToothDisabledFragment == null) {
+            mBlueToothDisabledFragment = BluetoothDisabledFragment.newInstance();
+        }
+        ActivityUtils.replaceFragment(getSupportFragmentManager(), mBlueToothDisabledFragment, R.id.frame_content);
+    }
+    public void showDeviceRecyclerFragment() {
+        if (mDeviceRecyclerFragment == null) {
+            mDeviceRecyclerFragment = DeviceRecyclerFragment.newInstance();
+        }
+        ActivityUtils.replaceFragment(getSupportFragmentManager(), mDeviceRecyclerFragment, R.id.frame_content);
     }
 
 }

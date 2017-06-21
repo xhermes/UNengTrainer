@@ -13,6 +13,7 @@
     <color name="grey99">#999999</color>
     <color name="greyCC">#cccccc</color>
     <color name="greyDD">#dddddd</color>
+    <color name="greyEE">#eeeeee</color>
     <color name="greyBackground">#f1f1f1</color>
 
     <color name="ripplePrimaryButton">#999999</color>

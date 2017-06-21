@@ -14,13 +14,9 @@ import me.xeno.unengtrainer.R;
 /**
  * Main UI for the add task screen. Users can enter a task title and description.
  */
-public class MainControlFragment extends Fragment {
-
-    private View mControlPanelLayout;
+public class MainControlFragment extends BaseMainFragment {
 
     private TextView mDescription;
-
-    private FloatingActionButton mFloatingActionBtn;
 
     public static MainControlFragment newInstance() {
         return new MainControlFragment();
@@ -58,7 +54,6 @@ public class MainControlFragment extends Fragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_control_main, container, false);
 
-        mControlPanelLayout = root.findViewById(R.id.control_panel_root);
 
         initView();
 

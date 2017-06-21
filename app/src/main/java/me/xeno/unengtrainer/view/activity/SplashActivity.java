@@ -20,7 +20,7 @@ import me.xeno.unengtrainer.util.RxUtils;
 
 public class SplashActivity extends BaseActivity {
 
-    private static final int SPLASH_ENTER_TIME = 2;
+    private static final int SPLASH_ENTER_TIME = 1;
 
     private Disposable mTimerDisposable;
 

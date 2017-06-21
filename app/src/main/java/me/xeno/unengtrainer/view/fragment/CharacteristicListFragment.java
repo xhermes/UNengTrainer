@@ -66,7 +66,7 @@ public class CharacteristicListFragment extends Fragment {
         mRecyclerView.setPullRefreshEnabled(false);
 //        mRecyclerView.setRefreshProgressStyle(ProgressStyle.TriangleSkewSpin); //设置下拉刷新Progress的样式
 //        mRecyclerView.setArrowImageView(R.drawable.ic_refresh);
-        mAdapter = new DeviceRecyclerAdapter();
+//        mAdapter = new DeviceRecyclerAdapter();
         LRecyclerViewAdapter lRecyclerViewAdapter = new LRecyclerViewAdapter(mAdapter);
         mRecyclerView.setAdapter(lRecyclerViewAdapter);
 

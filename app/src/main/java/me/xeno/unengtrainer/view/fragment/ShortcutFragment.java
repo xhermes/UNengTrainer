@@ -16,7 +16,7 @@ import me.xeno.unengtrainer.widget.EmptyRecyclerView;
 /**
  * Main UI for the add task screen. Users can enter a task title and description.
  */
-public class ShortcutFragment extends Fragment {
+public class ShortcutFragment extends BaseMainFragment {
 
     private View mRootView;
 

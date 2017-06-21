@@ -39,6 +39,11 @@
         <item name="android:textColor">@color/grey99</item>
     </style>
 
+    <style name="TextSmallGrey66" >
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:textColor">@color/grey66</item>
+    </style>
+
     <style name="TextSmallGrey33" >
         <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:textColor">@color/grey33</item>

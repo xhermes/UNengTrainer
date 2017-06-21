@@ -1,29 +1,18 @@
 package me.xeno.unengtrainer.view.fragment;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.lang.ref.WeakReference;
-
 import me.xeno.unengtrainer.R;
-import me.xeno.unengtrainer.application.DataManager;
-import me.xeno.unengtrainer.view.activity.BaseActivity;
-import me.xeno.unengtrainer.view.activity.BluetoothListActivity;
-import me.xeno.unengtrainer.view.activity.TestActivity;
 
 
-public class BluetoothDisabledFragment extends Fragment {
+public class BluetoothDisabledFragment extends BaseMainFragment {
 
     public static final String ARGUMENT_EDIT_TASK_ID = "EDIT_TASK_ID";
-
-    private BluetoothDisabledListener mCallback;
 
     private TextView mConnectBtn;
 
@@ -43,12 +32,6 @@ public class BluetoothDisabledFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mCallback = (BluetoothDisabledListener) context;
-    }
-
-    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
@@ -64,7 +47,10 @@ public class BluetoothDisabledFragment extends Fragment {
         mConnectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallback.onConnectBtnClick();
+                //TODO 检查有没有开启蓝牙
+
+                //切换到DeviceRecyclerFragment
+               getMainActivity().showDeviceRecyclerFragment();
             }
         });
     }
@@ -79,10 +65,6 @@ public class BluetoothDisabledFragment extends Fragment {
         setHasOptionsMenu(true);
         setRetainInstance(true);
         return root;
-    }
-
-    public interface BluetoothDisabledListener {
-        void onConnectBtnClick();
     }
 
 

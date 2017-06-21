@@ -19,7 +19,6 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.schedulers.Schedulers;
 import me.xeno.unengtrainer.application.DataManager;
 import me.xeno.unengtrainer.util.Logger;
-import me.xeno.unengtrainer.view.activity.BluetoothListActivity;
 
 /**
  * Created by xeno on 2017/5/15.
@@ -157,7 +156,7 @@ public class BluetoothModel {
 
 
                                 //TODO 使用ServiceListFragment列出发现的service
-                                ((BluetoothListActivity)context).showServiceRecyclerFragment();
+//                                ((BluetoothListActivity)context).showServiceRecyclerFragment();
 
 
                                 ConnectionWrapper wrapper = new ConnectionWrapper();

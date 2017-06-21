@@ -6,6 +6,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -14,12 +17,13 @@ import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 
 import me.xeno.unengtrainer.R;
+import me.xeno.unengtrainer.util.ToastUtils;
 import me.xeno.unengtrainer.view.adapter.DeviceRecyclerAdapter;
 
 /**
- * Main UI for the add task screen. Users can enter a task title and description.
+ * show discovered device list.
  */
-public class DeviceRecyclerFragment extends Fragment {
+public class DeviceRecyclerFragment extends BaseMainFragment {
 
     private View mRootView;
 
@@ -35,12 +39,6 @@ public class DeviceRecyclerFragment extends Fragment {
 
     public DeviceRecyclerFragment() {
         // Required empty public constructor
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mListener = (OnDeviceSelectListener) context;
     }
 
     @Override
@@ -68,6 +66,22 @@ public class DeviceRecyclerFragment extends Fragment {
         initRecyclerView();
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_recycler_device, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+
+        //右上角按钮
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+                ToastUtils.toast(getActivity(), "refresh");
+                break;
+        }
+        return true;
+    }
 
     private void initRecyclerView() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
