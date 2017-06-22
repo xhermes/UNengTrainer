@@ -44,7 +44,7 @@ public class BleService extends Service {
 
     private BleServiceListener mListener;//TODO 记得从MainActivity传入值
 
-    private BleBinder mBinder;
+    private BleBinder mBinder = new BleBinder();
 
     private BluetoothGatt mBluetoothGatt;
 
@@ -58,7 +58,7 @@ public class BleService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        mBinder = new BleBinder();
+        Logger.info("BleService onCreate()");
     }
 
     private BleGattCallback mBleGattCallback = new BleGattCallback() {
@@ -299,6 +299,7 @@ public class BleService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
+        Logger.info("BleService onBind()");
         return mBinder;
     }
 

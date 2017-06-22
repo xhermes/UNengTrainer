@@ -35,6 +35,8 @@ import android.util.Log;
 import java.util.List;
 import java.util.UUID;
 
+import me.xeno.unengtrainer.application.BleSppGattAttributes;
+
 /**
  * Service for managing connection and data communication with a GATT server hosted on a
  * given Bluetooth LE device.

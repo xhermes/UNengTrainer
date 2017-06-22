@@ -17,6 +17,8 @@ import me.xeno.unengtrainer.R;
 public class MainControlFragment extends BaseMainFragment {
 
     private TextView mDescription;
+    private TextView mWrite1View;
+    private TextView mWrite2View;
 
     public static MainControlFragment newInstance() {
         return new MainControlFragment();
@@ -54,6 +56,8 @@ public class MainControlFragment extends BaseMainFragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_control_main, container, false);
 
+        mWrite1View = (TextView) root.findViewById(R.id.write_1);
+        mWrite2View = (TextView) root.findViewById(R.id.write_2);
 
         initView();
 
@@ -63,6 +67,18 @@ public class MainControlFragment extends BaseMainFragment {
     }
 
     private void initView() {
+        mWrite1View.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getMainActivity().getBleService().writeData(new byte[]{1,2,3,4,5,3,2,1});
+            }
+        });
+        mWrite2View.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
 }

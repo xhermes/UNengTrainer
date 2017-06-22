@@ -8,36 +8,24 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.IBinder;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.clj.fastble.data.ScanResult;
 
 import java.lang.ref.WeakReference;
 
-import io.reactivex.Observable;
-import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 import me.xeno.unengtrainer.R;
-import me.xeno.unengtrainer.application.DataManager;
-import me.xeno.unengtrainer.blespp.BluetoothLeService;
 import me.xeno.unengtrainer.presenter.MainPresenter;
 import me.xeno.unengtrainer.service.BleService;
 import me.xeno.unengtrainer.util.ActivityUtils;
 import me.xeno.unengtrainer.util.Logger;
-import me.xeno.unengtrainer.util.ToastUtils;
 import me.xeno.unengtrainer.view.adapter.ShortcutAdapter;
 import me.xeno.unengtrainer.view.fragment.BluetoothDisabledFragment;
 import me.xeno.unengtrainer.view.fragment.DeviceRecyclerFragment;
@@ -73,6 +61,8 @@ public class MainActivity extends BaseActivity
 //    private MainPagerAdapter mPagerAdapter;
 
 //    private List<Fragment> mFragmentList = new ArrayList<>();
+
+    private ScanResult mScanResult;
 
     @Override
     protected void setContentView() {
@@ -209,26 +199,37 @@ public class MainActivity extends BaseActivity
         toggle.syncState();
     }
 
-    public void bindBleService() {
+    public void bindBleService(ScanResult scanResult) {
+        Logger.info("bindBleService()");
+        mScanResult = scanResult;
         Intent intent = new Intent(this, BleService.class);
-        bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
+        this.getApplicationContext().bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
     }
 
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder service) {
+            Logger.info("ServiceConnection onServiceConnected()");
             mBleService = ((BleService.BleBinder) service).getService();
             // Automatically connects to the device upon successful start-up initialization.
+            mBleService.setScanResult(mScanResult);
             mBleService.connect(mBleService.getScanResult());
             showMainControlFragment();
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
+            Logger.info("ServiceConnection onServiceDisconnected()");
             mBleService = null;
         }
     };
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        unbindService(mServiceConnection);
+    }
 
     public void showMainControlFragment() {
         if (mMainControlFragment == null) {
@@ -262,4 +263,9 @@ public class MainActivity extends BaseActivity
     public MainPresenter getPresenter() {
         return mPresenter;
     }
+
+    public BleService getBleService() {
+        return mBleService;
+    }
+
 }

@@ -21,6 +21,7 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import me.xeno.unengtrainer.R;
 import me.xeno.unengtrainer.model.BluetoothModel;
+import me.xeno.unengtrainer.util.Logger;
 import me.xeno.unengtrainer.util.ToastUtils;
 import me.xeno.unengtrainer.view.adapter.DeviceRecyclerAdapter;
 
@@ -134,7 +135,8 @@ public class DeviceRecyclerFragment extends BaseMainFragment implements DeviceRe
 
     @Override
     public void onSelect(ScanResult scanResult) {
+        Logger.info("onSelect()");
         //TODO
-        getMainActivity().bindBleService();
+        getMainActivity().bindBleService(scanResult);
     }
 }
