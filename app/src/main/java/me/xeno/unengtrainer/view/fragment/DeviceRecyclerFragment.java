@@ -134,6 +134,7 @@ public class DeviceRecyclerFragment extends BaseMainFragment implements DeviceRe
 
     @Override
     public void onSelect(ScanResult scanResult) {
-
+        //TODO
+        getMainActivity().bindBleService();
     }
 }

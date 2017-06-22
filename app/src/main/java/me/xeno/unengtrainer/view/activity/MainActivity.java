@@ -2,15 +2,19 @@ package me.xeno.unengtrainer.view.activity;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +32,9 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.xeno.unengtrainer.R;
 import me.xeno.unengtrainer.application.DataManager;
+import me.xeno.unengtrainer.blespp.BluetoothLeService;
+import me.xeno.unengtrainer.presenter.MainPresenter;
+import me.xeno.unengtrainer.service.BleService;
 import me.xeno.unengtrainer.util.ActivityUtils;
 import me.xeno.unengtrainer.util.Logger;
 import me.xeno.unengtrainer.util.ToastUtils;
@@ -39,7 +46,14 @@ import me.xeno.unengtrainer.view.fragment.MainControlFragment;
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    //TODO 目前流程 搜索设备->点选设备->bindService()->onServiceConnected()
+    //TODO ->调用connect()，同时切换到MainControlFragment
+
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
+
+    private MainPresenter mPresenter;
+
+    private BleService mBleService;
 
     private MainControlFragment mMainControlFragment;
     private BluetoothDisabledFragment mBlueToothDisabledFragment;
@@ -79,6 +93,8 @@ public class MainActivity extends BaseActivity
 
     @Override
     protected void initView() {
+        mPresenter = new MainPresenter(this);
+
         checkLocationPermissionV23();
 
         mToolbar.setTitle("未连接");
@@ -193,17 +209,26 @@ public class MainActivity extends BaseActivity
         toggle.syncState();
     }
 
-    public static void goFromActivity(WeakReference<BaseActivity> reference) {
-        BaseActivity activity = reference.get();
-        if (activity != null) {
-            Intent intent = new Intent(activity, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            activity.startActivity(intent);
-            setJumpingAnim(activity, BaseActivity.ANIM_FADE_IN_FADE_OUT);
-        }
+    public void bindBleService() {
+        Intent intent = new Intent(this, BleService.class);
+        bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
     }
 
+    private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder service) {
+            mBleService = ((BleService.BleBinder) service).getService();
+            // Automatically connects to the device upon successful start-up initialization.
+            mBleService.connect(mBleService.getScanResult());
+            showMainControlFragment();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            mBleService = null;
+        }
+    };
 
     public void showMainControlFragment() {
         if (mMainControlFragment == null) {
@@ -224,4 +249,17 @@ public class MainActivity extends BaseActivity
         ActivityUtils.replaceFragment(getSupportFragmentManager(), mDeviceRecyclerFragment, R.id.frame_content);
     }
 
+    public static void goFromActivity(WeakReference<BaseActivity> reference) {
+        BaseActivity activity = reference.get();
+        if (activity != null) {
+            Intent intent = new Intent(activity, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            activity.startActivity(intent);
+            setJumpingAnim(activity, BaseActivity.ANIM_FADE_IN_FADE_OUT);
+        }
+    }
+
+    public MainPresenter getPresenter() {
+        return mPresenter;
+    }
 }

@@ -6,4 +6,5 @@ package me.xeno.unengtrainer.application;
 
 public class Config {
 
+    public static byte RECEIVED_DATA_MAKE_ZERO = 0x01;
 }

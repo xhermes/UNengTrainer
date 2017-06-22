@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package me.xeno.unengtrainer.service;
+package me.xeno.unengtrainer.application;
 
 import java.util.HashMap;
 

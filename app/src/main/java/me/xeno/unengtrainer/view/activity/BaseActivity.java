@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import me.xeno.unengtrainer.R;
+import me.xeno.unengtrainer.presenter.MainPresenter;
 import me.xeno.unengtrainer.util.Logger;
 
 /**
