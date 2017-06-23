@@ -40,7 +40,11 @@
             android:screenOrientation="portrait" />
 
         <service
-            android:name=".service.BleService" />
+            android:name=".service.BleService">
+        <intent-filter>
+            <action android:name="me.xeno.unengtrainer.service.BleService" />
+        </intent-filter>
+        </service>
     </application>
 
 </manifest>

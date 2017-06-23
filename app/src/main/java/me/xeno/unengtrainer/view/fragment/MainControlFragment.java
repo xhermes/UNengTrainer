@@ -70,7 +70,8 @@ public class MainControlFragment extends BaseMainFragment {
         mWrite1View.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getMainActivity().getBleService().writeData(new byte[]{1,2,3,4,5,3,2,1});
+//                getMainActivity().getPresenter().getBleService().writeData(new byte[]{1,2,3,4,5,3,2,1});
+                //TODO 调用bluetoothModel 写数据
             }
         });
         mWrite2View.setOnClickListener(new View.OnClickListener() {

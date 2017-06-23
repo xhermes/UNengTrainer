@@ -9,6 +9,6 @@ public interface BleServiceListener {
      * receive data from trainer
      * @param data
      */
-    void onReceiveData(String data);
+    void onReceiveData(byte[] data);
 
 }

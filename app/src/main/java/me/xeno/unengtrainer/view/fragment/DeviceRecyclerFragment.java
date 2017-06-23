@@ -104,8 +104,8 @@ public class DeviceRecyclerFragment extends BaseMainFragment implements DeviceRe
     }
 
     private void startSearching() {
-        BluetoothModel model = new BluetoothModel();
-        model.scanForDevices().subscribe(new Observer<ScanResult>() {
+        getMainActivity().getPresenter()
+                .scanForDevices().subscribe(new Observer<ScanResult>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
                 //TODO dispose searching task when fragment exits
@@ -137,6 +137,6 @@ public class DeviceRecyclerFragment extends BaseMainFragment implements DeviceRe
     public void onSelect(ScanResult scanResult) {
         Logger.info("onSelect()");
         //TODO
-        getMainActivity().bindBleService(scanResult);
+        getMainActivity().getPresenter().bindService(scanResult);
     }
 }

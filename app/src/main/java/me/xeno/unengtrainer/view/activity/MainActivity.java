@@ -17,11 +17,12 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.clj.fastble.data.ScanResult;
 
 import java.lang.ref.WeakReference;
 
 import me.xeno.unengtrainer.R;
+import me.xeno.unengtrainer.listener.BleServiceListener;
+import me.xeno.unengtrainer.model.BluetoothModel;
 import me.xeno.unengtrainer.presenter.MainPresenter;
 import me.xeno.unengtrainer.service.BleService;
 import me.xeno.unengtrainer.util.ActivityUtils;
@@ -41,8 +42,6 @@ public class MainActivity extends BaseActivity
 
     private MainPresenter mPresenter;
 
-    private BleService mBleService;
-
     private MainControlFragment mMainControlFragment;
     private BluetoothDisabledFragment mBlueToothDisabledFragment;
     private DeviceRecyclerFragment mDeviceRecyclerFragment;
@@ -52,17 +51,9 @@ public class MainActivity extends BaseActivity
     //    private TabLayout mTabLayout;
     private DrawerLayout mDrawer;
     private NavigationView mNavigationView;
-
     private View mBottomActionBar;
     private View mFavouriteBtn;
     private View mSettingBtn;
-
-//    private ViewPager mViewPager;
-//    private MainPagerAdapter mPagerAdapter;
-
-//    private List<Fragment> mFragmentList = new ArrayList<>();
-
-    private ScanResult mScanResult;
 
     @Override
     protected void setContentView() {
@@ -110,7 +101,6 @@ public class MainActivity extends BaseActivity
 
     @Override
     protected void loadData() {
-
     }
 
     private void prepareFragments() {
@@ -125,14 +115,14 @@ public class MainActivity extends BaseActivity
 //                        R.id.frame_content);
 
         showBlueToothFragment();
-        setmBottomBarVisibility(View.GONE);
+        setBottomBarVisibility(View.GONE);
         mNavigationView.setCheckedItem(R.id.nav_bluetooth);
 //        mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), mFragmentList);
 //        mViewPager.setAdapter(mPagerAdapter);
 
     }
 
-    public void setmBottomBarVisibility(int visibility) {
+    public void setBottomBarVisibility(int visibility) {
         mBottomActionBar.setVisibility(visibility);
     }
 
@@ -199,36 +189,10 @@ public class MainActivity extends BaseActivity
         toggle.syncState();
     }
 
-    public void bindBleService(ScanResult scanResult) {
-        Logger.info("bindBleService()");
-        mScanResult = scanResult;
-        Intent intent = new Intent(this, BleService.class);
-        this.getApplicationContext().bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
-    }
-
-    private final ServiceConnection mServiceConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder service) {
-            Logger.info("ServiceConnection onServiceConnected()");
-            mBleService = ((BleService.BleBinder) service).getService();
-            // Automatically connects to the device upon successful start-up initialization.
-            mBleService.setScanResult(mScanResult);
-            mBleService.connect(mBleService.getScanResult());
-            showMainControlFragment();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            Logger.info("ServiceConnection onServiceDisconnected()");
-            mBleService = null;
-        }
-    };
-
     @Override
     protected void onDestroy(){
         super.onDestroy();
-        unbindService(mServiceConnection);
+       mPresenter.onDestroy();
     }
 
     public void showMainControlFragment() {
@@ -262,10 +226,6 @@ public class MainActivity extends BaseActivity
 
     public MainPresenter getPresenter() {
         return mPresenter;
-    }
-
-    public BleService getBleService() {
-        return mBleService;
     }
 
 }

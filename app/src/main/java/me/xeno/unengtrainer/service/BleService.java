@@ -36,10 +36,6 @@ import me.xeno.unengtrainer.util.Logger;
 
 public class BleService extends Service {
 
-    private static final int STATE_DISCONNECTED = 0;
-    private static final int STATE_CONNECTING = 1;
-    private static final int STATE_CONNECTED = 2;
-
     private static final boolean AUTO_CONNECT = false;
 
     private BleServiceListener mListener;//TODO 记得从MainActivity传入值
@@ -53,7 +49,7 @@ public class BleService extends Service {
     private BluetoothGattCharacteristic mNotifyCharacteristic;
     private BluetoothGattCharacteristic mWriteCharacteristic;
 
-    private int mConnectionState = STATE_DISCONNECTED;
+//    private int mConnectionState = STATE_DISCONNECTED;
 
     @Override
     public void onCreate() {
@@ -98,6 +94,8 @@ public class BleService extends Service {
             super.onServicesDiscovered(gatt, status);
             Logger.info("onServicesDiscovered() status = " + status);
 
+            mBluetoothGatt = gatt;
+
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 // 默认先使用 B-0006/TL8266 服务发现
                 BluetoothGattService service = gatt.getService(UUID.fromString(BleSppGattAttributes.BLE_SPP_Service));
@@ -109,7 +107,7 @@ public class BleService extends Service {
                     if (mNotifyCharacteristic!=null) {
                         //TODO Demo中在此处向activity发送了标记连接成功的广播，并进行了UI更新。即将执行到此处定义为连接成功
 
-                        //TODO 使能Notify，这个操作有何作用？
+                        // 使能Notify，开始接收characteristicChange的消息
                         setCharacteristicNotification(mNotifyCharacteristic, true);
                     }
                 } else {
@@ -124,9 +122,10 @@ public class BleService extends Service {
             super.onCharacteristicRead(gatt, characteristic, status);
             Logger.info("onCharacteristicRead()");
 
+            //主动读取，不适用
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 Logger.info("onCharacteristicRead(): " + bytes2HexString(characteristic.getValue()));
-                mListener.onReceiveData(bytes2HexString(characteristic.getValue()));
+                mListener.onReceiveData(characteristic.getValue());
             }
         }
 
@@ -156,7 +155,10 @@ public class BleService extends Service {
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             super.onCharacteristicChanged(gatt, characteristic);
-            Logger.info("onCharacteristicChanged()");
+            Logger.info("onCharacteristicChanged(): value = " + bytes2HexString(characteristic.getValue()));
+
+            //监听
+            mListener.onReceiveData(characteristic.getValue());
         }
 
         @Override
@@ -250,7 +252,7 @@ public class BleService extends Service {
         }
 
         DataManager.getInstance().getBleManager().connectDevice(scanResult, AUTO_CONNECT, mBleGattCallback);
-        mConnectionState = STATE_CONNECTING;
+//        mConnectionState = STATE_CONNECTING;
         return true;
     }
 
@@ -278,7 +280,6 @@ public class BleService extends Service {
 
     }
 
-
     /**
      * @param b 字节数组
      * @return 16进制字符串
@@ -303,7 +304,11 @@ public class BleService extends Service {
         return mBinder;
     }
 
-
+    @Override
+    public boolean onUnbind(Intent intent) {
+        disconnect();
+        return super.onUnbind(intent);
+    }
 
     public class BleBinder extends Binder {
         public BleService getService() {
@@ -317,5 +322,9 @@ public class BleService extends Service {
 
     public void setScanResult(ScanResult scanResult) {
         this.mScanResult = scanResult;
+    }
+
+    public void setListener(BleServiceListener listener) {
+        this.mListener = listener;
     }
 }

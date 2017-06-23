@@ -74,45 +74,5 @@ public class ServiceRecyclerAdapter extends RecyclerView.Adapter<ServiceHolder> 
         return dataList.size();
     }
 
-    private void connectDevice(ScanResult scanResult, boolean autoConnect) {
-        Logger.info("connectDevice()-------------->" + scanResult.getDevice().getAddress());
 
-        BluetoothModel model = new BluetoothModel();
-        model.connect(mContext, scanResult, autoConnect)
-                .subscribe(new Observer<ConnectionWrapper>() {
-            @Override
-            public void onSubscribe(@NonNull Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(@NonNull ConnectionWrapper connectionWrapper) {
-                switch (connectionWrapper.getMsgCode()) {
-                    case ConnectionWrapper.MSG_CODE_DEVICE_NOT_FOUND:
-                        ToastUtils.toast(mContext, connectionWrapper.getMessage());
-                        break;
-                    case ConnectionWrapper.MSG_CODE_DEVICE_FOUND:
-
-                        break;
-                    case ConnectionWrapper.MSG_CODE_CONNECT_FAIL:
-                        break;
-                    case ConnectionWrapper.MSG_CODE_CONNECT_SUCCESS:
-                        break;
-                    case ConnectionWrapper.MSG_CODE_SERVICES_DISCOVERD:
-                        //TODO
-                        break;
-                }
-            }
-
-            @Override
-            public void onError(@NonNull Throwable e) {
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        });
-    }
 }
