@@ -27,18 +27,31 @@ import me.xeno.unengtrainer.application.BleSppGattAttributes;
 import me.xeno.unengtrainer.application.DataManager;
 import me.xeno.unengtrainer.listener.BleServiceListener;
 import me.xeno.unengtrainer.model.ConnectionWrapper;
+import me.xeno.unengtrainer.model.entity.GetStatusWrapper;
 import me.xeno.unengtrainer.util.Logger;
 
 /**
  * Created by Administrator on 2017/6/11.
- * //TODO 需要用此service来保存BLE连接成功后的状态，可以参考github fastble源码
  */
 
 public class BleService extends Service {
 
+    public static final byte DATA_TYPE_GET_STATUS = 0x02;//查询步进电机状态 & 回归零点命令返回值 & 下位机主动发送异常状态
+    public static final byte DATA_TYPE_ENABLE = 0x03;//使能步进电机
+    public static final byte DATA_TYPE_SWITCH_BRAKE = 0x04;//打开/关闭电机刹车
+    public static final byte DATA_TYPE_MAKE_ZERO_COMPLETED = 0x05;//回归零点完成
+    public static final byte DATA_TYPE_SET_AXIS_ANGLE = 0x06;//设置1,2轴角度
+    public static final byte DATA_TYPE_SWITCH_AXIS = 0x07;//1,2轴单轴运行/停止
+    public static final byte DATA_TYPE_SET_AXIS_SPEED = 0x08;//设置轴运行速度
+    public static final byte DATA_TYPE_GET_AXIS_ANGLE = 0x09;//获取1,2轴当前角度
+    public static final byte DATA_TYPE_SET_MOTOR_SPEED = 0x0A;//设置第 1,2 发球电机的速度
+    public static final byte DATA_TYPE_GET_BATTERY_VOLTAGE = 0x0B;//获取电池电压
+
     private static final boolean AUTO_CONNECT = false;
 
     private BleServiceListener mListener;//TODO 记得从MainActivity传入值
+
+    BleServiceProcessor mProcessor;
 
     private BleBinder mBinder = new BleBinder();
 
@@ -55,6 +68,7 @@ public class BleService extends Service {
     public void onCreate() {
         super.onCreate();
         Logger.info("BleService onCreate()");
+        mProcessor = new BleServiceProcessor();
     }
 
     private BleGattCallback mBleGattCallback = new BleGattCallback() {
@@ -125,7 +139,7 @@ public class BleService extends Service {
             //主动读取，不适用
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 Logger.info("onCharacteristicRead(): " + bytes2HexString(characteristic.getValue()));
-                mListener.onReceiveData(characteristic.getValue());
+                handleReceivedData(characteristic.getValue());
             }
         }
 
@@ -158,7 +172,7 @@ public class BleService extends Service {
             Logger.info("onCharacteristicChanged(): value = " + bytes2HexString(characteristic.getValue()));
 
             //监听
-            mListener.onReceiveData(characteristic.getValue());
+            handleReceivedData(characteristic.getValue());
         }
 
         @Override
@@ -277,6 +291,69 @@ public class BleService extends Service {
 
         DataManager.getInstance().getBleManager().writeDevice(BleSppGattAttributes.BLE_SPP_Service,
                 mWriteCharacteristic.getUuid().toString(), data, mBleCharacterCallback);
+
+    }
+
+    public void handleReceivedData(byte[] dataPacket) {
+        //handle all data from bluetooth
+
+        byte header = dataPacket[0];
+        byte type = dataPacket[1];
+        byte length = dataPacket[2];
+        byte[] data = new byte[length];
+        byte crc = dataPacket[dataPacket.length - 2];
+        byte end = dataPacket[dataPacket.length - 1];
+
+        //回复帧头固定为0xFC，若非直接抛弃
+        if(header != 0xFC) {
+            Logger.warning("接收到蓝牙数据，帧头数据错误！");
+            return;
+        }
+
+        //TODO 使用校验位，校验数据，失败直接抛弃
+        //TODO 溢出忽略？
+//        int crc = header + type + length + data[3];
+//        if(data[4] != crc) {
+//            Logger.warning("接收到蓝牙数据，校验错误！");
+//            return;
+//        }
+
+        //打印数据长度
+        Logger.info("handleReceivedData: data Length = " + length);
+
+        //根据命令号处理
+        switch (type) {
+            case DATA_TYPE_GET_STATUS:
+                mListener.onGetStatus(mProcessor.handleGetStatus(data));
+                break;
+            case DATA_TYPE_ENABLE:
+                mListener.onEnable(mProcessor.handleEnable(data));
+                break;
+            case DATA_TYPE_SWITCH_BRAKE:
+                mListener.onTurnBrake(mProcessor.handleTurnBrake(data));
+                break;
+            case DATA_TYPE_MAKE_ZERO_COMPLETED:
+                mListener.onMakeZeroCompleted(mProcessor.handleMakeZeroCompleted(data));
+                break;
+            case DATA_TYPE_SET_AXIS_ANGLE:
+                mListener.onSetAxisAngle(mProcessor.handleSetAxisAngle(data));
+                break;
+            case DATA_TYPE_SWITCH_AXIS:
+                mListener.onRunAxis(mProcessor.handleRunAxis(data));
+                break;
+            case DATA_TYPE_SET_AXIS_SPEED:
+                mListener.onSetAxisSpeed(mProcessor.handleSetAxisSpeed(data));
+                break;
+            case DATA_TYPE_GET_AXIS_ANGLE:
+                mListener.onGetAxisAngle(mProcessor.handleGetAxisAngle(data));
+                break;
+            case DATA_TYPE_SET_MOTOR_SPEED:
+                mListener.onSetMotorSpeed(mProcessor.handleSetMotorSpeed(data));
+                break;
+            case DATA_TYPE_GET_BATTERY_VOLTAGE:
+                mListener.onGetBatteryVoltage(mProcessor.handleGetBatteryVoltage(data));
+                break;
+        }
 
     }
 

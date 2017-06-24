@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.clj.fastble.data.ScanResult;
 import com.clj.fastble.scan.ListScanCallback;
 
@@ -18,6 +19,16 @@ import io.reactivex.schedulers.Schedulers;
 import me.xeno.unengtrainer.application.DataManager;
 import me.xeno.unengtrainer.listener.BleServiceListener;
 import me.xeno.unengtrainer.model.BluetoothModel;
+import me.xeno.unengtrainer.model.entity.EnableWrapper;
+import me.xeno.unengtrainer.model.entity.GetAxisAngleWrapper;
+import me.xeno.unengtrainer.model.entity.GetBatteryVoltageWrapper;
+import me.xeno.unengtrainer.model.entity.GetStatusWrapper;
+import me.xeno.unengtrainer.model.entity.MakeZeroCompletedWrapper;
+import me.xeno.unengtrainer.model.entity.RunAxisWrapper;
+import me.xeno.unengtrainer.model.entity.SetAxisAngleWrapper;
+import me.xeno.unengtrainer.model.entity.SetAxisSpeedWrapper;
+import me.xeno.unengtrainer.model.entity.SetMotorSpeedWrapper;
+import me.xeno.unengtrainer.model.entity.TurnBrakeWrapper;
 import me.xeno.unengtrainer.service.BleService;
 import me.xeno.unengtrainer.util.Logger;
 import me.xeno.unengtrainer.view.activity.MainActivity;
@@ -43,8 +54,69 @@ public class MainPresenter {
 
     private BleServiceListener mListener = new BleServiceListener() {
         @Override
-        public void onReceiveData(byte[] data) {
-            mModel.handleReceivedData();
+        public void onGetStatus(GetStatusWrapper wrapper) {
+
+            GetStatusWrapper.AxisStatus axisStatus1 = wrapper.getAxisStatuses()[0];
+            GetStatusWrapper.AxisStatus axisStatus2 = wrapper.getAxisStatuses()[1];
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("运行状态：").append(axisStatus1.isRunning()).append(axisStatus2.isRunning()).append("\n")
+                    .append("急停：").append(axisStatus1.isAbruptStopping()).append(axisStatus2.isAbruptStopping()).append("\n")
+                    .append("报警位：").append(axisStatus1.isAlerting()).append(axisStatus2.isAlerting()).append("\n")
+                    .append("正限位：").append(axisStatus1.isPositiveSpacing()).append(axisStatus2.isPositiveSpacing()).append("\n")
+                    .append("负限位：").append(axisStatus1.isNegativeSpacing()).append(axisStatus2.isNegativeSpacing()).append("\n");
+
+            String content = sb.toString();
+
+            new MaterialDialog.Builder(mActivity)
+                    .title("查询步进电机状态回复")
+                    .content(content)
+                    .show();
+        }
+
+        @Override
+        public void onEnable(EnableWrapper wrapper) {
+
+        }
+
+        @Override
+        public void onTurnBrake(TurnBrakeWrapper wrapper) {
+
+        }
+
+        @Override
+        public void onMakeZeroCompleted(MakeZeroCompletedWrapper wrapper) {
+
+        }
+
+        @Override
+        public void onSetAxisAngle(SetAxisAngleWrapper wrapper) {
+
+        }
+
+        @Override
+        public void onRunAxis(RunAxisWrapper wrapper) {
+
+        }
+
+        @Override
+        public void onSetAxisSpeed(SetAxisSpeedWrapper wrapper) {
+
+        }
+
+        @Override
+        public void onGetAxisAngle(GetAxisAngleWrapper wrapper) {
+
+        }
+
+        @Override
+        public void onSetMotorSpeed(SetMotorSpeedWrapper wrapper) {
+
+        }
+
+        @Override
+        public void onGetBatteryVoltage(GetBatteryVoltageWrapper wrapper) {
+
         }
     };
 
