@@ -5,10 +5,13 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.os.SystemClock;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.clj.fastble.data.ScanResult;
 import com.clj.fastble.scan.ListScanCallback;
+
+import java.text.ParseException;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -21,6 +24,7 @@ import me.xeno.unengtrainer.application.DataManager;
 import me.xeno.unengtrainer.listener.BleServiceListener;
 import me.xeno.unengtrainer.model.BluetoothModel;
 import me.xeno.unengtrainer.model.entity.EnableWrapper;
+import me.xeno.unengtrainer.model.entity.FavoiriteRecord;
 import me.xeno.unengtrainer.model.entity.GetAxisAngleWrapper;
 import me.xeno.unengtrainer.model.entity.GetBatteryVoltageWrapper;
 import me.xeno.unengtrainer.model.entity.GetStatusWrapper;
@@ -33,6 +37,7 @@ import me.xeno.unengtrainer.model.entity.TurnBrakeWrapper;
 import me.xeno.unengtrainer.service.BleService;
 import me.xeno.unengtrainer.util.Logger;
 import me.xeno.unengtrainer.util.SpUtils;
+import me.xeno.unengtrainer.util.TimeUtils;
 import me.xeno.unengtrainer.view.activity.MainActivity;
 
 import static android.content.Context.BIND_AUTO_CREATE;
@@ -136,7 +141,14 @@ public class MainPresenter {
         setMotorSpeed(speed1, speed2);
     }
 
-    public void addToFavourite(double angle1, double angle2, int speed1, int speed2) {
+    public void addToFavourite(String name, double angle1, double angle2, int speed1, int speed2) {
+        try {
+            String currentTime = TimeUtils.longToString(System.currentTimeMillis(), "yyyy-MM-dd HH:mm");
+            FavoiriteRecord record = new FavoiriteRecord(name, currentTime, currentTime, angle1, angle2, speed1, speed2);
+            DataManager.getInstance().getDaoSession().getFavoiriteRecordDao().insert(record);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
     }
 

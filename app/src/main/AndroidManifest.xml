@@ -33,8 +33,10 @@
             android:name=".view.activity.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
-
         </activity>
+        <activity
+            android:name=".view.activity.FavouriteActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.TestActivity"
             android:screenOrientation="portrait" />

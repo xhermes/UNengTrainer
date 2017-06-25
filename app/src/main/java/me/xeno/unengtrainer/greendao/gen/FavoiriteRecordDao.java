@@ -15,7 +15,7 @@ import me.xeno.unengtrainer.model.entity.FavoiriteRecord;
 /** 
  * DAO for table "FAVOIRITE_RECORD".
 */
-public class FavoiriteRecordDao extends AbstractDao<FavoiriteRecord, Long> {
+public class FavoiriteRecordDao extends AbstractDao<FavoiriteRecord, Void> {
 
     public static final String TABLENAME = "FAVOIRITE_RECORD";
 
@@ -24,14 +24,13 @@ public class FavoiriteRecordDao extends AbstractDao<FavoiriteRecord, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, long.class, "id", true, "_id");
-        public final static Property Name = new Property(1, String.class, "name", false, "NAME");
-        public final static Property CreateTime = new Property(2, String.class, "createTime", false, "CREATE_TIME");
-        public final static Property ModifyTime = new Property(3, String.class, "modifyTime", false, "MODIFY_TIME");
-        public final static Property SwingAngle = new Property(4, double.class, "swingAngle", false, "SWING_ANGLE");
-        public final static Property ElevationAngle = new Property(5, double.class, "elevationAngle", false, "ELEVATION_ANGLE");
-        public final static Property LeftMotorSpeed = new Property(6, int.class, "leftMotorSpeed", false, "LEFT_MOTOR_SPEED");
-        public final static Property RightMotorSpeed = new Property(7, int.class, "rightMotorSpeed", false, "RIGHT_MOTOR_SPEED");
+        public final static Property Name = new Property(0, String.class, "name", false, "NAME");
+        public final static Property CreateTime = new Property(1, String.class, "createTime", false, "CREATE_TIME");
+        public final static Property ModifyTime = new Property(2, String.class, "modifyTime", false, "MODIFY_TIME");
+        public final static Property SwingAngle = new Property(3, double.class, "swingAngle", false, "SWING_ANGLE");
+        public final static Property ElevationAngle = new Property(4, double.class, "elevationAngle", false, "ELEVATION_ANGLE");
+        public final static Property LeftMotorSpeed = new Property(5, int.class, "leftMotorSpeed", false, "LEFT_MOTOR_SPEED");
+        public final static Property RightMotorSpeed = new Property(6, int.class, "rightMotorSpeed", false, "RIGHT_MOTOR_SPEED");
     }
 
 
@@ -47,14 +46,13 @@ public class FavoiriteRecordDao extends AbstractDao<FavoiriteRecord, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"FAVOIRITE_RECORD\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY NOT NULL ," + // 0: id
-                "\"NAME\" TEXT," + // 1: name
-                "\"CREATE_TIME\" TEXT," + // 2: createTime
-                "\"MODIFY_TIME\" TEXT," + // 3: modifyTime
-                "\"SWING_ANGLE\" REAL NOT NULL ," + // 4: swingAngle
-                "\"ELEVATION_ANGLE\" REAL NOT NULL ," + // 5: elevationAngle
-                "\"LEFT_MOTOR_SPEED\" INTEGER NOT NULL ," + // 6: leftMotorSpeed
-                "\"RIGHT_MOTOR_SPEED\" INTEGER NOT NULL );"); // 7: rightMotorSpeed
+                "\"NAME\" TEXT," + // 0: name
+                "\"CREATE_TIME\" TEXT," + // 1: createTime
+                "\"MODIFY_TIME\" TEXT," + // 2: modifyTime
+                "\"SWING_ANGLE\" REAL NOT NULL ," + // 3: swingAngle
+                "\"ELEVATION_ANGLE\" REAL NOT NULL ," + // 4: elevationAngle
+                "\"LEFT_MOTOR_SPEED\" INTEGER NOT NULL ," + // 5: leftMotorSpeed
+                "\"RIGHT_MOTOR_SPEED\" INTEGER NOT NULL );"); // 6: rightMotorSpeed
     }
 
     /** Drops the underlying database table. */
@@ -66,103 +64,96 @@ public class FavoiriteRecordDao extends AbstractDao<FavoiriteRecord, Long> {
     @Override
     protected final void bindValues(DatabaseStatement stmt, FavoiriteRecord entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
  
         String name = entity.getName();
         if (name != null) {
-            stmt.bindString(2, name);
+            stmt.bindString(1, name);
         }
  
         String createTime = entity.getCreateTime();
         if (createTime != null) {
-            stmt.bindString(3, createTime);
+            stmt.bindString(2, createTime);
         }
  
         String modifyTime = entity.getModifyTime();
         if (modifyTime != null) {
-            stmt.bindString(4, modifyTime);
+            stmt.bindString(3, modifyTime);
         }
-        stmt.bindDouble(5, entity.getSwingAngle());
-        stmt.bindDouble(6, entity.getElevationAngle());
-        stmt.bindLong(7, entity.getLeftMotorSpeed());
-        stmt.bindLong(8, entity.getRightMotorSpeed());
+        stmt.bindDouble(4, entity.getSwingAngle());
+        stmt.bindDouble(5, entity.getElevationAngle());
+        stmt.bindLong(6, entity.getLeftMotorSpeed());
+        stmt.bindLong(7, entity.getRightMotorSpeed());
     }
 
     @Override
     protected final void bindValues(SQLiteStatement stmt, FavoiriteRecord entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
  
         String name = entity.getName();
         if (name != null) {
-            stmt.bindString(2, name);
+            stmt.bindString(1, name);
         }
  
         String createTime = entity.getCreateTime();
         if (createTime != null) {
-            stmt.bindString(3, createTime);
+            stmt.bindString(2, createTime);
         }
  
         String modifyTime = entity.getModifyTime();
         if (modifyTime != null) {
-            stmt.bindString(4, modifyTime);
+            stmt.bindString(3, modifyTime);
         }
-        stmt.bindDouble(5, entity.getSwingAngle());
-        stmt.bindDouble(6, entity.getElevationAngle());
-        stmt.bindLong(7, entity.getLeftMotorSpeed());
-        stmt.bindLong(8, entity.getRightMotorSpeed());
+        stmt.bindDouble(4, entity.getSwingAngle());
+        stmt.bindDouble(5, entity.getElevationAngle());
+        stmt.bindLong(6, entity.getLeftMotorSpeed());
+        stmt.bindLong(7, entity.getRightMotorSpeed());
     }
 
     @Override
-    public Long readKey(Cursor cursor, int offset) {
-        return cursor.getLong(offset + 0);
+    public Void readKey(Cursor cursor, int offset) {
+        return null;
     }    
 
     @Override
     public FavoiriteRecord readEntity(Cursor cursor, int offset) {
         FavoiriteRecord entity = new FavoiriteRecord( //
-            cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // name
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // createTime
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // modifyTime
-            cursor.getDouble(offset + 4), // swingAngle
-            cursor.getDouble(offset + 5), // elevationAngle
-            cursor.getInt(offset + 6), // leftMotorSpeed
-            cursor.getInt(offset + 7) // rightMotorSpeed
+            cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // name
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // createTime
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // modifyTime
+            cursor.getDouble(offset + 3), // swingAngle
+            cursor.getDouble(offset + 4), // elevationAngle
+            cursor.getInt(offset + 5), // leftMotorSpeed
+            cursor.getInt(offset + 6) // rightMotorSpeed
         );
         return entity;
     }
      
     @Override
     public void readEntity(Cursor cursor, FavoiriteRecord entity, int offset) {
-        entity.setId(cursor.getLong(offset + 0));
-        entity.setName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setCreateTime(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setModifyTime(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setSwingAngle(cursor.getDouble(offset + 4));
-        entity.setElevationAngle(cursor.getDouble(offset + 5));
-        entity.setLeftMotorSpeed(cursor.getInt(offset + 6));
-        entity.setRightMotorSpeed(cursor.getInt(offset + 7));
+        entity.setName(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
+        entity.setCreateTime(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setModifyTime(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setSwingAngle(cursor.getDouble(offset + 3));
+        entity.setElevationAngle(cursor.getDouble(offset + 4));
+        entity.setLeftMotorSpeed(cursor.getInt(offset + 5));
+        entity.setRightMotorSpeed(cursor.getInt(offset + 6));
      }
     
     @Override
-    protected final Long updateKeyAfterInsert(FavoiriteRecord entity, long rowId) {
-        entity.setId(rowId);
-        return rowId;
+    protected final Void updateKeyAfterInsert(FavoiriteRecord entity, long rowId) {
+        // Unsupported or missing PK type
+        return null;
     }
     
     @Override
-    public Long getKey(FavoiriteRecord entity) {
-        if(entity != null) {
-            return entity.getId();
-        } else {
-            return null;
-        }
+    public Void getKey(FavoiriteRecord entity) {
+        return null;
     }
 
     @Override
     public boolean hasKey(FavoiriteRecord entity) {
-        throw new UnsupportedOperationException("Unsupported for entities with a non-null key");
+        // TODO
+        return false;
     }
 
     @Override

@@ -7,50 +7,42 @@ import org.greenrobot.greendao.annotation.Generated;
 /**
  * Created by Administrator on 2017/6/25.
  */
-
 @Entity
-public class FavoiriteRecord {
+public class HistoryRecord {
 
-    private String name;
+    @Id
+    private long id;
+
     private String createTime;
-    private String modifyTime;
 
     private double swingAngle;
     private double elevationAngle;
     private int leftMotorSpeed;
     private int rightMotorSpeed;
-    @Generated(hash = 1181040709)
-    public FavoiriteRecord(String name, String createTime, String modifyTime,
-            double swingAngle, double elevationAngle, int leftMotorSpeed,
-            int rightMotorSpeed) {
-        this.name = name;
+    @Generated(hash = 658306288)
+    public HistoryRecord(long id, String createTime, double swingAngle,
+            double elevationAngle, int leftMotorSpeed, int rightMotorSpeed) {
+        this.id = id;
         this.createTime = createTime;
-        this.modifyTime = modifyTime;
         this.swingAngle = swingAngle;
         this.elevationAngle = elevationAngle;
         this.leftMotorSpeed = leftMotorSpeed;
         this.rightMotorSpeed = rightMotorSpeed;
     }
-    @Generated(hash = 883964941)
-    public FavoiriteRecord() {
+    @Generated(hash = 725453896)
+    public HistoryRecord() {
     }
-    public String getName() {
-        return this.name;
+    public long getId() {
+        return this.id;
     }
-    public void setName(String name) {
-        this.name = name;
+    public void setId(long id) {
+        this.id = id;
     }
     public String getCreateTime() {
         return this.createTime;
     }
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
-    }
-    public String getModifyTime() {
-        return this.modifyTime;
-    }
-    public void setModifyTime(String modifyTime) {
-        this.modifyTime = modifyTime;
     }
     public double getSwingAngle() {
         return this.swingAngle;
@@ -76,7 +68,4 @@ public class FavoiriteRecord {
     public void setRightMotorSpeed(int rightMotorSpeed) {
         this.rightMotorSpeed = rightMotorSpeed;
     }
-
-
-
 }

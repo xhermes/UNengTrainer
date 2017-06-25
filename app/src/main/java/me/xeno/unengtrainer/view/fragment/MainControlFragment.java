@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -21,6 +24,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import me.xeno.unengtrainer.R;
 import me.xeno.unengtrainer.application.Config;
+import me.xeno.unengtrainer.application.DataManager;
 import me.xeno.unengtrainer.util.Logger;
 
 /**
@@ -179,6 +183,7 @@ public class MainControlFragment extends BaseMainFragment {
                 break;
             case R.id.action_favourite:
 //                getMainActivity().getPresenter().addToFavourite();
+                showAddFavouriteDialog();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -192,6 +197,28 @@ public class MainControlFragment extends BaseMainFragment {
         batteryView.setText("当前电压：" + voltage + " V");
     }
 
+    public void showAddFavouriteDialog() {
+        long count = DataManager.getInstance().getDaoSession().getFavoiriteRecordDao().count();
+
+        new MaterialDialog.Builder(getActivity())
+                .title("收藏")
+                .content("将当前的参数保存到收藏列表，您可以在「我的收藏」中看到所有的收藏内容。")
+                .input("为此收藏记录命名", "记录" + (count + 1), new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        getMainActivity().getPresenter().addToFavourite(input.toString(), 12.3,12.3,30,85);
+                    }
+                })
+                .positiveText("添加收藏")
+                .negativeText("取消")
+//                .onPositive(new MaterialDialog.SingleButtonCallback() {
+//                    @Override
+//                    public void onClick(@android.support.annotation.NonNull MaterialDialog dialog, @android.support.annotation.NonNull DialogAction which) {
+//                        getMainActivity().getPresenter().addToFavourite();
+//                    }
+//                })
+                .show();
+    }
 
 
 }
