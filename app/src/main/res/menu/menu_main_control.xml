@@ -7,10 +7,10 @@
         android:orderInCategory="1"
         android:title="收藏"
         app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/action_send"
-        android:icon="@drawable/ic_send"
-        android:orderInCategory="2"
-        android:title="发送"
-        app:showAsAction="ifRoom" />
+    <!--<item-->
+        <!--android:id="@+id/action_send"-->
+        <!--android:icon="@drawable/ic_send"-->
+        <!--android:orderInCategory="2"-->
+        <!--android:title="发送"-->
+        <!--app:showAsAction="ifRoom" />-->
 </menu>

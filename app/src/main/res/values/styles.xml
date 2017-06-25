@@ -101,4 +101,11 @@
         <item name="android:background">@color/greyDD</item>
     </style>
 
+    <style name="temp" >
+        <item name="android:textSize">@dimen/text_size_sub_title</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/selector_button_white</item>
+    </style>
+
 </resources>

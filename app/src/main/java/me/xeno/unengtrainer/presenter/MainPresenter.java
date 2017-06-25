@@ -131,12 +131,13 @@ public class MainPresenter {
     /**
      * 向机器发送调整姿态命令，参数由用户在界面中设置好
      * 速度分成 100 等份，超过100不执行
-     * @param angle1 第一轴角度 //TODO 范围？
+     * @param angle1 第一轴角度
      * @param angle2 第二轴角度
      * @param speed1 电机1转速
      * @param speed2 电机2转速
      */
     public void send(double angle1, double angle2, int speed1, int speed2) {
+        Logger.info("send:=======> angle1=" + angle1 + " angle2=" + angle2 + "speed1=" + speed1 + "speed2=" + speed2);
         setAxisAngle(angle1, angle2);
         setMotorSpeed(speed1, speed2);
     }
@@ -144,7 +145,13 @@ public class MainPresenter {
     public void addToFavourite(String name, double angle1, double angle2, int speed1, int speed2) {
         try {
             String currentTime = TimeUtils.longToString(System.currentTimeMillis(), "yyyy-MM-dd HH:mm");
-            FavouriteRecord record = new FavouriteRecord(name, currentTime, currentTime, angle1, angle2, speed1, speed2);
+            FavouriteRecord record = new FavouriteRecord();
+//            name, currentTime, currentTime, angle1, angle2, speed1, speed2
+                    record.setName(name);
+            record.setCreateTime(currentTime);
+            record.setModifyTime(currentTime);
+            record.setSwingAngle(angle1);
+            record.setElevationAngle(angle2);
             DataManager.getInstance().getDaoSession().getFavouriteRecordDao().insert(record);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -210,6 +217,8 @@ public class MainPresenter {
             mBleService.setListener(mListener);
             mBleService.setScanResult(mScanResult);
             mBleService.connect(mBleService.getScanResult());
+
+            mActivity.setTitle(mScanResult.getDevice().getName());
             mActivity.showMainControlFragment();
         }
 

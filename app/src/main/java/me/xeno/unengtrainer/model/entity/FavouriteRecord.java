@@ -10,6 +10,8 @@ import org.greenrobot.greendao.annotation.Generated;
 
 @Entity
 public class FavouriteRecord {
+    @Id(autoincrement = true)
+    private Long id = null;
 
     private String name;
     private String createTime;
@@ -19,10 +21,11 @@ public class FavouriteRecord {
     private double elevationAngle;
     private int leftMotorSpeed;
     private int rightMotorSpeed;
-    @Generated(hash = 1507407770)
-    public FavouriteRecord(String name, String createTime, String modifyTime,
-            double swingAngle, double elevationAngle, int leftMotorSpeed,
-            int rightMotorSpeed) {
+    @Generated(hash = 1644622795)
+    public FavouriteRecord(Long id, String name, String createTime,
+            String modifyTime, double swingAngle, double elevationAngle,
+            int leftMotorSpeed, int rightMotorSpeed) {
+        this.id = id;
         this.name = name;
         this.createTime = createTime;
         this.modifyTime = modifyTime;
@@ -33,6 +36,12 @@ public class FavouriteRecord {
     }
     @Generated(hash = 902397497)
     public FavouriteRecord() {
+    }
+    public Long getId() {
+        return this.id;
+    }
+    public void setId(Long id) {
+        this.id = id;
     }
     public String getName() {
         return this.name;
@@ -76,6 +85,6 @@ public class FavouriteRecord {
     public void setRightMotorSpeed(int rightMotorSpeed) {
         this.rightMotorSpeed = rightMotorSpeed;
     }
-
+  
 
 }

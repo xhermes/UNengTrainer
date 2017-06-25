@@ -2,6 +2,9 @@ package me.xeno.unengtrainer.view.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.AppCompatSeekBar;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,19 +35,42 @@ import me.xeno.unengtrainer.util.Logger;
  */
 public class MainControlFragment extends BaseMainFragment {
 
-    private TextView mDescription;
-    private TextView mWrite1View;
-    private TextView mWrite2View;
-    private TextView tv_angle;
-    private TextView tv_voltage;
+//    private TextView mDescription;
+//    private TextView mWrite1View;
+//    private TextView mWrite2View;
+//    private TextView tv_angle;
+//    private TextView tv_voltage;
     private TextView angleView;
     private TextView batteryView;
-    private TextView stop;
+//    private TextView stop;
+//
+//    private EditText motor1;
+//    private EditText motor2;
+//    private EditText input;
+//    private TextView makeZero;
 
-    private EditText motor1;
-    private EditText motor2;
-    private EditText input;
-    private TextView makeZero;
+    private AppCompatSeekBar mElevationAngleBar;
+    private AppCompatSeekBar mSwingAngleBar;
+    private AppCompatSeekBar mLeftSpeedBar;
+    private AppCompatSeekBar mRightSpeedBar;
+
+    private EditText mElevationAngleEdt;
+    private EditText mSwingAngleEdt;
+    private EditText mLeftSpeedEdt;
+    private EditText mRightSpeedEdt;
+
+    private TextView mElevationAngleView;
+    private TextView mSwingAngleView;
+    private TextView mLeftSpeedView;
+    private TextView mRightSpeedView;
+
+    private View mSendView;
+
+    private double mSwingAngle;
+    private double mElevationAngle;
+    private int mLeftSpeed;
+    private int mRightSpeed;
+
     private final CompositeDisposable cd =new CompositeDisposable();
 
     public static MainControlFragment newInstance() {
@@ -83,17 +109,34 @@ public class MainControlFragment extends BaseMainFragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_control_main, container, false);
 
-        input = (EditText) root.findViewById(R.id.input);
-        motor1 = (EditText) root.findViewById(R.id.motor1);
-        motor2 = (EditText) root.findViewById(R.id.motor2);
-        stop = (TextView) root.findViewById(R.id.stop);
-        mWrite1View = (TextView) root.findViewById(R.id.write_1);
-        mWrite2View = (TextView) root.findViewById(R.id.write_2);
-        makeZero = (TextView) root.findViewById(R.id.make_zero);
-        tv_angle = (TextView) root.findViewById(R.id.angle);
-        tv_voltage = (TextView) root.findViewById(R.id.battery);
+//        input = (EditText) root.findViewById(R.id.input);
+//        motor1 = (EditText) root.findViewById(R.id.motor1);
+//        motor2 = (EditText) root.findViewById(R.id.motor2);
+//        stop = (TextView) root.findViewById(R.id.stop);
+//        mWrite1View = (TextView) root.findViewById(R.id.write_1);
+//        mWrite2View = (TextView) root.findViewById(R.id.write_2);
+//        makeZero = (TextView) root.findViewById(R.id.make_zero);
+//        tv_angle = (TextView) root.findViewById(R.id.angle);
+//        tv_voltage = (TextView) root.findViewById(R.id.battery);
         angleView = (TextView) root.findViewById(R.id.tv_angle);
         batteryView = (TextView) root.findViewById(R.id.tv_battery);
+
+//        mElevationAngleBar = (AppCompatSeekBar) root.findViewById(R.id.seek_elevation_angle);
+//        mSwingAngleBar = (AppCompatSeekBar) root.findViewById(R.id.seek_swing_angle);
+//        mLeftSpeedBar = (AppCompatSeekBar) root.findViewById(R.id.seek_left_speed);
+//        mRightSpeedBar = (AppCompatSeekBar) root.findViewById(R.id.seek_right_speed);
+//
+//        mElevationAngleEdt = (AppCompatEditText) root.findViewById(R.id.edit_elevation_angle);
+//        mSwingAngleEdt = (AppCompatEditText) root.findViewById(R.id.edit_swing_angle);
+//        mLeftSpeedEdt = (AppCompatEditText) root.findViewById(R.id.edit_left_motor);
+//        mRightSpeedEdt = (AppCompatEditText) root.findViewById(R.id.edit_right_speed);
+
+        mElevationAngleView = (TextView) root.findViewById(R.id.elevation_angle);
+        mSwingAngleView = (TextView) root.findViewById(R.id.swing_angle);
+        mLeftSpeedView = (TextView) root.findViewById(R.id.left_speed);
+        mRightSpeedView = (TextView) root.findViewById(R.id.right_speed);
+
+        mSendView = root.findViewById(R.id.send);
 
         initView();
 
@@ -103,69 +146,101 @@ public class MainControlFragment extends BaseMainFragment {
     }
 
     private void initView() {
-        mWrite1View.setOnClickListener(new View.OnClickListener() {
+        mElevationAngleView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showElevationAngleDialog();
+            }
+        });
+        mSwingAngleView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSwingAngleDialog();
+            }
+        });
+        mLeftSpeedView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showLeftSpeedDialog();
+            }
+        });
+        mRightSpeedView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showRightSpeedDialog();
+            }
+        });
 
-                Observable.interval(0,50, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Observer<Long>() {
-                            @Override
-                            public void onSubscribe(@NonNull Disposable d) {
-                                cd.add(d);
-                            }
 
-                            @Override
-                            public void onNext(@NonNull Long aLong) {
-                                Logger.info(aLong + "");
-                                getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_POSITIVE);
-                            }
-
-                            @Override
-                            public void onError(@NonNull Throwable e) {
-
-                            }
-
-                            @Override
-                            public void onComplete() {
-
-                            }
-                        });
+        mSendView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getMainActivity().getPresenter().send(mSwingAngle, mElevationAngle, mLeftSpeed, mRightSpeed);
+            }
+        });
+//        mWrite1View.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
 //
-            }
-        });
-        stop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_STOP);
-                cd.clear();
-            }
-        });
-
-        mWrite2View.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getMainActivity().getPresenter().setAxisAngle(Double.valueOf(input.getText().toString()), Double.valueOf(input.getText().toString()));
-            }
-        });
-        makeZero.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getMainActivity().getPresenter().setMotorSpeed(Integer.valueOf(motor1.getText().toString()),Integer.valueOf(motor2.getText().toString()));
-            }
-        });
-
-        tv_angle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getMainActivity().getPresenter().getAxisAngle();
-            }
-        });
-        tv_voltage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getMainActivity().getPresenter().getBatteryVoltage();
-            }
-        });
+//                Observable.interval(0,50, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread())
+//                        .subscribe(new Observer<Long>() {
+//                            @Override
+//                            public void onSubscribe(@NonNull Disposable d) {
+//                                cd.add(d);
+//                            }
+//
+//                            @Override
+//                            public void onNext(@NonNull Long aLong) {
+//                                Logger.info(aLong + "");
+//                                getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_POSITIVE);
+//                            }
+//
+//                            @Override
+//                            public void onError(@NonNull Throwable e) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onComplete() {
+//
+//                            }
+//                        });
+////
+//            }
+//        });
+//        stop.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_STOP);
+//                cd.clear();
+//            }
+//        });
+//
+//        mWrite2View.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                getMainActivity().getPresenter().setAxisAngle(Double.valueOf(input.getText().toString()), Double.valueOf(input.getText().toString()));
+//            }
+//        });
+//        makeZero.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                getMainActivity().getPresenter().setMotorSpeed(Integer.valueOf(motor1.getText().toString()),Integer.valueOf(motor2.getText().toString()));
+//            }
+//        });
+//
+//        tv_angle.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                getMainActivity().getPresenter().getAxisAngle();
+//            }
+//        });
+//        tv_voltage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                getMainActivity().getPresenter().getBatteryVoltage();
+//            }
+//        });
 
     }
 
@@ -178,9 +253,9 @@ public class MainControlFragment extends BaseMainFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_send:
-//                getMainActivity().getPresenter().send();
-                break;
+//            case R.id.action_send:
+////                getMainActivity().getPresenter().send();
+//                break;
             case R.id.action_favourite:
 //                getMainActivity().getPresenter().addToFavourite();
                 showAddFavouriteDialog();
@@ -206,19 +281,112 @@ public class MainControlFragment extends BaseMainFragment {
                 .input("为此收藏记录命名", "记录" + (count + 1), new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
-                        getMainActivity().getPresenter().addToFavourite(input.toString(), 12.3,12.3,30,85);
+                        getMainActivity().getPresenter().addToFavourite(input.toString(), mSwingAngle,mElevationAngle,mLeftSpeed,mRightSpeed);
                     }
                 })
                 .positiveText("添加收藏")
                 .negativeText("取消")
-//                .onPositive(new MaterialDialog.SingleButtonCallback() {
-//                    @Override
-//                    public void onClick(@android.support.annotation.NonNull MaterialDialog dialog, @android.support.annotation.NonNull DialogAction which) {
-//                        getMainActivity().getPresenter().addToFavourite();
-//                    }
-//                })
                 .show();
     }
 
+    public void showSwingAngleDialog() {
+        new MaterialDialog.Builder(getActivity())
+                .title("设置摆角")
+                .content("摆角范围：(-90 ~ 90)")
+                .inputType(InputType.TYPE_CLASS_NUMBER)
+                .input("输入摆角", "", new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        //TODO 范围控制
+                       mSwingAngle = Double.valueOf(input.toString());
+                        mSwingAngleView.setText("摆角：" + input.toString());
+                    }
+                })
+                .positiveText("确定")
+                .show();
+    }
+    public void showElevationAngleDialog() {
+        new MaterialDialog.Builder(getActivity())
+                .title("设置仰角")
+                .content("仰角范围：(-90 ~ 50)")
+                .inputType(InputType.TYPE_CLASS_NUMBER)
+                .input("输入仰角", "", new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        //TODO 范围控制
+                        mElevationAngle = Double.valueOf(input.toString());
+                        mElevationAngleView.setText("仰角：" + input.toString());
+                    }
+                })
+                .positiveText("确定")
+                .show();
+    }
+    public void showLeftSpeedDialog() {
+        new MaterialDialog.Builder(getActivity())
+                .title("设置左转速")
+                .content("转速范围：(0 ~ 100)")
+                .inputType(InputType.TYPE_CLASS_NUMBER)
+                .input("输入转速", "", new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        //TODO 范围控制
+                        mLeftSpeed = Integer.valueOf(input.toString());
+                        mLeftSpeedView.setText("左转速：" + input.toString());
+                    }
+                })
+                .positiveText("确定")
+                .show();
+    }
+    public void showRightSpeedDialog() {
+        new MaterialDialog.Builder(getActivity())
+                .title("设置右转速")
+                .content("转速范围：(0 ~ 100)")
+                .inputType(InputType.TYPE_CLASS_NUMBER)
+                .input("输入转速", "", new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        //TODO 范围控制
+                        mRightSpeed = Integer.valueOf(input.toString());
+                        mRightSpeedView.setText("右转速：" + input.toString());
+                    }
+                })
+                .positiveText("确定")
+                .show();
+    }
 
+    public double getSwingAngle() {
+        return mSwingAngle;
+    }
+
+    public void setSwingAngle(double swingAngle) {
+        this.mSwingAngle = mSwingAngle;
+        mSwingAngleView.setText("摆角：" + swingAngle);
+    }
+
+    public double getElevationAngle() {
+        return mElevationAngle;
+    }
+
+    public void setElevationAngle(double elevationAngle) {
+        this.mElevationAngle = mElevationAngle;
+        mElevationAngleView.setText("仰角：" + elevationAngle);
+    }
+
+    public int getLeftSpeed() {
+        return mLeftSpeed;
+    }
+
+    public void setLeftSpeed(int leftSpeed) {
+        this.mLeftSpeed = mLeftSpeed;
+        mLeftSpeedView.setText("左转速：" + leftSpeed);
+    }
+
+    public int getRightSpeed() {
+        return mRightSpeed;
+    }
+
+    public void setRightSpeed(int rightSpeed) {
+        this.mRightSpeed = mRightSpeed;
+        mRightSpeedView.setText("右转速：" + rightSpeed);
+    }
 }

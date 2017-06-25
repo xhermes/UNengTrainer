@@ -21,8 +21,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import java.lang.ref.WeakReference;
 
 import me.xeno.unengtrainer.R;
+import me.xeno.unengtrainer.application.DataManager;
 import me.xeno.unengtrainer.listener.BleServiceListener;
 import me.xeno.unengtrainer.model.BluetoothModel;
+import me.xeno.unengtrainer.model.entity.FavouriteRecord;
 import me.xeno.unengtrainer.presenter.MainPresenter;
 import me.xeno.unengtrainer.service.BleService;
 import me.xeno.unengtrainer.util.ActivityUtils;
@@ -116,7 +118,7 @@ public class MainActivity extends BaseActivity
 
         showBlueToothFragment();
         setBottomBarVisibility(View.GONE);
-        mNavigationView.setCheckedItem(R.id.nav_bluetooth);
+//        mNavigationView.setCheckedItem(R.id.nav_bluetooth);
 //        mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), mFragmentList);
 //        mViewPager.setAdapter(mPagerAdapter);
 
@@ -146,9 +148,9 @@ public class MainActivity extends BaseActivity
 
         int id = item.getItemId();
         if (id == R.id.nav_favourite) {
-            FavouriteActivity.goFromActivity(new WeakReference<BaseActivity>(MainActivity.this));
+            FavouriteActivity.goFromActivityForResult(new WeakReference<BaseActivity>(MainActivity.this));
         }
-        return true;
+        return false;
     }
 
     public void checkLocationPermissionV23() {
@@ -195,8 +197,28 @@ public class MainActivity extends BaseActivity
        mPresenter.onDestroy();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == FavouriteActivity.REQUEST_CODE_FAVOURITE && resultCode == RESULT_OK) {
+            long id = data.getLongExtra("id", 0);
+            if(id != 0) {
+                FavouriteRecord record = DataManager.getInstance().getDaoSession().getFavouriteRecordDao().load(id);
+                mMainControlFragment.setElevationAngle(record.getElevationAngle());
+                mMainControlFragment.setSwingAngle(record.getSwingAngle());
+                mMainControlFragment.setLeftSpeed(record.getLeftMotorSpeed());
+                mMainControlFragment.setRightSpeed(record.getRightMotorSpeed());
+            }
+
+        }
+    }
+
     public void displayAngle(String angle1, String angle2) {
         mMainControlFragment.showCurrentAngle(angle1, angle2);
+    }
+
+    public void setTitle(String title) {
+        getSupportActionBar().setTitle(title);
     }
 
     public void displayBattery(String voltage) {

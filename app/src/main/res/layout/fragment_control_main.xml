@@ -9,90 +9,90 @@
     <!-- 占位 机器示意图 -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
         android:background="@color/colorPrimaryLight"
         android:orientation="vertical">
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal">-->
 
-            <TextView
-                android:id="@+id/write_1"
-                android:layout_width="120dp"
-                android:layout_height="45dp"
-                android:layout_margin="15dp"
-                android:background="@color/colorPrimaryDark"
-                android:gravity="center"
-                android:text="单轴运行"
-                android:textColor="@color/white" />
+            <!--<TextView-->
+                <!--android:id="@+id/write_1"-->
+                <!--android:layout_width="120dp"-->
+                <!--android:layout_height="45dp"-->
+                <!--android:layout_margin="15dp"-->
+                <!--android:background="@color/colorPrimaryDark"-->
+                <!--android:gravity="center"-->
+                <!--android:text="单轴运行"-->
+                <!--android:textColor="@color/white" />-->
 
-            <TextView
-                android:id="@+id/stop"
-                android:layout_width="120dp"
-                android:layout_height="45dp"
-                android:layout_margin="15dp"
-                android:background="@color/colorPrimaryDark"
-                android:gravity="center"
-                android:text="单轴运行停止"
-                android:textColor="@color/white" />
-        </LinearLayout>
+            <!--<TextView-->
+                <!--android:id="@+id/stop"-->
+                <!--android:layout_width="120dp"-->
+                <!--android:layout_height="45dp"-->
+                <!--android:layout_margin="15dp"-->
+                <!--android:background="@color/colorPrimaryDark"-->
+                <!--android:gravity="center"-->
+                <!--android:text="单轴运行停止"-->
+                <!--android:textColor="@color/white" />-->
+        <!--</LinearLayout>-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal">-->
 
-            <EditText
-                android:id="@+id/input"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:layout_margin="15dp"
-                android:background="@color/white" />
+            <!--<EditText-->
+                <!--android:id="@+id/input"-->
+                <!--android:layout_width="100dp"-->
+                <!--android:layout_height="50dp"-->
+                <!--android:layout_margin="15dp"-->
+                <!--android:background="@color/white" />-->
 
-            <TextView
-                android:id="@+id/write_2"
-                android:layout_width="120dp"
-                android:layout_height="45dp"
-                android:layout_margin="15dp"
-                android:background="@color/colorPrimaryDark"
-                android:gravity="center"
-                android:text="设置角度"
-                android:textColor="@color/white" />
-        </LinearLayout>
+            <!--<TextView-->
+                <!--android:id="@+id/write_2"-->
+                <!--android:layout_width="120dp"-->
+                <!--android:layout_height="45dp"-->
+                <!--android:layout_margin="15dp"-->
+                <!--android:background="@color/colorPrimaryDark"-->
+                <!--android:gravity="center"-->
+                <!--android:text="设置角度"-->
+                <!--android:textColor="@color/white" />-->
+        <!--</LinearLayout>-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal">-->
 
-            <TextView
-                android:id="@+id/make_zero"
-                android:layout_width="120dp"
-                android:layout_height="45dp"
-                android:layout_margin="15dp"
-                android:background="@color/colorPrimaryDark"
-                android:gravity="center"
-                android:text="电机速度"
-                android:textColor="@color/white" />
+            <!--<TextView-->
+                <!--android:id="@+id/make_zero"-->
+                <!--android:layout_width="120dp"-->
+                <!--android:layout_height="45dp"-->
+                <!--android:layout_margin="15dp"-->
+                <!--android:background="@color/colorPrimaryDark"-->
+                <!--android:gravity="center"-->
+                <!--android:text="电机速度"-->
+                <!--android:textColor="@color/white" />-->
 
-            <EditText
-                android:id="@+id/motor1"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:layout_margin="5dp"
-                android:background="@color/white" />
+            <!--<EditText-->
+                <!--android:id="@+id/motor1"-->
+                <!--android:layout_width="100dp"-->
+                <!--android:layout_height="50dp"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:background="@color/white" />-->
 
-            <EditText
-                android:id="@+id/motor2"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:layout_margin="5dp"
-                android:background="@color/white" />
+            <!--<EditText-->
+                <!--android:id="@+id/motor2"-->
+                <!--android:layout_width="100dp"-->
+                <!--android:layout_height="50dp"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:background="@color/white" />-->
 
-        </LinearLayout>
+        <!--</LinearLayout>-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -121,6 +121,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
                 android:orientation="vertical">
                 <TextView
                     android:id="@+id/tv_battery"
@@ -158,125 +159,187 @@
             android:textColor="@color/grey33"
             android:textSize="@dimen/text_size_button" />
 
+        <!--<TextView-->
+            <!--style="@style/TextSmallGrey66"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:text="仰角" />-->
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:orientation="horizontal">-->
+
+            <!--<android.support.v7.widget.AppCompatSeekBar-->
+                <!--android:id="@+id/seek_elevation_angle"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="20dp"-->
+                <!--android:layout_marginRight="10dp"-->
+                <!--android:layout_weight="1" />-->
+
+            <!--<android.support.design.widget.TextInputEditText-->
+                <!--android:id="@+id/edit_elevation_angle"-->
+                <!--style="@style/TextSmallGrey66"-->
+                <!--android:layout_width="40dp"-->
+                <!--android:gravity="center"-->
+                <!--android:layout_height="40dp"-->
+                <!--android:layout_marginRight="15dp"-->
+                <!--android:text="55" />-->
+
+        <!--</LinearLayout>-->
+
+        <!--<TextView-->
+            <!--style="@style/TextSmallGrey66"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:text="摆角" />-->
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:orientation="horizontal">-->
+
+            <!--<android.support.v7.widget.AppCompatSeekBar-->
+                <!--android:id="@+id/seek_swing_angle"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="20dp"-->
+                <!--android:layout_marginRight="10dp"-->
+                <!--android:layout_weight="1" />-->
+
+            <!--<android.support.design.widget.TextInputEditText-->
+                <!--android:id="@+id/edit_swing_angle"-->
+                <!--style="@style/TextSmallGrey66"-->
+                <!--android:layout_width="40dp"-->
+                <!--android:gravity="center"-->
+                <!--android:layout_height="40dp"-->
+                <!--android:layout_marginRight="15dp"-->
+                <!--android:text="55" />-->
+
+        <!--</LinearLayout>-->
+
+        <!--<TextView-->
+            <!--style="@style/TextSmallGrey66"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:text="左转速" />-->
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:orientation="horizontal">-->
+
+            <!--<android.support.v7.widget.AppCompatSeekBar-->
+                <!--android:id="@+id/seek_left_speed"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="20dp"-->
+                <!--android:layout_marginRight="10dp"-->
+                <!--android:layout_weight="1" />-->
+
+            <!--<android.support.design.widget.TextInputEditText-->
+                <!--android:id="@+id/edit_left_motor"-->
+                <!--style="@style/TextSmallGrey66"-->
+                <!--android:layout_width="40dp"-->
+                <!--android:gravity="center"-->
+                <!--android:layout_height="40dp"-->
+                <!--android:layout_marginRight="15dp"-->
+                <!--android:text="55" />-->
+
+        <!--</LinearLayout>-->
+
+        <!--<TextView-->
+            <!--style="@style/TextSmallGrey66"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:text="右转速" />-->
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:orientation="horizontal">-->
+
+            <!--<android.support.v7.widget.AppCompatSeekBar-->
+                <!--android:id="@+id/seek_right_speed"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="20dp"-->
+                <!--android:layout_marginRight="10dp"-->
+                <!--android:layout_weight="1" />-->
+
+            <!--<android.support.design.widget.TextInputEditText-->
+                <!--android:id="@+id/edit_right_speed"-->
+                <!--style="@style/TextSmallGrey66"-->
+                <!--android:layout_width="40dp"-->
+                <!--android:gravity="center"-->
+                <!--android:layout_height="40dp"-->
+                <!--android:layout_marginRight="15dp"-->
+                <!--android:text="55" />-->
+
+        <!--</LinearLayout>-->
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="center_vertical"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
-
             <TextView
-                style="@style/TextSmallGrey66"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:text="调整1轴角度" />
-
-            <android.support.v7.widget.AppCompatSeekBar
+                android:id="@+id/swing_angle"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1" />
-
-            <android.support.design.widget.TextInputEditText
-                style="@style/TextSmallGrey66"
-                android:layout_width="40dp"
-                android:gravity="center"
-                android:layout_height="40dp"
-                android:layout_marginRight="15dp"
-                android:text="55" />
-
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:text="摆角：0"
+                style="@style/temp"/>
+            <View
+              style="@style/SeparateLineVertical"/>
+            <TextView
+                android:id="@+id/elevation_angle"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:text="仰角：0"
+                style="@style/temp"/>
         </LinearLayout>
-
+        <View
+            style="@style/SeparateLine"/>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="center_vertical"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
-
             <TextView
-                style="@style/TextSmallGrey66"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:text="调整2轴角度" />
-
-            <android.support.v7.widget.AppCompatSeekBar
+                android:id="@+id/left_speed"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1" />
-
-            <android.support.design.widget.TextInputEditText
-                style="@style/TextSmallGrey66"
-                android:layout_width="40dp"
-                android:gravity="center"
-                android:layout_height="40dp"
-                android:layout_marginRight="15dp"
-                android:text="55" />
-
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:text="左转速：0"
+                style="@style/temp"/>
+            <View
+                style="@style/SeparateLineVertical"/>
+            <TextView
+                android:id="@+id/right_speed"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:text="右转速：0"
+                style="@style/temp"/>
         </LinearLayout>
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/send"
+            style="@style/ButtonPrimary"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/TextSmallGrey66"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:text="1号电机转速" />
-
-            <android.support.v7.widget.AppCompatSeekBar
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1" />
-
-            <android.support.design.widget.TextInputEditText
-                style="@style/TextSmallGrey66"
-                android:layout_width="40dp"
-                android:gravity="center"
-                android:layout_height="40dp"
-                android:layout_marginRight="15dp"
-                android:text="55" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/TextSmallGrey66"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:text="2号电机转速" />
-
-            <android.support.v7.widget.AppCompatSeekBar
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1" />
-
-            <android.support.design.widget.TextInputEditText
-                style="@style/TextSmallGrey66"
-                android:layout_width="40dp"
-                android:gravity="center"
-                android:layout_height="40dp"
-                android:layout_marginRight="15dp"
-                android:text="55" />
-
-        </LinearLayout>
+            android:layout_height="70dp"
+            android:layout_margin="15dp"
+            android:text="发送"
+            android:textSize="@dimen/text_size_sub_title" />
     </LinearLayout>
 
 </LinearLayout>

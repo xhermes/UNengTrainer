@@ -6,6 +6,10 @@ package me.xeno.unengtrainer.application;
 
 public class Config {
 
+    public static final int STATE_DISCONNECTED = 0;
+    public static final int STATE_CONNECTING = 1;
+    public static final int STATE_CONNECTED = 2;
+
     public static final byte DATA_TYPE_GET_STATUS = 0x02;//查询步进电机状态 & 回归零点命令返回值 & 下位机主动发送异常状态
     public static final byte DATA_TYPE_ENABLE = 0x03;//使能步进电机
     public static final byte DATA_TYPE_SWITCH_BRAKE = 0x04;//打开/关闭电机刹车

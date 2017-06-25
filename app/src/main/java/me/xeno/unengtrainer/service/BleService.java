@@ -1,7 +1,6 @@
 package me.xeno.unengtrainer.service;
 
 import android.app.Service;
-import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
@@ -9,32 +8,27 @@ import android.bluetooth.BluetoothGattService;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.os.IInterface;
-import android.os.Parcel;
-import android.os.RemoteException;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.clj.fastble.conn.BleCharacterCallback;
 import com.clj.fastble.conn.BleGattCallback;
 import com.clj.fastble.data.ScanResult;
 import com.clj.fastble.exception.BleException;
 
-import java.io.FileDescriptor;
 import java.util.UUID;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 import me.xeno.unengtrainer.application.BleSppGattAttributes;
 import me.xeno.unengtrainer.application.Config;
 import me.xeno.unengtrainer.application.DataManager;
 import me.xeno.unengtrainer.listener.BleServiceListener;
-import me.xeno.unengtrainer.model.ConnectionWrapper;
-import me.xeno.unengtrainer.model.entity.GetStatusWrapper;
 import me.xeno.unengtrainer.util.Logger;
+
+import static me.xeno.unengtrainer.application.Config.STATE_CONNECTED;
+import static me.xeno.unengtrainer.application.Config.STATE_DISCONNECTED;
 
 /**
  * Created by Administrator on 2017/6/11.
@@ -57,7 +51,7 @@ public class BleService extends Service {
     private BluetoothGattCharacteristic mNotifyCharacteristic;
     private BluetoothGattCharacteristic mWriteCharacteristic;
 
-//    private int mConnectionState = STATE_DISCONNECTED;
+    private int mConnectionState = STATE_DISCONNECTED;
 
     @Override
     public void onCreate() {
@@ -115,6 +109,7 @@ public class BleService extends Service {
 
                     if (mNotifyCharacteristic!=null) {
                         //TODO Demo中在此处向activity发送了标记连接成功的广播，并进行了UI更新。即将执行到此处定义为连接成功
+                        mConnectionState = STATE_CONNECTED;
 
                         // 使能Notify，开始接收characteristicChange的消息
                         setCharacteristicNotification(mNotifyCharacteristic, true);
@@ -285,8 +280,12 @@ public class BleService extends Service {
         }
 
         //TODO java.lang.NullPointerException: Attempt to invoke virtual method 'java.util.UUID android.bluetooth.BluetoothGattCharacteristic.getUuid()' on a null object reference
-        DataManager.getInstance().getBleManager().writeDevice(BleSppGattAttributes.BLE_SPP_Service,
-                mWriteCharacteristic.getUuid().toString(), data, mBleCharacterCallback);
+        if(mConnectionState == STATE_CONNECTED) {
+            DataManager.getInstance().getBleManager().writeDevice(BleSppGattAttributes.BLE_SPP_Service,
+                    mWriteCharacteristic.getUuid().toString(), data, mBleCharacterCallback);
+        } else {
+            Logger.error("write data: service is not ready, please wait..");
+        }
 
     }
 
