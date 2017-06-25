@@ -9,7 +9,7 @@ import org.greenrobot.greendao.annotation.Generated;
  */
 
 @Entity
-public class FavoiriteRecord {
+public class FavouriteRecord {
 
     private String name;
     private String createTime;
@@ -19,8 +19,8 @@ public class FavoiriteRecord {
     private double elevationAngle;
     private int leftMotorSpeed;
     private int rightMotorSpeed;
-    @Generated(hash = 1181040709)
-    public FavoiriteRecord(String name, String createTime, String modifyTime,
+    @Generated(hash = 1507407770)
+    public FavouriteRecord(String name, String createTime, String modifyTime,
             double swingAngle, double elevationAngle, int leftMotorSpeed,
             int rightMotorSpeed) {
         this.name = name;
@@ -31,8 +31,8 @@ public class FavoiriteRecord {
         this.leftMotorSpeed = leftMotorSpeed;
         this.rightMotorSpeed = rightMotorSpeed;
     }
-    @Generated(hash = 883964941)
-    public FavoiriteRecord() {
+    @Generated(hash = 902397497)
+    public FavouriteRecord() {
     }
     public String getName() {
         return this.name;
@@ -76,7 +76,6 @@ public class FavoiriteRecord {
     public void setRightMotorSpeed(int rightMotorSpeed) {
         this.rightMotorSpeed = rightMotorSpeed;
     }
-
 
 
 }

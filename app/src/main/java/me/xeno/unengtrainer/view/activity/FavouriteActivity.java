@@ -10,7 +10,7 @@ import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 import java.lang.ref.WeakReference;
 
 import me.xeno.unengtrainer.R;
-import me.xeno.unengtrainer.model.entity.FavoiriteRecord;
+import me.xeno.unengtrainer.model.entity.FavouriteRecord;
 import me.xeno.unengtrainer.view.adapter.FavouriteRecyclerAdapter;
 
 /**
@@ -55,7 +55,7 @@ public class FavouriteActivity extends BaseActivity {
         LRecyclerViewAdapter lRecyclerViewAdapter = new LRecyclerViewAdapter(mAdapter);
         mRecyclerView.setAdapter(lRecyclerViewAdapter);
 
-        FavoiriteRecord record = new FavoiriteRecord();
+        FavouriteRecord record = new FavouriteRecord();
         record.setName("gweaga");
         record.setModifyTime("gweagwag");
         record.setElevationAngle(12);

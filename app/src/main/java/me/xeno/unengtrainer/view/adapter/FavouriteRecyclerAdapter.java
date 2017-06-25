@@ -6,14 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.clj.fastble.data.ScanResult;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import me.xeno.unengtrainer.R;
-import me.xeno.unengtrainer.model.entity.FavoiriteRecord;
-import me.xeno.unengtrainer.view.holder.BluetoothHolder;
+import me.xeno.unengtrainer.model.entity.FavouriteRecord;
 import me.xeno.unengtrainer.view.holder.FavouriteHolder;
 
 /**
@@ -25,17 +22,17 @@ public class FavouriteRecyclerAdapter extends RecyclerView.Adapter<FavouriteHold
 
     private Context mContext;
 
-    private List<FavoiriteRecord> dataList = new ArrayList<>();
+    private List<FavouriteRecord> dataList = new ArrayList<>();
 
     public FavouriteRecyclerAdapter() {
     }
 
-    public void setDataList(List<FavoiriteRecord> dataList) {
+    public void setDataList(List<FavouriteRecord> dataList) {
         this.dataList = dataList;
         notifyDataSetChanged();
     }
 
-    public void addDataToList(FavoiriteRecord record) {
+    public void addDataToList(FavouriteRecord record) {
         dataList.add(record);
         notifyDataSetChanged();
     }
@@ -52,7 +49,7 @@ public class FavouriteRecyclerAdapter extends RecyclerView.Adapter<FavouriteHold
 
     @Override
     public void onBindViewHolder(FavouriteHolder holder, int position) {
-        final FavoiriteRecord record = dataList.get(position);
+        final FavouriteRecord record = dataList.get(position);
 
         holder.getNameView().setText(record.getName());
         holder.getModifyTimeView().setText(record.getModifyTime());

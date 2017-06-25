@@ -198,7 +198,7 @@ public class MainControlFragment extends BaseMainFragment {
     }
 
     public void showAddFavouriteDialog() {
-        long count = DataManager.getInstance().getDaoSession().getFavoiriteRecordDao().count();
+        long count = DataManager.getInstance().getDaoSession().getFavouriteRecordDao().count();
 
         new MaterialDialog.Builder(getActivity())
                 .title("收藏")

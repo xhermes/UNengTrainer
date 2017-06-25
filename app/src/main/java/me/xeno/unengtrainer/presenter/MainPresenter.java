@@ -24,7 +24,7 @@ import me.xeno.unengtrainer.application.DataManager;
 import me.xeno.unengtrainer.listener.BleServiceListener;
 import me.xeno.unengtrainer.model.BluetoothModel;
 import me.xeno.unengtrainer.model.entity.EnableWrapper;
-import me.xeno.unengtrainer.model.entity.FavoiriteRecord;
+import me.xeno.unengtrainer.model.entity.FavouriteRecord;
 import me.xeno.unengtrainer.model.entity.GetAxisAngleWrapper;
 import me.xeno.unengtrainer.model.entity.GetBatteryVoltageWrapper;
 import me.xeno.unengtrainer.model.entity.GetStatusWrapper;
@@ -144,8 +144,8 @@ public class MainPresenter {
     public void addToFavourite(String name, double angle1, double angle2, int speed1, int speed2) {
         try {
             String currentTime = TimeUtils.longToString(System.currentTimeMillis(), "yyyy-MM-dd HH:mm");
-            FavoiriteRecord record = new FavoiriteRecord(name, currentTime, currentTime, angle1, angle2, speed1, speed2);
-            DataManager.getInstance().getDaoSession().getFavoiriteRecordDao().insert(record);
+            FavouriteRecord record = new FavouriteRecord(name, currentTime, currentTime, angle1, angle2, speed1, speed2);
+            DataManager.getInstance().getDaoSession().getFavouriteRecordDao().insert(record);
         } catch (ParseException e) {
             e.printStackTrace();
         }
