@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
 
 android {
     compileSdkVersion 25
@@ -38,4 +39,11 @@ dependencies {
     compile 'com.h6ah4i.android.widget.verticalseekbar:verticalseekbar:0.7.2'
     compile 'com.afollestad.material-dialogs:core:0.9.4.5'
     compile 'com.github.jdsjlzx:LRecyclerView:1.4.3'
+    compile 'org.greenrobot:greendao:3.2.2'
+}
+
+greendao {
+    schemaVersion 1
+    daoPackage 'me.xeno.unengtrainer.greendao.gen'
+    targetGenDir 'src/main/java'
 }

@@ -5,4 +5,5 @@ package me.xeno.unengtrainer.model.entity;
  */
 
 public class SetAxisAngleWrapper {
+
 }

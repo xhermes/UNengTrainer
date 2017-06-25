@@ -4,6 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.internal.operators.observable.ObservableRepeat;
 import io.reactivex.internal.operators.observable.ObservableTimer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -18,4 +19,8 @@ public class RxUtils {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+//    public static Observable<Long> repeater(int period, int times) {
+//        return Observable
+//    }
 }

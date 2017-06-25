@@ -5,4 +5,14 @@ package me.xeno.unengtrainer.model.entity;
  */
 
 public class GetBatteryVoltageWrapper {
+
+    private String voltage;
+
+    public String getVoltage() {
+        return voltage;
+    }
+
+    public void setVoltage(String voltage) {
+        this.voltage = voltage;
+    }
 }

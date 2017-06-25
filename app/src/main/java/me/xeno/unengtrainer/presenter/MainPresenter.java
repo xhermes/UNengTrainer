@@ -16,6 +16,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.schedulers.Schedulers;
+import me.xeno.unengtrainer.application.Config;
 import me.xeno.unengtrainer.application.DataManager;
 import me.xeno.unengtrainer.listener.BleServiceListener;
 import me.xeno.unengtrainer.model.BluetoothModel;
@@ -31,6 +32,7 @@ import me.xeno.unengtrainer.model.entity.SetMotorSpeedWrapper;
 import me.xeno.unengtrainer.model.entity.TurnBrakeWrapper;
 import me.xeno.unengtrainer.service.BleService;
 import me.xeno.unengtrainer.util.Logger;
+import me.xeno.unengtrainer.util.SpUtils;
 import me.xeno.unengtrainer.view.activity.MainActivity;
 
 import static android.content.Context.BIND_AUTO_CREATE;
@@ -60,11 +62,11 @@ public class MainPresenter {
             GetStatusWrapper.AxisStatus axisStatus2 = wrapper.getAxisStatuses()[1];
 
             StringBuilder sb = new StringBuilder();
-            sb.append("运行状态：").append(axisStatus1.isRunning()).append(axisStatus2.isRunning()).append("\n")
-                    .append("急停：").append(axisStatus1.isAbruptStopping()).append(axisStatus2.isAbruptStopping()).append("\n")
-                    .append("报警位：").append(axisStatus1.isAlerting()).append(axisStatus2.isAlerting()).append("\n")
-                    .append("正限位：").append(axisStatus1.isPositiveSpacing()).append(axisStatus2.isPositiveSpacing()).append("\n")
-                    .append("负限位：").append(axisStatus1.isNegativeSpacing()).append(axisStatus2.isNegativeSpacing()).append("\n");
+            sb.append("运行状态：").append(axisStatus1.getRunning()).append(axisStatus2.getRunning()).append("\n")
+                    .append("急停：").append(axisStatus1.getAbruptStopping()).append(axisStatus2.getAbruptStopping()).append("\n")
+                    .append("报警位：").append(axisStatus1.getAlerting()).append(axisStatus2.getAlerting()).append("\n")
+                    .append("正限位：").append(axisStatus1.getPositiveSpacing()).append(axisStatus2.getPositiveSpacing()).append("\n")
+                    .append("负限位：").append(axisStatus1.getNegativeSpacing()).append(axisStatus2.getNegativeSpacing()).append("\n");
 
             String content = sb.toString();
 
@@ -106,7 +108,7 @@ public class MainPresenter {
 
         @Override
         public void onGetAxisAngle(GetAxisAngleWrapper wrapper) {
-
+            mActivity.displayAngle(wrapper.getAxis1Angle(), wrapper.getAxis2Angle());
         }
 
         @Override
@@ -116,9 +118,69 @@ public class MainPresenter {
 
         @Override
         public void onGetBatteryVoltage(GetBatteryVoltageWrapper wrapper) {
-
+            mActivity.displayBattery(wrapper.getVoltage());
         }
     };
+
+
+    /**
+     * 向机器发送调整姿态命令，参数由用户在界面中设置好
+     * 速度分成 100 等份，超过100不执行
+     * @param angle1 第一轴角度 //TODO 范围？
+     * @param angle2 第二轴角度
+     * @param speed1 电机1转速
+     * @param speed2 电机2转速
+     */
+    public void send(double angle1, double angle2, int speed1, int speed2) {
+        setAxisAngle(angle1, angle2);
+        setMotorSpeed(speed1, speed2);
+    }
+
+    public void addToFavourite(double angle1, double angle2, int speed1, int speed2) {
+
+    }
+
+    /**
+     * @param angle1 第一轴角度
+     * @param angle2 第二轴角度
+     */
+    public void setAxisAngle(double angle1, double angle2) {
+        mBleService.writeData(mModel.setAxisAngle(angle1, angle2));
+    }
+
+    public void makeZero() {
+        mBleService.writeData(mModel.makeZero());
+    }
+
+    /**
+     * 速度分成 100 等份，超过100不执行
+     * @param motor1 电机1
+     * @param motor2 电机2
+     */
+    public void setMotorSpeed(int motor1, int motor2) {
+        mBleService.writeData(mModel.setMotorSpeed(motor1, motor2));
+    }
+
+
+    /**
+     *  1,2 轴单轴运行/停止
+     *  0:第一轴停止运行
+     *  1:第一轴正方向连续运行(直到正限位或者报警)
+     *  2:第一轴负方向连续运行(直到负限位或者报警)
+     * @param axis1 第一轴
+     * @param axis2 第二轴
+     */
+    public void runAxis(int axis1, int axis2) {
+        mBleService.writeData(mModel.runAxis(axis1, axis2));
+    }
+
+    public void getBatteryVoltage() {
+        mBleService.writeData(mModel.getBatteryVoltage());
+    }
+
+    public void getAxisAngle() {
+        mBleService.writeData(mModel.getAxisAngle());
+    }
 
     private ScanResult mScanResult;
 
@@ -188,5 +250,9 @@ public class MainPresenter {
 
     public BluetoothModel getModel() {
         return mModel;
+    }
+
+    public BleService getBleService() {
+        return mBleService;
     }
 }

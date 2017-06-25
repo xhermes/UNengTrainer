@@ -72,9 +72,42 @@ public class MainActivity extends BaseActivity
         mFavouriteBtn = findViewById(R.id.favourite_btn);
     }
 
+    private byte[] stringToBytes(String s) {
+        byte[] buf = new byte[s.length() / 2];
+        for (int i = 0; i < buf.length; i++) {
+            try {
+                buf[i] = (byte) Integer.parseInt(s.substring(i * 2, i * 2 + 2), 16);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+        return buf;
+    }
+    private String getHexString(String str) {
+        String s = str;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (('0' <= c && c <= '9') || ('a' <= c && c <= 'f') ||
+                    ('A' <= c && c <= 'F')) {
+                sb.append(c);
+            }
+        }
+        if ((sb.length() % 2) != 0) {
+            sb.deleteCharAt(sb.length());
+        }
+        return sb.toString();
+    }
+
     @Override
     protected void initView() {
         mPresenter = new MainPresenter(this);
+
+        byte[] bbb = stringToBytes(getHexString("FC"));
+        for(Byte b : bbb) {
+            Logger.error(b);
+        }
+
 
         checkLocationPermissionV23();
 
@@ -193,6 +226,14 @@ public class MainActivity extends BaseActivity
     protected void onDestroy(){
         super.onDestroy();
        mPresenter.onDestroy();
+    }
+
+    public void displayAngle(String angle1, String angle2) {
+        mMainControlFragment.showCurrentAngle(angle1, angle2);
+    }
+
+    public void displayBattery(String voltage) {
+        mMainControlFragment.showCurrentVoltage(voltage);
     }
 
     public void showMainControlFragment() {
