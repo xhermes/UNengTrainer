@@ -152,6 +152,8 @@ public class MainPresenter {
             record.setModifyTime(currentTime);
             record.setSwingAngle(angle1);
             record.setElevationAngle(angle2);
+            record.setLeftMotorSpeed(speed1);
+            record.setRightMotorSpeed(speed2);
             DataManager.getInstance().getDaoSession().getFavouriteRecordDao().insert(record);
         } catch (ParseException e) {
             e.printStackTrace();

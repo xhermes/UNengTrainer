@@ -29,6 +29,7 @@ import me.xeno.unengtrainer.R;
 import me.xeno.unengtrainer.application.Config;
 import me.xeno.unengtrainer.application.DataManager;
 import me.xeno.unengtrainer.util.Logger;
+import me.xeno.unengtrainer.util.ToastUtils;
 
 /**
  * Main UI for the add task screen. Users can enter a task title and description.
@@ -293,13 +294,20 @@ public class MainControlFragment extends BaseMainFragment {
         new MaterialDialog.Builder(getActivity())
                 .title("设置摆角")
                 .content("摆角范围：(-90 ~ 90)")
-                .inputType(InputType.TYPE_CLASS_NUMBER)
+                .inputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_SIGNED)
                 .input("输入摆角", "", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
-                        //TODO 范围控制
-                       mSwingAngle = Double.valueOf(input.toString());
-                        mSwingAngleView.setText("摆角：" + input.toString());
+                        if(input.length() == 0) {
+                            return;
+                        }
+                        double inputValue = Double.valueOf(input.toString());
+                        if(inputValue >= -90 && inputValue <= 90) {
+                            mSwingAngle = inputValue;
+                            mSwingAngleView.setText("摆角：" + input.toString());
+                        } else {
+                            ToastUtils.toast(getActivity().getApplicationContext(), "输入超限！");
+                        }
                     }
                 })
                 .positiveText("确定")
@@ -309,13 +317,20 @@ public class MainControlFragment extends BaseMainFragment {
         new MaterialDialog.Builder(getActivity())
                 .title("设置仰角")
                 .content("仰角范围：(-90 ~ 50)")
-                .inputType(InputType.TYPE_CLASS_NUMBER)
+                .inputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_SIGNED)
                 .input("输入仰角", "", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
-                        //TODO 范围控制
-                        mElevationAngle = Double.valueOf(input.toString());
-                        mElevationAngleView.setText("仰角：" + input.toString());
+                        if(input.length() == 0) {
+                            return;
+                        }
+                        double inputValue = Double.valueOf(input.toString());
+                        if(inputValue >= -90 && inputValue <= 50) {
+                            mElevationAngle = inputValue;
+                            mElevationAngleView.setText("仰角：" + input.toString());
+                        } else {
+                            ToastUtils.toast(getActivity().getApplicationContext(), "输入超限！");
+                        }
                     }
                 })
                 .positiveText("确定")
@@ -329,9 +344,16 @@ public class MainControlFragment extends BaseMainFragment {
                 .input("输入转速", "", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
-                        //TODO 范围控制
-                        mLeftSpeed = Integer.valueOf(input.toString());
-                        mLeftSpeedView.setText("左转速：" + input.toString());
+                        if(input.length() == 0) {
+                            return;
+                        }
+                        int inputValue = Integer.valueOf(input.toString());
+                        if (inputValue >= 0 && inputValue <= 100) {
+                            mLeftSpeed = Integer.valueOf(input.toString());
+                            mLeftSpeedView.setText("左转速：" + input.toString());
+                        } else {
+                            ToastUtils.toast(getActivity().getApplicationContext(), "输入超限！");
+                        }
                     }
                 })
                 .positiveText("确定")
@@ -345,9 +367,16 @@ public class MainControlFragment extends BaseMainFragment {
                 .input("输入转速", "", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
-                        //TODO 范围控制
-                        mRightSpeed = Integer.valueOf(input.toString());
-                        mRightSpeedView.setText("右转速：" + input.toString());
+                        if(input.length() == 0) {
+                            return;
+                        }
+                        int inputValue = Integer.valueOf(input.toString());
+                        if (inputValue >= 0 && inputValue <= 100) {
+                            mRightSpeed = Integer.valueOf(input.toString());
+                            mRightSpeedView.setText("右转速：" + input.toString());
+                        } else {
+                            ToastUtils.toast(getActivity().getApplicationContext(), "输入超限！");
+                        }
                     }
                 })
                 .positiveText("确定")

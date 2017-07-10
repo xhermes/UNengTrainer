@@ -55,7 +55,9 @@ public class BluetoothDisabledFragment extends BaseMainFragment {
             public void onClick(View v) {
                 //检查有没有开启蓝牙，如果开启了，直接切换到DeviceRecyclerFragment
                 //否则请求开启蓝牙，开启成功后在onActivityResult中切换到DeviceRecyclerFragment
-                checkPermissionAndEnableBluetooth();
+//                checkPermissionAndEnableBluetooth();
+                //TODO 测试 直通maincontrol
+                getMainActivity().showMainControlFragment();
             }
         });
     }
