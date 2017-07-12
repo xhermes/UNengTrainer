@@ -27,6 +27,7 @@ import me.xeno.unengtrainer.view.holder.ServiceHolder;
  * Created by xeno on 2017/5/22.
  */
 
+@Deprecated
 public class ServiceRecyclerAdapter extends RecyclerView.Adapter<ServiceHolder>  {
 
     public static boolean AUTO_CONNECT = true;
@@ -64,7 +65,6 @@ public class ServiceRecyclerAdapter extends RecyclerView.Adapter<ServiceHolder> 
         holder.getRootView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO 显示characteristic列表
             }
         });
     }

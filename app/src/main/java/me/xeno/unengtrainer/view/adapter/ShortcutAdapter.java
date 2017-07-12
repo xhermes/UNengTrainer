@@ -10,6 +10,7 @@ import me.xeno.unengtrainer.view.holder.ShortcutHolder;
 
 /**
  * Created by xeno on 2017/5/16.
+ * //TODO 改造为九宫格recycler
  */
 
 public class ShortcutAdapter extends RecyclerView.Adapter<ShortcutHolder> {
