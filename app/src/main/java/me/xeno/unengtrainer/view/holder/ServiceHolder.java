@@ -8,6 +8,7 @@ import me.xeno.unengtrainer.R;
 
 /**
  * Created by xeno on 2017/5/22.
+ * @deprecated
  */
 
 public class ServiceHolder extends RecyclerView.ViewHolder  {

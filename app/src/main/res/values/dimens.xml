@@ -7,7 +7,7 @@
     <dimen name="fab_margin">16dp</dimen>
 
 
-    <dimen name="text_size_big">26dp</dimen>
+    <dimen name="text_size_big">24dp</dimen>
     <dimen name="text_size_sub_title">20dp</dimen>
     <dimen name="text_size_title">30dp</dimen>
     <dimen name="text_size_button">18dp</dimen>

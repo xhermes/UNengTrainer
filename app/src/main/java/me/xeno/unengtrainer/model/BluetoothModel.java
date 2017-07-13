@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import me.xeno.unengtrainer.application.Config;
+import me.xeno.unengtrainer.util.CommonUtils;
+import me.xeno.unengtrainer.util.DialogUtils;
 import me.xeno.unengtrainer.util.Logger;
 
 /**
@@ -168,22 +170,9 @@ public class BluetoothModel {
 
         byte[] result = outputStream.toByteArray();
 //        byte[] result = new byte[]{FRAME_HEADER, type, length, FRAME_END};
-        Logger.info(bytes2HexString(result));
+        Logger.info(CommonUtils.bytes2HexString(result));
 
         return result;
-    }
-
-    public static String bytes2HexString(byte[] b) {
-        StringBuffer result = new StringBuffer();
-        String hex;
-        for (int i = 0; i < b.length; i++) {
-            hex = Integer.toHexString(b[i] & 0xFF);
-            if (hex.length() == 1) {
-                hex = '0' + hex;
-            }
-            result.append(hex.toUpperCase());
-        }
-        return result.toString();
     }
 
 }

@@ -16,5 +16,5 @@
     <color name="greyEE">#eeeeee</color>
     <color name="greyBackground">#f1f1f1</color>
 
-    <color name="ripplePrimaryButton">#999999</color>
+    <color name="ripplePrimaryButton">#333333</color>
 </resources>

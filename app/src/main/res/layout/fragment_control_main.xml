@@ -9,7 +9,7 @@
     <!-- 占位 机器示意图 -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="200dp"
         android:background="@color/colorPrimaryLight"
         android:orientation="vertical">
 
@@ -143,7 +143,54 @@
                     android:textColor="@color/white" />
             </LinearLayout>
 
+
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/run_axis_1"
+                android:layout_width="80dp"
+                android:layout_height="45dp"
+                android:layout_margin="10dp"
+                android:background="@color/colorPrimaryDark"
+                android:gravity="center"
+                android:text="单轴正方向"
+                android:textColor="@color/white" />
+
+
+            <TextView
+                android:id="@+id/run_axis_2"
+                android:layout_width="80dp"
+                android:layout_height="45dp"
+                android:layout_margin="10dp"
+                android:background="@color/colorPrimaryDark"
+                android:gravity="center"
+                android:text="单轴负方向"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/run_axis_stop"
+                android:layout_width="80dp"
+                android:layout_height="45dp"
+                android:layout_margin="10dp"
+                android:background="@color/colorPrimaryDark"
+                android:gravity="center"
+                android:text="单轴停止"
+                android:textColor="@color/white" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/stop_send"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_margin="10dp"
+            android:padding="5dp"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="停止单轴连续发送事件"
+            android:textColor="@color/white" />
     </LinearLayout>
 
     <!-- 参数设置，滑动调整 -->
@@ -349,7 +396,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
-                android:text="发 送"
+                android:text="发送"
                 android:textSize="@dimen/text_size_big" />
         </RelativeLayout>
 

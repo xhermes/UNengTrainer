@@ -20,7 +20,5 @@ public class RxUtils {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-//    public static Observable<Long> repeater(int period, int times) {
-//        return Observable
-//    }
+
 }

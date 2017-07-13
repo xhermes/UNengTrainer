@@ -21,10 +21,13 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import me.xeno.unengtrainer.R;
 import me.xeno.unengtrainer.application.Config;
 import me.xeno.unengtrainer.application.DataManager;
@@ -39,8 +42,8 @@ public class MainControlFragment extends BaseMainFragment {
 //    private TextView mDescription;
 //    private TextView mWrite1View;
 //    private TextView mWrite2View;
-//    private TextView tv_angle;
-//    private TextView tv_voltage;
+    private TextView tv_angle;
+    private TextView tv_voltage;
     private TextView angleView;
     private TextView batteryView;
 //    private TextView stop;
@@ -65,12 +68,22 @@ public class MainControlFragment extends BaseMainFragment {
     private TextView mLeftSpeedView;
     private TextView mRightSpeedView;
 
+    private TextView mRunAxis1View;
+    private TextView mRunAxis2View;
+    private TextView mRunAxisStopView;
+    private TextView mStopView;
+
     private View mSendView;
 
     private double mSwingAngle;
     private double mElevationAngle;
     private int mLeftSpeed;
     private int mRightSpeed;
+
+    private int pick;
+
+    private Disposable mDisposable1;
+    private Disposable mDisposable2;
 
     private final CompositeDisposable cd =new CompositeDisposable();
 
@@ -117,11 +130,15 @@ public class MainControlFragment extends BaseMainFragment {
 //        mWrite1View = (TextView) root.findViewById(R.id.write_1);
 //        mWrite2View = (TextView) root.findViewById(R.id.write_2);
 //        makeZero = (TextView) root.findViewById(R.id.make_zero);
-//        tv_angle = (TextView) root.findViewById(R.id.angle);
-//        tv_voltage = (TextView) root.findViewById(R.id.battery);
+        tv_angle = (TextView) root.findViewById(R.id.angle);
+        tv_voltage = (TextView) root.findViewById(R.id.battery);
         angleView = (TextView) root.findViewById(R.id.tv_angle);
         batteryView = (TextView) root.findViewById(R.id.tv_battery);
 
+        mRunAxis1View = (TextView) root.findViewById(R.id.run_axis_1);
+        mRunAxis2View = (TextView) root.findViewById(R.id.run_axis_2);
+        mRunAxisStopView = (TextView) root.findViewById(R.id.run_axis_stop);
+        mStopView = (TextView) root.findViewById(R.id.stop_send);
 //        mElevationAngleBar = (AppCompatSeekBar) root.findViewById(R.id.seek_elevation_angle);
 //        mSwingAngleBar = (AppCompatSeekBar) root.findViewById(R.id.seek_swing_angle);
 //        mLeftSpeedBar = (AppCompatSeekBar) root.findViewById(R.id.seek_left_speed);
@@ -230,18 +247,140 @@ public class MainControlFragment extends BaseMainFragment {
 //            }
 //        });
 //
-//        tv_angle.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                getMainActivity().getPresenter().getAxisAngle();
-//            }
-//        });
-//        tv_voltage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                getMainActivity().getPresenter().getBatteryVoltage();
-//            }
-//        });
+        tv_angle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getMainActivity().getPresenter().getAxisAngle();
+            }
+        });
+        tv_voltage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getMainActivity().getPresenter().getBatteryVoltage();
+            }
+        });
+        mRunAxis1View.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pick = 100;
+                new MaterialDialog.Builder(getMainActivity())
+                        .items("第一轴", "第二轴")
+                        .alwaysCallSingleChoiceCallback()
+                        .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
+                                pick = which;
+                                return true;
+                            }
+                        })
+                        .cancelable(true)
+                        .negativeText("取消")
+                        .positiveText("确定")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@android.support.annotation.NonNull MaterialDialog dialog, @android.support.annotation.NonNull DialogAction which) {
+                                if(pick != 100) {
+                                    if(pick == 0) {
+                                       //第一轴
+                                        mDisposable1 = Observable.just(1).repeat()
+                                                .subscribeOn(Schedulers.io())
+                                                .observeOn(Schedulers.io())
+                                                .subscribe(new Consumer<Integer>() {
+                                                    @Override
+                                                    public void accept(@NonNull Integer integer) throws Exception {
+                                                        getMainActivity().getPresenter().runAxis(1, 0);
+                                                    }
+                                                });
+
+                                    } else if(pick == 1) {
+                                        //第二轴
+                                        mDisposable2 = Observable.just(1).repeat()
+                                                .subscribeOn(Schedulers.io())
+                                                .observeOn(Schedulers.io())
+                                                .subscribe(new Consumer<Integer>() {
+                                                    @Override
+                                                    public void accept(@NonNull Integer integer) throws Exception {
+                                                        getMainActivity().getPresenter().runAxis(0, 1);
+                                                    }
+                                                });
+
+                                    }
+                                }
+                            }
+                        })
+                        .show();
+            }
+        });
+        mRunAxis2View.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pick = 100;
+                new MaterialDialog.Builder(getMainActivity())
+                        .items("第一轴", "第二轴")
+                        .alwaysCallSingleChoiceCallback()
+                        .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
+                                pick = which;
+                                return true;
+                            }
+                        })
+                        .cancelable(true)
+                        .negativeText("取消")
+                        .positiveText("确定")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@android.support.annotation.NonNull MaterialDialog dialog, @android.support.annotation.NonNull DialogAction which) {
+                                if(pick != 100) {
+                                    if(pick == 0) {
+                                        //第一轴
+                                        mDisposable1 = Observable.just(1).repeat()
+                                                .subscribeOn(Schedulers.io())
+                                                .observeOn(Schedulers.io())
+                                                .subscribe(new Consumer<Integer>() {
+                                                    @Override
+                                                    public void accept(@NonNull Integer integer) throws Exception {
+                                                        getMainActivity().getPresenter().runAxis(2, 0);
+                                                    }
+                                                });
+
+                                    } else if(pick == 1) {
+                                        //第二轴
+                                        mDisposable1 = Observable.just(1).repeat()
+                                                .subscribeOn(Schedulers.io())
+                                                .observeOn(Schedulers.io())
+                                                .subscribe(new Consumer<Integer>() {
+                                                    @Override
+                                                    public void accept(@NonNull Integer integer) throws Exception {
+                                                        getMainActivity().getPresenter().runAxis(0, 2);
+                                                    }
+                                                });
+
+                                    }
+                                }
+                            }
+                        })
+                        .show();
+            }
+        });
+        mRunAxisStopView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getMainActivity().getPresenter().runAxis(0, 0);
+            }
+        });
+
+        mStopView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mDisposable1 != null && !mDisposable1.isDisposed()) {
+                    mDisposable1.dispose();
+                }
+                if(mDisposable2 != null && !mDisposable2.isDisposed()) {
+                    mDisposable2.dispose();
+                }
+            }
+        });
 
     }
 

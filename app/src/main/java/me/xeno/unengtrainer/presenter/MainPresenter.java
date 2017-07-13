@@ -35,6 +35,8 @@ import me.xeno.unengtrainer.model.entity.SetAxisSpeedWrapper;
 import me.xeno.unengtrainer.model.entity.SetMotorSpeedWrapper;
 import me.xeno.unengtrainer.model.entity.TurnBrakeWrapper;
 import me.xeno.unengtrainer.service.BleService;
+import me.xeno.unengtrainer.util.CommonUtils;
+import me.xeno.unengtrainer.util.DialogUtils;
 import me.xeno.unengtrainer.util.Logger;
 import me.xeno.unengtrainer.util.SpUtils;
 import me.xeno.unengtrainer.util.TimeUtils;
@@ -131,6 +133,7 @@ public class MainPresenter {
     /**
      * 向机器发送调整姿态命令，参数由用户在界面中设置好
      * 速度分成 100 等份，超过100不执行
+     *
      * @param angle1 第一轴角度
      * @param angle2 第二轴角度
      * @param speed1 电机1转速
@@ -147,7 +150,7 @@ public class MainPresenter {
             String currentTime = TimeUtils.longToString(System.currentTimeMillis(), "yyyy-MM-dd HH:mm");
             FavouriteRecord record = new FavouriteRecord();
 //            name, currentTime, currentTime, angle1, angle2, speed1, speed2
-                    record.setName(name);
+            record.setName(name);
             record.setCreateTime(currentTime);
             record.setModifyTime(currentTime);
             record.setSwingAngle(angle1);
@@ -175,6 +178,7 @@ public class MainPresenter {
 
     /**
      * 速度分成 100 等份，超过100不执行
+     *
      * @param motor1 电机1
      * @param motor2 电机2
      */
@@ -184,10 +188,11 @@ public class MainPresenter {
 
 
     /**
-     *  1,2 轴单轴运行/停止
-     *  0:第一轴停止运行
-     *  1:第一轴正方向连续运行(直到正限位或者报警)
-     *  2:第一轴负方向连续运行(直到负限位或者报警)
+     * 1,2 轴单轴运行/停止
+     * 0:第一轴停止运行
+     * 1:第一轴正方向连续运行(直到正限位或者报警)
+     * 2:第一轴负方向连续运行(直到负限位或者报警)
+     *
      * @param axis1 第一轴
      * @param axis2 第二轴
      */
@@ -196,11 +201,23 @@ public class MainPresenter {
     }
 
     public void getBatteryVoltage() {
-        mBleService.writeData(mModel.getBatteryVoltage());
+        if (mModel != null) {
+            //TODO 调试用
+            byte[] frame = mModel.getBatteryVoltage();
+            String str = CommonUtils.bytes2HexString(frame);
+            DialogUtils.logDialog(mActivity, str);
+            mBleService.writeData(mModel.getBatteryVoltage());
+        }
     }
 
     public void getAxisAngle() {
-        mBleService.writeData(mModel.getAxisAngle());
+        if (mModel != null) {
+            //TODO 调试用
+            byte[] frame = mModel.getAxisAngle();
+            String str = CommonUtils.bytes2HexString(frame);
+            DialogUtils.logDialog(mActivity, str);
+            mBleService.writeData(mModel.getAxisAngle());
+        }
     }
 
     private ScanResult mScanResult;
@@ -265,7 +282,7 @@ public class MainPresenter {
     }
 
     public void onDestroy() {
-        if(sServiceState == STATE_CONNECTED) {
+        if (sServiceState == STATE_CONNECTED) {
             mActivity.unbindService(mServiceConnection);
             sServiceState = STATE_DISCONNECTED;
         }
