@@ -7,80 +7,83 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-    
-    <style name="TextSubTitlePrimary" >
+
+    <style name="TextSubTitlePrimary">
         <item name="android:textSize">@dimen/text_size_sub_title</item>
         <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
-    <style name="TextSubTitleGrey33" >
+    <style name="TextSubTitleGrey33">
         <item name="android:textSize">@dimen/text_size_sub_title</item>
         <item name="android:textColor">@color/grey33</item>
     </style>
 
-    <style name="TextSubTitleGrey66" >
+    <style name="TextSubTitleGrey66">
         <item name="android:textSize">@dimen/text_size_sub_title</item>
         <item name="android:textColor">@color/grey66</item>
     </style>
 
-    <style name="TextSubTitleGrey99" >
+    <style name="TextSubTitleGrey99">
         <item name="android:textSize">@dimen/text_size_sub_title</item>
         <item name="android:textColor">@color/grey99</item>
     </style>
 
-    <style name="TextSmallGrey99" >
+    <style name="TextSmallGrey99">
         <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:textColor">@color/grey99</item>
     </style>
 
-    <style name="TextSmallGrey66" >
+    <style name="TextSmallGrey66">
         <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:textColor">@color/grey66</item>
     </style>
 
-    <style name="TextSmallGrey33" >
+    <style name="TextSmallGrey33">
         <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:textColor">@color/grey33</item>
     </style>
 
-    <style name="TextTinyGrey99" >
+    <style name="TextTinyGrey99">
         <item name="android:textSize">@dimen/text_size_tiny</item>
         <item name="android:textColor">@color/grey99</item>
     </style>
 
-    <style name="TextContentGrey99" >
+    <style name="TextContentGrey99">
         <item name="android:textSize">@dimen/text_size_content</item>
         <item name="android:textColor">@color/grey99</item>
     </style>
 
-    <style name="TextContentGrey33" >
+    <style name="TextContentGrey33">
         <item name="android:textSize">@dimen/text_size_content</item>
         <item name="android:textColor">@color/grey33</item>
     </style>
 
-    <style name="TextContentGrey66" >
+    <style name="TextContentGrey66">
         <item name="android:textSize">@dimen/text_size_content</item>
         <item name="android:textColor">@color/grey66</item>
     </style>
 
-    <style name="TextContentPrimary" >
+    <style name="TextContentPrimary">
         <item name="android:textSize">@dimen/text_size_content</item>
         <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
-    <style name="TextMainControlNumber" >
+    <style name="TextMainControlNumber">
         <item name="android:textSize">@dimen/text_size_content</item>
         <item name="android:textColor">@color/colorAccent</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="ButtonPrimary" >
+    <style name="ButtonPrimary">
         <item name="android:textSize">@dimen/text_size_button</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:gravity">center</item>
@@ -101,11 +104,22 @@
         <item name="android:background">@color/greyDD</item>
     </style>
 
-    <style name="temp" >
+    <style name="temp">
         <item name="android:textSize">@dimen/text_size_sub_title</item>
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:gravity">center</item>
         <item name="android:background">@drawable/selector_button_white</item>
     </style>
+
+    <!-- 布局style -->
+    <style name="MainControlRunAxisBtn">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/text_size_big</item>
+    </style>
+
 
 </resources>

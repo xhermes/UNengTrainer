@@ -24,6 +24,7 @@ public class Config {
     public static final int RUN_AXIS_STOP = 0;//的运行/停止
     public static final int RUN_AXIS_POSITIVE = 1;//正方向连续运行(直到正限位或者报警)
     public static final int RUN_AXIS_NEGATIVE = 2;//负方向连续运行(直到负限位或者报警)
+    public static final int RUN_AXIS_PERIOD = 100;//单轴运行发送间隔，单位ms
 
     public static final String SP_AXIS_ANGLE_1 = "SP_AXIS_ANGLE_1";
     public static final String SP_AXIS_ANGLE_2 = "SP_AXIS_ANGLE_2";

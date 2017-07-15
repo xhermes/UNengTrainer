@@ -12,12 +12,15 @@ import com.clj.fastble.data.ScanResult;
 import com.clj.fastble.scan.ListScanCallback;
 
 import java.text.ParseException;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.xeno.unengtrainer.application.Config;
 import me.xeno.unengtrainer.application.DataManager;
@@ -195,10 +198,25 @@ public class MainPresenter {
      *
      * @param axis1 第一轴
      * @param axis2 第二轴
+     * @return a rxjava disposable for unsubscribing
      */
-    public void runAxis(int axis1, int axis2) {
-        mBleService.writeData(mModel.runAxis(axis1, axis2));
+    public Disposable runAxis(final int axis1, final int axis2, int period) {
+        return Observable.interval(0, period, TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(@NonNull Long aLong) throws Exception {
+                        mBleService.writeData(mModel.runAxis(axis1, axis2));
+                    }
+                });
     }
+
+    public void stopAxis() {
+        mBleService.writeData(mModel.runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_STOP));
+    }
+
+
 
     public void getBatteryVoltage() {
         if (mModel != null) {
