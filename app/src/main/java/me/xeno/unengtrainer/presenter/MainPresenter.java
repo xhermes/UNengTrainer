@@ -128,6 +128,7 @@ public class MainPresenter {
 
         @Override
         public void onGetBatteryVoltage(GetBatteryVoltageWrapper wrapper) {
+            Logger.info("获取电量：" + wrapper.getVoltage());
             mActivity.displayBattery(wrapper.getVoltage());
         }
     };
@@ -218,14 +219,20 @@ public class MainPresenter {
 
 
 
-    public void getBatteryVoltage() {
+    public Disposable getBatteryVoltage(int periodInSec) {
         if (mModel != null) {
-            //TODO 调试用
-            byte[] frame = mModel.getBatteryVoltage();
-            String str = CommonUtils.bytes2HexString(frame);
-            DialogUtils.logDialog(mActivity, str);
-            mBleService.writeData(mModel.getBatteryVoltage());
+            return Observable.interval(0, periodInSec, TimeUnit.SECONDS)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .subscribe(new Consumer<Long>() {
+                        @Override
+                        public void accept(@NonNull Long aLong) throws Exception {
+                            Logger.info("获取电压");
+                            mBleService.writeData(mModel.getBatteryVoltage());
+                        }
+                    });
         }
+        return null;
     }
 
     public void getAxisAngle() {

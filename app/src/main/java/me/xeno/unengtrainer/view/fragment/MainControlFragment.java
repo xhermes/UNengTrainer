@@ -39,13 +39,13 @@ import me.xeno.unengtrainer.util.ToastUtils;
 /**
  * Main UI for the add task screen. Users can enter a task title and description.
  */
-public class MainControlFragment extends BaseMainFragment {
+public class MainControlFragment extends BaseMainFragment implements View.OnTouchListener {
 
-//    private TextView mDescription;
+    //    private TextView mDescription;
 //    private TextView mWrite1View;
 //    private TextView mWrite2View;
-    private TextView tv_angle;
-    private TextView tv_voltage;
+//    private TextView tv_angle;
+//    private TextView tv_voltage;
     private TextView angleView;
     private TextView batteryView;
 //    private TextView stop;
@@ -72,10 +72,10 @@ public class MainControlFragment extends BaseMainFragment {
 
     private AppCompatImageView mRunAxisSwingPositiveView;
     private AppCompatImageView mRunAxisSwingNegativeView;
-    private AppCompatImageView mRunAxisSwingStopView;
+    //    private AppCompatImageView mRunAxisSwingStopView;
     private AppCompatImageView mRunAxisElevationPositiveView;
     private AppCompatImageView mRunAxisElevationNegativeView;
-    private AppCompatImageView mRunAxisElevationStopView;
+//    private AppCompatImageView mRunAxisElevationStopView;
 
     private View mSendView;
 
@@ -86,12 +86,16 @@ public class MainControlFragment extends BaseMainFragment {
 
     private int pick;
 
-    private Disposable mDisposable1;
-    private Disposable mDisposable2;
+    private Disposable mBatteryDisposable;
+    private Disposable mCurrentSwingAngleDisposable;
+    private Disposable mCurrentElevationAngleDisposable;
 
-    private Disposable mRunAxisDisposable;
+    private Disposable mRunAxisSwingPosDisposable;
+    private Disposable mRunAxisSwingNegDisposable;
+    private Disposable mRunAxisElevationPosDisposable;
+    private Disposable mRunAxisElevationNegDisposable;
 
-    private final CompositeDisposable cd =new CompositeDisposable();
+    private final CompositeDisposable cd = new CompositeDisposable();
 
     public static MainControlFragment newInstance() {
         return new MainControlFragment();
@@ -104,13 +108,21 @@ public class MainControlFragment extends BaseMainFragment {
     @Override
     public void onResume() {
         super.onResume();
+        //页面恢复时，重新开始获取电压
+        if(mBatteryDisposable == null)
+            mBatteryDisposable = getMainActivity().getPresenter().getBatteryVoltage(Config.GET_BATTERY_PERIOD);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        //页面休眠时，停止获取电压
+        dispose(mBatteryDisposable);
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
 
 
 //        mFloatingActionBtn =
@@ -136,17 +148,17 @@ public class MainControlFragment extends BaseMainFragment {
 //        mWrite1View = (TextView) root.findViewById(R.id.write_1);
 //        mWrite2View = (TextView) root.findViewById(R.id.write_2);
 //        makeZero = (TextView) root.findViewById(R.id.make_zero);
-        tv_angle = (TextView) root.findViewById(R.id.angle);
-        tv_voltage = (TextView) root.findViewById(R.id.battery);
+//        tv_angle = (TextView) root.findViewById(R.id.angle);
+//        tv_voltage = (TextView) root.findViewById(R.id.battery);
         angleView = (TextView) root.findViewById(R.id.tv_angle);
         batteryView = (TextView) root.findViewById(R.id.tv_battery);
 
         mRunAxisSwingNegativeView = (AppCompatImageView) root.findViewById(R.id.swing_angle_negative);
         mRunAxisSwingPositiveView = (AppCompatImageView) root.findViewById(R.id.swing_angle_positive);
-        mRunAxisSwingStopView = (AppCompatImageView) root.findViewById(R.id.swing_angle_stop);
+//        mRunAxisSwingStopView = (AppCompatImageView) root.findViewById(R.id.swing_angle_stop);
         mRunAxisElevationNegativeView = (AppCompatImageView) root.findViewById(R.id.elevation_angle_negative);
         mRunAxisElevationPositiveView = (AppCompatImageView) root.findViewById(R.id.elevation_angle_positive);
-        mRunAxisElevationStopView = (AppCompatImageView) root.findViewById(R.id.elevation_angle_stop);
+//        mRunAxisElevationStopView = (AppCompatImageView) root.findViewById(R.id.elevation_angle_stop);
 
 //        mElevationAngleBar = (AppCompatSeekBar) root.findViewById(R.id.seek_elevation_angle);
 //        mSwingAngleBar = (AppCompatSeekBar) root.findViewById(R.id.seek_swing_angle);
@@ -256,18 +268,18 @@ public class MainControlFragment extends BaseMainFragment {
 //            }
 //        });
 //
-        tv_angle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getMainActivity().getPresenter().getAxisAngle();
-            }
-        });
-        tv_voltage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getMainActivity().getPresenter().getBatteryVoltage();
-            }
-        });
+//        tv_angle.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                getMainActivity().getPresenter().getAxisAngle();
+//            }
+//        });
+//        tv_voltage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                getMainActivity().getPresenter().getBatteryVoltage();
+//            }
+//        });
 //        mRunAxis1View.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -380,69 +392,49 @@ public class MainControlFragment extends BaseMainFragment {
 //        });
 
 
-
-        mRunAxisSwingPositiveView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    mRunAxisDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_POSITIVE, Config.RUN_AXIS_STOP, Config.RUN_AXIS_PERIOD);
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    dispose(mRunAxisDisposable);
-                    Logger.info("单轴运行结束");
-                }
-                return true;
-            }
-        });
-        mRunAxisSwingNegativeView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    mRunAxisDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_NEGATIVE, Config.RUN_AXIS_STOP, Config.RUN_AXIS_PERIOD);
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    dispose(mRunAxisDisposable);
-                    Logger.info("单轴运行结束");
-                }
-                return true;
-            }
-        });
-        mRunAxisSwingStopView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getMainActivity().getPresenter().stopAxis();
-            }
-    });
+        mRunAxisSwingPositiveView.setOnTouchListener(this);
+        mRunAxisSwingNegativeView.setOnTouchListener(this);
+        mRunAxisElevationPositiveView.setOnTouchListener(this);
+        mRunAxisElevationNegativeView.setOnTouchListener(this);
+//        mRunAxisSwingStopView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                getMainActivity().getPresenter().stopAxis();
+//            }
+//    });
 
 
-        mRunAxisElevationPositiveView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    mRunAxisDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_POSITIVE, Config.RUN_AXIS_PERIOD);
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    dispose(mRunAxisDisposable);
-                    Logger.info("单轴运行结束");
-                }
-                return true;
-            }
-        });
-        mRunAxisElevationNegativeView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    mRunAxisDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_NEGATIVE, Config.RUN_AXIS_PERIOD);
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    dispose(mRunAxisDisposable);
-                    Logger.info("单轴运行结束");
-                }
-                return true;
-            }
-        });
-        mRunAxisElevationStopView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getMainActivity().getPresenter().stopAxis();
-            }
-        });
+//        mRunAxisElevationPositiveView.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//                    mRunAxisDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_POSITIVE, Config.RUN_AXIS_PERIOD);
+//                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+//                    dispose(mRunAxisDisposable);
+//                    Logger.info("单轴运行结束");
+//                }
+//                return true;
+//            }
+//        });
+//        mRunAxisElevationNegativeView.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//                    mRunAxisDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_NEGATIVE, Config.RUN_AXIS_PERIOD);
+//                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+//                    dispose(mRunAxisDisposable);
+//                    Logger.info("单轴运行结束");
+//                }
+//                return true;
+//            }
+//        });
+//        mRunAxisElevationStopView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                getMainActivity().getPresenter().stopAxis();
+//            }
+//        });
+
 
     }
 
@@ -483,7 +475,7 @@ public class MainControlFragment extends BaseMainFragment {
                 .input("为此收藏记录命名", "记录" + (count + 1), new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
-                        getMainActivity().getPresenter().addToFavourite(input.toString(), mSwingAngle,mElevationAngle,mLeftSpeed,mRightSpeed);
+                        getMainActivity().getPresenter().addToFavourite(input.toString(), mSwingAngle, mElevationAngle, mLeftSpeed, mRightSpeed);
                     }
                 })
                 .positiveText("添加收藏")
@@ -495,15 +487,15 @@ public class MainControlFragment extends BaseMainFragment {
         new MaterialDialog.Builder(getActivity())
                 .title("设置摆角")
                 .content("摆角范围：(-90 ~ 90)")
-                .inputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_SIGNED)
+                .inputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED)
                 .input("输入摆角", "", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
-                        if(input.length() == 0) {
+                        if (input.length() == 0) {
                             return;
                         }
                         double inputValue = Double.valueOf(input.toString());
-                        if(inputValue >= -90 && inputValue <= 90) {
+                        if (inputValue >= -90 && inputValue <= 90) {
                             mSwingAngle = inputValue;
                             mSwingAngleView.setText("摆角：" + input.toString());
                         } else {
@@ -514,19 +506,20 @@ public class MainControlFragment extends BaseMainFragment {
                 .positiveText("确定")
                 .show();
     }
+
     public void showElevationAngleDialog() {
         new MaterialDialog.Builder(getActivity())
                 .title("设置仰角")
                 .content("仰角范围：(-90 ~ 50)")
-                .inputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_SIGNED)
+                .inputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED)
                 .input("输入仰角", "", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
-                        if(input.length() == 0) {
+                        if (input.length() == 0) {
                             return;
                         }
                         double inputValue = Double.valueOf(input.toString());
-                        if(inputValue >= -90 && inputValue <= 50) {
+                        if (inputValue >= -90 && inputValue <= 50) {
                             mElevationAngle = inputValue;
                             mElevationAngleView.setText("仰角：" + input.toString());
                         } else {
@@ -537,6 +530,7 @@ public class MainControlFragment extends BaseMainFragment {
                 .positiveText("确定")
                 .show();
     }
+
     public void showLeftSpeedDialog() {
         new MaterialDialog.Builder(getActivity())
                 .title("设置左转速")
@@ -545,7 +539,7 @@ public class MainControlFragment extends BaseMainFragment {
                 .input("输入转速", "", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
-                        if(input.length() == 0) {
+                        if (input.length() == 0) {
                             return;
                         }
                         int inputValue = Integer.valueOf(input.toString());
@@ -560,6 +554,7 @@ public class MainControlFragment extends BaseMainFragment {
                 .positiveText("确定")
                 .show();
     }
+
     public void showRightSpeedDialog() {
         new MaterialDialog.Builder(getActivity())
                 .title("设置右转速")
@@ -568,7 +563,7 @@ public class MainControlFragment extends BaseMainFragment {
                 .input("输入转速", "", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
-                        if(input.length() == 0) {
+                        if (input.length() == 0) {
                             return;
                         }
                         int inputValue = Integer.valueOf(input.toString());
@@ -621,8 +616,58 @@ public class MainControlFragment extends BaseMainFragment {
     }
 
     private void dispose(Disposable disposable) {
-        if(disposable != null && !disposable.isDisposed()) {
+        if (disposable != null && !disposable.isDisposed()) {
             disposable.dispose();
+            disposable = null;
         }
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        if (v == mRunAxisSwingPositiveView) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                mRunAxisSwingPosDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_POSITIVE, Config.RUN_AXIS_STOP, Config.RUN_AXIS_PERIOD);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                dispose(mRunAxisSwingPosDisposable);
+                Logger.info("单轴运行结束");
+            }
+        }
+        if (v == mRunAxisSwingNegativeView) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                mRunAxisSwingNegDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_NEGATIVE, Config.RUN_AXIS_STOP, Config.RUN_AXIS_PERIOD);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                dispose(mRunAxisSwingNegDisposable);
+                Logger.info("单轴运行结束");
+            }
+        }
+        if(v == mRunAxisElevationPositiveView) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                mRunAxisElevationPosDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_POSITIVE, Config.RUN_AXIS_PERIOD);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                dispose(mRunAxisElevationPosDisposable);
+                Logger.info("单轴运行结束");
+            }
+        }
+        if(v == mRunAxisElevationNegativeView) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                mRunAxisElevationNegDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_NEGATIVE, Config.RUN_AXIS_PERIOD);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                dispose(mRunAxisElevationNegDisposable);
+                Logger.info("单轴运行结束");
+            }
+        }
+
+
+//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//            mRunAxisDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_POSITIVE, Config.RUN_AXIS_STOP, Config.RUN_AXIS_PERIOD);
+//            return false;
+//        } else if (event.getAction() == MotionEvent.ACTION_UP) {
+//            dispose(mRunAxisDisposable);
+//            Logger.info("单轴运行结束");
+//            return true;
+//        } else if(event.getActionButton()) {
+//
+//        }
+        return true;
     }
 }

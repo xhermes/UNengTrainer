@@ -6,6 +6,8 @@ package me.xeno.unengtrainer.application;
 
 public class Config {
 
+    public static final int GET_BATTERY_PERIOD = 60;//获取电压间隔，单位秒
+
     public static final int STATE_DISCONNECTED = 0;
     public static final int STATE_CONNECTING = 1;
     public static final int STATE_CONNECTED = 2;

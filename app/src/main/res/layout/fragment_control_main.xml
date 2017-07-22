@@ -7,145 +7,126 @@
     android:orientation="vertical">
 
     <!-- 占位 机器示意图 -->
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:background="@color/colorPrimaryDark"
         android:elevation="4dp"
         android:orientation="vertical">
 
-
-        <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal">-->
-
-        <!--<TextView-->
-        <!--android:id="@+id/write_1"-->
-        <!--android:layout_width="120dp"-->
-        <!--android:layout_height="45dp"-->
-        <!--android:layout_margin="15dp"-->
-        <!--android:background="@color/colorPrimaryDark"-->
-        <!--android:gravity="center"-->
-        <!--android:text="单轴运行"-->
-        <!--android:textColor="@color/white" />-->
-
-        <!--<TextView-->
-        <!--android:id="@+id/stop"-->
-        <!--android:layout_width="120dp"-->
-        <!--android:layout_height="45dp"-->
-        <!--android:layout_margin="15dp"-->
-        <!--android:background="@color/colorPrimaryDark"-->
-        <!--android:gravity="center"-->
-        <!--android:text="单轴运行停止"-->
-        <!--android:textColor="@color/white" />-->
-        <!--</LinearLayout>-->
-
-        <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal">-->
-
-        <!--<EditText-->
-        <!--android:id="@+id/input"-->
-        <!--android:layout_width="100dp"-->
-        <!--android:layout_height="50dp"-->
-        <!--android:layout_margin="15dp"-->
-        <!--android:background="@color/white" />-->
-
-        <!--<TextView-->
-        <!--android:id="@+id/write_2"-->
-        <!--android:layout_width="120dp"-->
-        <!--android:layout_height="45dp"-->
-        <!--android:layout_margin="15dp"-->
-        <!--android:background="@color/colorPrimaryDark"-->
-        <!--android:gravity="center"-->
-        <!--android:text="设置角度"-->
-        <!--android:textColor="@color/white" />-->
-        <!--</LinearLayout>-->
-
-        <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal">-->
-
-        <!--<TextView-->
-        <!--android:id="@+id/make_zero"-->
-        <!--android:layout_width="120dp"-->
-        <!--android:layout_height="45dp"-->
-        <!--android:layout_margin="15dp"-->
-        <!--android:background="@color/colorPrimaryDark"-->
-        <!--android:gravity="center"-->
-        <!--android:text="电机速度"-->
-        <!--android:textColor="@color/white" />-->
-
-        <!--<EditText-->
-        <!--android:id="@+id/motor1"-->
-        <!--android:layout_width="100dp"-->
-        <!--android:layout_height="50dp"-->
-        <!--android:layout_margin="5dp"-->
-        <!--android:background="@color/white" />-->
-
-        <!--<EditText-->
-        <!--android:id="@+id/motor2"-->
-        <!--android:layout_width="100dp"-->
-        <!--android:layout_height="50dp"-->
-        <!--android:layout_margin="5dp"-->
-        <!--android:background="@color/white" />-->
-
-        <!--</LinearLayout>-->
+        <!-- 电压布局 -->
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/battery"
-                android:layout_width="80dp"
-                android:layout_height="45dp"
-                android:layout_margin="15dp"
-                android:background="@color/colorPrimaryDark"
-                android:gravity="center"
-                android:text="获取电压"
-                android:textColor="@color/white" />
-
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/ic_battery"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                app:srcCompat="@drawable/ic_battery" />
 
             <TextView
-                android:id="@+id/angle"
-                android:layout_width="80dp"
-                android:layout_height="45dp"
-                android:layout_margin="15dp"
-                android:background="@color/colorPrimaryDark"
-                android:gravity="center"
-                android:text="获取角度"
-                android:textColor="@color/white" />
+                android:id="@+id/tv_battery"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_tiny" />
+        </LinearLayout>
+
+        <!-- 显示当前转速，角度-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:orientation="vertical">
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    app:srcCompat="@drawable/ic_motor_speed" />
 
                 <TextView
-                    android:id="@+id/tv_battery"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="电压"
-                    android:textColor="@color/white" />
-
-                <TextView
-                    android:id="@+id/tv_angle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:gravity="center"
-                    android:text="角度"
+                    android:layout_marginLeft="5dp"
+                    android:text="123"
                     android:textColor="@color/white" />
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
 
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    app:srcCompat="@drawable/ic_motor_speed" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="123"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    app:srcCompat="@drawable/ic_swing_angle" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="123"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    app:srcCompat="@drawable/ic_elevation_angle" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="123"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/white" />
+            </LinearLayout>
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_angle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:text="角度"
+            android:textColor="@color/white" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -156,35 +137,35 @@
                 android:id="@+id/run_axis_1"
                 android:layout_width="80dp"
                 android:layout_height="45dp"
-                android:visibility="gone"
                 android:layout_margin="10dp"
                 android:background="@color/colorPrimaryDark"
                 android:gravity="center"
                 android:text="单轴正方向"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:visibility="gone" />
 
 
             <TextView
                 android:id="@+id/run_axis_2"
                 android:layout_width="80dp"
                 android:layout_height="45dp"
-                android:visibility="gone"
                 android:layout_margin="10dp"
                 android:background="@color/colorPrimaryDark"
                 android:gravity="center"
                 android:text="单轴负方向"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/run_axis_stop"
                 android:layout_width="80dp"
                 android:layout_height="45dp"
                 android:layout_margin="10dp"
-                android:visibility="gone"
                 android:background="@color/colorPrimaryDark"
                 android:gravity="center"
                 android:text="单轴停止"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:visibility="gone" />
         </LinearLayout>
 
         <TextView
@@ -198,7 +179,7 @@
             android:text="停止单轴连续发送事件"
             android:textColor="@color/white"
             android:visibility="gone" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <!-- 参数设置，滑动调整 -->
     <LinearLayout
@@ -230,28 +211,28 @@
                     android:gravity="center_vertical"
                     android:text="仰角单轴调整" />
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/elevation_angle_stop"
-                    android:background="@drawable/selector_button_white"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:padding="10dp"
-                    app:srcCompat="@drawable/ic_stop_black_24dp" />
+                <!--<android.support.v7.widget.AppCompatImageView-->
+                <!--android:id="@+id/elevation_angle_stop"-->
+                <!--android:background="@drawable/selector_button_white"-->
+                <!--android:layout_width="60dp"-->
+                <!--android:layout_height="60dp"-->
+                <!--android:padding="10dp"-->
+                <!--app:srcCompat="@drawable/ic_stop_black_24dp" />-->
 
                 <android.support.v7.widget.AppCompatImageView
-                    android:background="@drawable/selector_button_white"
                     android:id="@+id/elevation_angle_negative"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:padding="10dp"
+                    android:background="@drawable/selector_button_white"
+                    android:padding="15dp"
                     app:srcCompat="@drawable/ic_minus" />
 
                 <android.support.v7.widget.AppCompatImageView
-                    android:background="@drawable/selector_button_white"
                     android:id="@+id/elevation_angle_positive"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:padding="10dp"
+                    android:background="@drawable/selector_button_white"
+                    android:padding="15dp"
                     app:srcCompat="@drawable/ic_plus" />
             </LinearLayout>
 
@@ -267,28 +248,28 @@
                     android:gravity="center_vertical"
                     android:text="摆角单轴调整" />
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:background="@drawable/selector_button_white"
-                    android:id="@+id/swing_angle_stop"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:padding="10dp"
-                    app:srcCompat="@drawable/ic_stop_black_24dp" />
+                <!--<android.support.v7.widget.AppCompatImageView-->
+                <!--android:background="@drawable/selector_button_white"-->
+                <!--android:id="@+id/swing_angle_stop"-->
+                <!--android:layout_width="60dp"-->
+                <!--android:layout_height="60dp"-->
+                <!--android:padding="10dp"-->
+                <!--app:srcCompat="@drawable/ic_stop_black_24dp" />-->
 
                 <android.support.v7.widget.AppCompatImageView
-                    android:background="@drawable/selector_button_white"
                     android:id="@+id/swing_angle_negative"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:padding="10dp"
+                    android:background="@drawable/selector_button_white"
+                    android:padding="15dp"
                     app:srcCompat="@drawable/ic_minus" />
 
                 <android.support.v7.widget.AppCompatImageView
-                    android:background="@drawable/selector_button_white"
                     android:id="@+id/swing_angle_positive"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:padding="10dp"
+                    android:background="@drawable/selector_button_white"
+                    android:padding="15dp"
                     app:srcCompat="@drawable/ic_plus" />
             </LinearLayout>
 
