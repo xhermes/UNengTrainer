@@ -50,12 +50,14 @@ public class BleServiceProcessor {
         byte axis2 = data[1];
 
         GetStatusWrapper.AxisStatus[] axisStatuses = new GetStatusWrapper.AxisStatus[2];
+        axisStatuses[0] = new GetStatusWrapper.AxisStatus();
         axisStatuses[0].setRunning(getBit0(axis1));
         axisStatuses[0].setAbruptStopping(getBit1(axis1));
         axisStatuses[0].setAlerting(getBit2(axis1));
         axisStatuses[0].setPositiveSpacing(getBit3(axis1));
         axisStatuses[0].setNegativeSpacing(getBit4(axis1));
 
+        axisStatuses[1] = new GetStatusWrapper.AxisStatus();
         axisStatuses[1].setRunning(getBit0(axis2));
         axisStatuses[1].setAbruptStopping(getBit1(axis2));
         axisStatuses[1].setAlerting(getBit2(axis2));
@@ -168,6 +170,7 @@ public class BleServiceProcessor {
     }
 
     public String asciiToString(byte[] bytes) {
+        //由上游接收到length=0的包问题而来，需要在上游忽略length=0的包，不执行动作
         //FIXME java.lang.NullPointerException: Attempt to get length of null array
         char[] buf = new char[bytes.length];
         StringBuilder sb = new StringBuilder();

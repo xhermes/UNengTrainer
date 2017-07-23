@@ -6,7 +6,10 @@ package me.xeno.unengtrainer.application;
 
 public class Config {
 
-    public static final int GET_BATTERY_PERIOD = 60;//获取电压间隔，单位秒
+    public static final int GET_STATUS_PERIOD = 5;//获取状态间隔，单位秒
+    public static final int GET_BATTERY_PERIOD = 5;//获取电压间隔，单位秒
+    public static final int GET_ANGLE_PERIOD = 300;//获取角度间隔，单位豪秒
+
 
     public static final int STATE_DISCONNECTED = 0;
     public static final int STATE_CONNECTING = 1;
@@ -32,4 +35,7 @@ public class Config {
     public static final String SP_AXIS_ANGLE_2 = "SP_AXIS_ANGLE_2";
     public static final String SP_MOTOR_SPEED_1 = "SP_MOTOR_SPEED_1";
     public static final String SP_MOTOR_SPEED_2 = "SP_MOTOR_SPEED_2";
+
+    public static final int AXIS_STATUS_RUNNING_STOP = 0;
+    public static final int AXIS_STATUS_RUNNING_RUNNING = 1;
 }

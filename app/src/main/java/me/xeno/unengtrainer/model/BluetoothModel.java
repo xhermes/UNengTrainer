@@ -29,10 +29,8 @@ public class BluetoothModel {
 
     }
 
-    public void getMachineStatus(BluetoothGattCharacteristic characteristic) {
-        //帧头（固定）0xFB，命令号(查询状态) 0x02，数据长度 0x00，数据（无），校验位 0xFD，帧尾（固定）0x0D
-        characteristic.setValue(new byte[]{(byte) 0xFB, 0x02, 0x00, (byte) 0xFD, (byte) 0x0D});
-        characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
+    public byte[] getMachineStatus() {
+      return createFrame(Config.DATA_TYPE_GET_STATUS, new byte[]{});
     }
 
     public void conductMachine(BluetoothGattCharacteristic characteristic) {

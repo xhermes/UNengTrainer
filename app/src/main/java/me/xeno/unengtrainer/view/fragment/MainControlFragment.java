@@ -77,6 +77,9 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
     private AppCompatImageView mRunAxisElevationNegativeView;
 //    private AppCompatImageView mRunAxisElevationStopView;
 
+    private TextView mCurrentSwingAngleView;
+    private TextView mCurrentElevationAngleView;
+
     private View mSendView;
 
     private double mSwingAngle;
@@ -84,16 +87,25 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
     private int mLeftSpeed;
     private int mRightSpeed;
 
+    private double mCurrentSwingAngle;
+    private double mCurrentElevationAngle;
+    private int mCurrentLeftSpeed;
+    private int mCurrentRightSpeed;
+
+    private TextView mCurrentRightSpeedView;
+    private TextView mCurrentLeftSpeedView;
+
     private int pick;
 
     private Disposable mBatteryDisposable;
-    private Disposable mCurrentSwingAngleDisposable;
-    private Disposable mCurrentElevationAngleDisposable;
+    private Disposable mCurrentAngleDisposable;
 
     private Disposable mRunAxisSwingPosDisposable;
     private Disposable mRunAxisSwingNegDisposable;
     private Disposable mRunAxisElevationPosDisposable;
     private Disposable mRunAxisElevationNegDisposable;
+
+    private Disposable mStatusDisposable;
 
     private final CompositeDisposable cd = new CompositeDisposable();
 
@@ -111,6 +123,9 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         //页面恢复时，重新开始获取电压
         if(mBatteryDisposable == null)
             mBatteryDisposable = getMainActivity().getPresenter().getBatteryVoltage(Config.GET_BATTERY_PERIOD);
+        if(mStatusDisposable == null) {
+            getMainActivity().getPresenter().startGetStatusTask(Config.GET_STATUS_PERIOD);
+        }
     }
 
     @Override
@@ -150,8 +165,11 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 //        makeZero = (TextView) root.findViewById(R.id.make_zero);
 //        tv_angle = (TextView) root.findViewById(R.id.angle);
 //        tv_voltage = (TextView) root.findViewById(R.id.battery);
-        angleView = (TextView) root.findViewById(R.id.tv_angle);
         batteryView = (TextView) root.findViewById(R.id.tv_battery);
+
+        mCurrentElevationAngleView = (TextView) root.findViewById(R.id.current_elevation_angle);
+        mCurrentSwingAngleView = (TextView) root.findViewById(R.id.current_swing_angle);
+
 
         mRunAxisSwingNegativeView = (AppCompatImageView) root.findViewById(R.id.swing_angle_negative);
         mRunAxisSwingPositiveView = (AppCompatImageView) root.findViewById(R.id.swing_angle_positive);
@@ -174,6 +192,9 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         mSwingAngleView = (TextView) root.findViewById(R.id.swing_angle);
         mLeftSpeedView = (TextView) root.findViewById(R.id.left_speed);
         mRightSpeedView = (TextView) root.findViewById(R.id.right_speed);
+
+        mCurrentRightSpeedView = (TextView) root.findViewById(R.id.current_right_speed);
+        mCurrentLeftSpeedView = (TextView) root.findViewById(R.id.current_left_speed);
 
         mSendView = root.findViewById(R.id.send);
 
@@ -214,6 +235,8 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         mSendView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
+
                 getMainActivity().getPresenter().send(mSwingAngle, mElevationAngle, mLeftSpeed, mRightSpeed);
             }
         });
@@ -458,12 +481,27 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         return super.onOptionsItemSelected(item);
     }
 
+    public void refreshCurrentSpeed(int left, int right) {
+        mCurrentLeftSpeedView.setText(left + "");
+        mCurrentRightSpeedView.setText(right + "");
+    }
+
+    public void stopGetCurrentAngle() {
+        if(mCurrentAngleDisposable != null && !mCurrentAngleDisposable.isDisposed()) {
+            mCurrentAngleDisposable.dispose();
+        }
+    }
+
     public void showCurrentAngle(String angle1, String angle2) {
-        angleView.setText("1轴角度：" + angle1 + "2轴角度：" + angle2);
+        mCurrentSwingAngle = Double.valueOf(angle1);
+        mCurrentElevationAngle = Double.valueOf(angle2);
+
+        mCurrentElevationAngleView.setText(angle2);
+        mCurrentSwingAngleView.setText(angle1);
     }
 
     public void showCurrentVoltage(String voltage) {
-        batteryView.setText("当前电压：" + voltage + " V");
+        batteryView.setText(voltage + " V");
     }
 
     public void showAddFavouriteDialog() {
@@ -584,7 +622,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
     }
 
     public void setSwingAngle(double swingAngle) {
-        this.mSwingAngle = mSwingAngle;
+        this.mSwingAngle = swingAngle;
         mSwingAngleView.setText("摆角：" + swingAngle);
     }
 
@@ -593,7 +631,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
     }
 
     public void setElevationAngle(double elevationAngle) {
-        this.mElevationAngle = mElevationAngle;
+        this.mElevationAngle = elevationAngle;
         mElevationAngleView.setText("仰角：" + elevationAngle);
     }
 
@@ -602,7 +640,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
     }
 
     public void setLeftSpeed(int leftSpeed) {
-        this.mLeftSpeed = mLeftSpeed;
+        this.mLeftSpeed = leftSpeed;
         mLeftSpeedView.setText("左转速：" + leftSpeed);
     }
 
@@ -611,14 +649,13 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
     }
 
     public void setRightSpeed(int rightSpeed) {
-        this.mRightSpeed = mRightSpeed;
+        this.mRightSpeed = rightSpeed;
         mRightSpeedView.setText("右转速：" + rightSpeed);
     }
 
     private void dispose(Disposable disposable) {
         if (disposable != null && !disposable.isDisposed()) {
             disposable.dispose();
-            disposable = null;
         }
     }
 
@@ -627,22 +664,34 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         if (v == mRunAxisSwingPositiveView) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mRunAxisSwingPosDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_POSITIVE, Config.RUN_AXIS_STOP, Config.RUN_AXIS_PERIOD);
+                //开始单轴连续调整时，启动一个获取当前角度的任务
+                if(mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed()) {
+                    mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
+                }
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 dispose(mRunAxisSwingPosDisposable);
+                dispose(mCurrentAngleDisposable);
                 Logger.info("单轴运行结束");
             }
         }
         if (v == mRunAxisSwingNegativeView) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mRunAxisSwingNegDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_NEGATIVE, Config.RUN_AXIS_STOP, Config.RUN_AXIS_PERIOD);
+                if(mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed())  {
+                    mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
+                }
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 dispose(mRunAxisSwingNegDisposable);
+                dispose(mCurrentAngleDisposable);
                 Logger.info("单轴运行结束");
             }
         }
         if(v == mRunAxisElevationPositiveView) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mRunAxisElevationPosDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_POSITIVE, Config.RUN_AXIS_PERIOD);
+                if(mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed())  {
+                    mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
+                }
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 dispose(mRunAxisElevationPosDisposable);
                 Logger.info("单轴运行结束");
@@ -651,6 +700,9 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         if(v == mRunAxisElevationNegativeView) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mRunAxisElevationNegDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_NEGATIVE, Config.RUN_AXIS_PERIOD);
+                if(mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed())  {
+                    mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
+                }
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 dispose(mRunAxisElevationNegDisposable);
                 Logger.info("单轴运行结束");

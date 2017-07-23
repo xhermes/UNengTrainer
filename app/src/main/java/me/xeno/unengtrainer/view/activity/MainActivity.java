@@ -217,12 +217,20 @@ public class MainActivity extends BaseActivity
         mMainControlFragment.showCurrentAngle(angle1, angle2);
     }
 
+    public void stopGetCurrentAngle() {
+        mMainControlFragment.stopGetCurrentAngle();
+    }
+
     public void setTitle(String title) {
         getSupportActionBar().setTitle(title);
     }
 
     public void displayBattery(String voltage) {
         mMainControlFragment.showCurrentVoltage(voltage);
+    }
+
+    public void refreshCurrentSpeed(int left, int right) {
+        mMainControlFragment.refreshCurrentSpeed(left, right);
     }
 
     public void showMainControlFragment() {

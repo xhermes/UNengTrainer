@@ -57,10 +57,11 @@
                     app:srcCompat="@drawable/ic_motor_speed" />
 
                 <TextView
+                    android:id="@+id/current_left_speed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="123"
+                    android:text="0"
                     android:textColor="@color/white" />
             </LinearLayout>
             <LinearLayout
@@ -75,10 +76,11 @@
                     app:srcCompat="@drawable/ic_motor_speed" />
 
                 <TextView
+                    android:id="@+id/current_right_speed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="123"
+                    android:text="0"
                     android:textColor="@color/white" />
             </LinearLayout>
             <LinearLayout
@@ -93,6 +95,7 @@
                     app:srcCompat="@drawable/ic_swing_angle" />
 
                 <TextView
+                    android:id="@+id/current_swing_angle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="123"
@@ -111,6 +114,7 @@
                     app:srcCompat="@drawable/ic_elevation_angle" />
 
                 <TextView
+                    android:id="@+id/current_elevation_angle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="123"
@@ -118,15 +122,6 @@
                     android:textColor="@color/white" />
             </LinearLayout>
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/tv_angle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:gravity="center"
-            android:text="角度"
-            android:textColor="@color/white" />
 
         <LinearLayout
             android:layout_width="match_parent"

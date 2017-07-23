@@ -41,6 +41,7 @@ import me.xeno.unengtrainer.service.BleService;
 import me.xeno.unengtrainer.util.CommonUtils;
 import me.xeno.unengtrainer.util.DialogUtils;
 import me.xeno.unengtrainer.util.Logger;
+import me.xeno.unengtrainer.util.RxUtils;
 import me.xeno.unengtrainer.util.SpUtils;
 import me.xeno.unengtrainer.util.TimeUtils;
 import me.xeno.unengtrainer.view.activity.MainActivity;
@@ -78,12 +79,16 @@ public class MainPresenter {
                     .append("正限位：").append(axisStatus1.getPositiveSpacing()).append(axisStatus2.getPositiveSpacing()).append("\n")
                     .append("负限位：").append(axisStatus1.getNegativeSpacing()).append(axisStatus2.getNegativeSpacing()).append("\n");
 
+            //如果检测到两轴均为停止状态，就不再轮询角度，节省电量
+            if(axisStatus1.getRunning() == Config.AXIS_STATUS_RUNNING_STOP && axisStatus2.getRunning() == Config.AXIS_STATUS_RUNNING_STOP)
+                mActivity.stopGetCurrentAngle();
+
             String content = sb.toString();
 
-            new MaterialDialog.Builder(mActivity)
-                    .title("查询步进电机状态回复")
-                    .content(content)
-                    .show();
+//            new MaterialDialog.Builder(mActivity)
+//                    .title("查询步进电机状态回复")
+//                    .content(content)
+//                    .show();
         }
 
         @Override
@@ -143,10 +148,24 @@ public class MainPresenter {
      * @param speed1 电机1转速
      * @param speed2 电机2转速
      */
-    public void send(double angle1, double angle2, int speed1, int speed2) {
-        Logger.info("send:=======> angle1=" + angle1 + " angle2=" + angle2 + "speed1=" + speed1 + "speed2=" + speed2);
-        setAxisAngle(angle1, angle2);
+    public void send(final double angle1, final double angle2, int speed1, int speed2) {
+        Logger.error("send:=======> angle1=" + angle1 + " angle2=" + angle2 + "speed1=" + speed1 + "speed2=" + speed2);
+
+        //TODO 在机器状态栏显示当前转速，这段可能应该放到机器回调指令到达成功以后再执行
+        mActivity.refreshCurrentSpeed(speed1, speed2);
+
         setMotorSpeed(speed1, speed2);
+
+        //延时发送调整角度命令，防止机器来不及处理，忽略命令
+        RxUtils.timer(1).subscribe(new Consumer<Long>() {
+            @Override
+            public void accept(@NonNull Long aLong) throws Exception {
+                setAxisAngle(angle1, angle2);
+            }
+        });
+
+
+
     }
 
     public void addToFavourite(String name, double angle1, double angle2, int speed1, int speed2) {
@@ -204,7 +223,7 @@ public class MainPresenter {
     public Disposable runAxis(final int axis1, final int axis2, int period) {
         return Observable.interval(0, period, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(@NonNull Long aLong) throws Exception {
@@ -223,7 +242,7 @@ public class MainPresenter {
         if (mModel != null) {
             return Observable.interval(0, periodInSec, TimeUnit.SECONDS)
                     .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Consumer<Long>() {
                         @Override
                         public void accept(@NonNull Long aLong) throws Exception {
@@ -235,14 +254,51 @@ public class MainPresenter {
         return null;
     }
 
+    /**
+     * 单词获取角度
+     */
     public void getAxisAngle() {
         if (mModel != null) {
-            //TODO 调试用
-            byte[] frame = mModel.getAxisAngle();
-            String str = CommonUtils.bytes2HexString(frame);
-            DialogUtils.logDialog(mActivity, str);
             mBleService.writeData(mModel.getAxisAngle());
         }
+    }
+
+    /**
+     * 启动一个任务，每隔一段时间调用一次获取角度接口
+     */
+    public Disposable startGetAxisAngleTask(int periodInMilliSec) {
+        if(mModel != null) {
+            return Observable.interval(0, periodInMilliSec, TimeUnit.MILLISECONDS)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<Long>() {
+                        @Override
+                        public void accept(@NonNull Long aLong) throws Exception {
+                            Logger.info("获取角度");
+                            mBleService.writeData(mModel.getAxisAngle());
+                        }
+                    });
+        }
+        return null;
+    }
+
+    /**
+     * 启动一个任务，每隔一段时间调用一次获取状态
+     */
+    public Disposable startGetStatusTask(int periodInSec) {
+        if(mModel != null) {
+            return Observable.interval(0, periodInSec, TimeUnit.SECONDS)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<Long>() {
+                        @Override
+                        public void accept(@NonNull Long aLong) throws Exception {
+                            Logger.info("获取状态");
+                            mBleService.writeData(mModel.getMachineStatus());
+                        }
+                    });
+        }
+        return null;
     }
 
     private ScanResult mScanResult;

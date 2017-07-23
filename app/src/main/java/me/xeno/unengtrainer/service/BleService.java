@@ -367,7 +367,11 @@ public class BleService extends Service {
                                 mListener.onSetAxisSpeed(mProcessor.handleSetAxisSpeed(finalData));
                                 break;
                             case Config.DATA_TYPE_GET_AXIS_ANGLE:
-                                mListener.onGetAxisAngle(mProcessor.handleGetAxisAngle(finalData));
+                                if(finalData != null) {
+                                    mListener.onGetAxisAngle(mProcessor.handleGetAxisAngle(finalData));
+                                } else {
+                                    Logger.info("数据包长度为0");
+                                }
                                 break;
                             case Config.DATA_TYPE_SET_MOTOR_SPEED:
                                 mListener.onSetMotorSpeed(mProcessor.handleSetMotorSpeed(finalData));
