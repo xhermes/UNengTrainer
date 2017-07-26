@@ -9,7 +9,7 @@
     <!-- 占位 机器示意图 -->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
         android:background="@color/colorPrimaryDark"
         android:elevation="4dp"
         android:orientation="vertical">
@@ -19,9 +19,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
             android:layout_marginTop="15dp"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/ic_battery"
@@ -31,11 +32,11 @@
 
             <TextView
                 android:id="@+id/tv_battery"
-                android:layout_width="50dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="left"
                 android:textColor="@color/white"
-                android:textSize="@dimen/text_size_tiny" />
+                android:textSize="@dimen/text_size_minimum" />
         </LinearLayout>
 
         <!-- 显示当前转速，角度-->
@@ -64,6 +65,7 @@
                     android:text="0"
                     android:textColor="@color/white" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -83,6 +85,7 @@
                     android:text="0"
                     android:textColor="@color/white" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -98,10 +101,11 @@
                     android:id="@+id/current_swing_angle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="123"
                     android:layout_marginLeft="5dp"
+                    android:text="123"
                     android:textColor="@color/white" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -117,8 +121,8 @@
                     android:id="@+id/current_elevation_angle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="123"
                     android:layout_marginLeft="5dp"
+                    android:text="123"
                     android:textColor="@color/white" />
             </LinearLayout>
         </LinearLayout>
@@ -187,220 +191,99 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="3dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
             android:background="@color/white"
             android:elevation="1dp"
             android:orientation="vertical">
 
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="100dp"
                 android:orientation="horizontal">
 
-                <TextView
+                <android.support.v7.widget.AppCompatImageView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="仰角单轴调整" />
+                    android:padding="15dp"
+                    app:srcCompat="@drawable/ic_motor_speed_black" />
 
-                <!--<android.support.v7.widget.AppCompatImageView-->
-                <!--android:id="@+id/elevation_angle_stop"-->
-                <!--android:background="@drawable/selector_button_white"-->
-                <!--android:layout_width="60dp"-->
-                <!--android:layout_height="60dp"-->
-                <!--android:padding="10dp"-->
-                <!--app:srcCompat="@drawable/ic_stop_black_24dp" />-->
 
                 <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/elevation_angle_negative"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:background="@drawable/selector_button_white"
-                    android:padding="15dp"
-                    app:srcCompat="@drawable/ic_minus" />
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/elevation_angle_positive"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:background="@drawable/selector_button_white"
-                    android:padding="15dp"
-                    app:srcCompat="@drawable/ic_plus" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:orientation="horizontal">
-
-                <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="摆角单轴调整" />
-
-                <!--<android.support.v7.widget.AppCompatImageView-->
-                <!--android:background="@drawable/selector_button_white"-->
-                <!--android:id="@+id/swing_angle_stop"-->
-                <!--android:layout_width="60dp"-->
-                <!--android:layout_height="60dp"-->
-                <!--android:padding="10dp"-->
-                <!--app:srcCompat="@drawable/ic_stop_black_24dp" />-->
+                    android:padding="15dp"
+                    app:srcCompat="@drawable/ic_up_chevron" />
 
                 <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/swing_angle_negative"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:background="@drawable/selector_button_white"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:padding="15dp"
-                    app:srcCompat="@drawable/ic_minus" />
+                    app:srcCompat="@drawable/ic_motor_speed_black" />
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/swing_angle_positive"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:background="@drawable/selector_button_white"
-                    android:padding="15dp"
-                    app:srcCompat="@drawable/ic_plus" />
             </LinearLayout>
-
-            <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:orientation="horizontal"-->
-            <!--android:background="@color/colorSecondaryLight"-->
-            <!--android:paddingBottom="5dp"-->
-            <!--android:paddingTop="5dp">-->
-
-            <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:gravity="center"-->
-            <!--android:textSize="@dimen/text_size_tiny"-->
-            <!--android:textColor="@color/colorSecondaryDark"-->
-            <!--android:text="仰角单轴调整" />-->
-
-            <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:gravity="center"-->
-            <!--android:textSize="@dimen/text_size_tiny"-->
-            <!--android:textColor="@color/colorSecondaryDark"-->
-            <!--android:text="俯角单轴调整" />-->
-            <!--</LinearLayout>-->
-
-            <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="60dp"-->
-            <!--android:orientation="horizontal">-->
-
-            <!--<TextView-->
-            <!--android:id="@+id/textView2"-->
-            <!--style="@style/MainControlRunAxisBtn"-->
-            <!--android:background="@drawable/selector_button_white"-->
-            <!--android:text="-"-->
-            <!--android:textColor="@color/colorPrimary" />-->
-
-            <!--<TextView-->
-            <!--style="@style/MainControlRunAxisBtn"-->
-            <!--android:background="@drawable/selector_button_primary"-->
-            <!--android:text="+"-->
-            <!--android:textColor="@color/white" />-->
-
-            <!--<TextView-->
-            <!--style="@style/MainControlRunAxisBtn"-->
-            <!--android:background="@drawable/selector_button_white"-->
-            <!--android:text="-"-->
-            <!--android:textColor="@color/colorPrimary" />-->
-
-            <!--<TextView-->
-            <!--style="@style/MainControlRunAxisBtn"-->
-            <!--android:background="@drawable/selector_button_primary"-->
-            <!--android:text="+"-->
-            <!--android:textColor="@color/white" />-->
-            <!--</LinearLayout>-->
-            <!--</LinearLayout>-->
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-
+                android:layout_height="100dp"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/swing_angle"
-                    style="@style/temp"
+                <android.support.v7.widget.AppCompatImageView
                     android:layout_width="0dp"
-                    android:layout_height="80dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="摆角：0" />
+                    android:padding="15dp"
+                    app:srcCompat="@drawable/ic_left_chevron" />
 
-                <View style="@style/SeparateLineVertical" />
-
-                <TextView
-                    android:id="@+id/elevation_angle"
-                    style="@style/temp"
+                <android.support.v7.widget.AppCompatImageView
                     android:layout_width="0dp"
-                    android:layout_height="80dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="仰角：0" />
+                    android:padding="15dp"
+                    app:srcCompat="@drawable/ic_down_chevron" />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="15dp"
+                    app:srcCompat="@drawable/ic_right_chevron" />
+
             </LinearLayout>
-
-            <View style="@style/SeparateLine" />
-
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/left_speed"
-                    style="@style/temp"
+                <android.support.v7.widget.AppCompatImageView
                     android:layout_width="0dp"
-                    android:layout_height="80dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="左转速：0" />
+                    android:padding="15dp"
+                    app:srcCompat="@drawable/ic_left_chevron" />
 
-                <View style="@style/SeparateLineVertical" />
-
-                <TextView
-                    android:id="@+id/right_speed"
-                    style="@style/temp"
+                <android.support.v7.widget.AppCompatImageView
                     android:layout_width="0dp"
-                    android:layout_height="80dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="右转速：0" />
+                    android:padding="15dp"
+                    app:srcCompat="@drawable/ic_down_chevron" />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="15dp"
+                    app:srcCompat="@drawable/ic_right_chevron" />
+
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/send"
-                style="@style/ButtonPrimary"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="2dp"
-                android:elevation="1dp"
-                android:text="发送"
-                android:textSize="@dimen/text_size_big" />
 
         </LinearLayout>
     </LinearLayout>
-
 </LinearLayout>

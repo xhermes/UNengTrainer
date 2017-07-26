@@ -165,40 +165,40 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 //        makeZero = (TextView) root.findViewById(R.id.make_zero);
 //        tv_angle = (TextView) root.findViewById(R.id.angle);
 //        tv_voltage = (TextView) root.findViewById(R.id.battery);
-        batteryView = (TextView) root.findViewById(R.id.tv_battery);
-
-        mCurrentElevationAngleView = (TextView) root.findViewById(R.id.current_elevation_angle);
-        mCurrentSwingAngleView = (TextView) root.findViewById(R.id.current_swing_angle);
-
-
-        mRunAxisSwingNegativeView = (AppCompatImageView) root.findViewById(R.id.swing_angle_negative);
-        mRunAxisSwingPositiveView = (AppCompatImageView) root.findViewById(R.id.swing_angle_positive);
-//        mRunAxisSwingStopView = (AppCompatImageView) root.findViewById(R.id.swing_angle_stop);
-        mRunAxisElevationNegativeView = (AppCompatImageView) root.findViewById(R.id.elevation_angle_negative);
-        mRunAxisElevationPositiveView = (AppCompatImageView) root.findViewById(R.id.elevation_angle_positive);
-//        mRunAxisElevationStopView = (AppCompatImageView) root.findViewById(R.id.elevation_angle_stop);
-
-//        mElevationAngleBar = (AppCompatSeekBar) root.findViewById(R.id.seek_elevation_angle);
-//        mSwingAngleBar = (AppCompatSeekBar) root.findViewById(R.id.seek_swing_angle);
-//        mLeftSpeedBar = (AppCompatSeekBar) root.findViewById(R.id.seek_left_speed);
-//        mRightSpeedBar = (AppCompatSeekBar) root.findViewById(R.id.seek_right_speed);
+//        batteryView = (TextView) root.findViewById(R.id.tv_battery);
 //
-//        mElevationAngleEdt = (AppCompatEditText) root.findViewById(R.id.edit_elevation_angle);
-//        mSwingAngleEdt = (AppCompatEditText) root.findViewById(R.id.edit_swing_angle);
-//        mLeftSpeedEdt = (AppCompatEditText) root.findViewById(R.id.edit_left_motor);
-//        mRightSpeedEdt = (AppCompatEditText) root.findViewById(R.id.edit_right_speed);
-
-        mElevationAngleView = (TextView) root.findViewById(R.id.elevation_angle);
-        mSwingAngleView = (TextView) root.findViewById(R.id.swing_angle);
-        mLeftSpeedView = (TextView) root.findViewById(R.id.left_speed);
-        mRightSpeedView = (TextView) root.findViewById(R.id.right_speed);
-
-        mCurrentRightSpeedView = (TextView) root.findViewById(R.id.current_right_speed);
-        mCurrentLeftSpeedView = (TextView) root.findViewById(R.id.current_left_speed);
-
-        mSendView = root.findViewById(R.id.send);
-
-        initView();
+//        mCurrentElevationAngleView = (TextView) root.findViewById(R.id.current_elevation_angle);
+//        mCurrentSwingAngleView = (TextView) root.findViewById(R.id.current_swing_angle);
+//
+//
+//        mRunAxisSwingNegativeView = (AppCompatImageView) root.findViewById(R.id.swing_angle_negative);
+//        mRunAxisSwingPositiveView = (AppCompatImageView) root.findViewById(R.id.swing_angle_positive);
+////        mRunAxisSwingStopView = (AppCompatImageView) root.findViewById(R.id.swing_angle_stop);
+//        mRunAxisElevationNegativeView = (AppCompatImageView) root.findViewById(R.id.elevation_angle_negative);
+//        mRunAxisElevationPositiveView = (AppCompatImageView) root.findViewById(R.id.elevation_angle_positive);
+////        mRunAxisElevationStopView = (AppCompatImageView) root.findViewById(R.id.elevation_angle_stop);
+//
+////        mElevationAngleBar = (AppCompatSeekBar) root.findViewById(R.id.seek_elevation_angle);
+////        mSwingAngleBar = (AppCompatSeekBar) root.findViewById(R.id.seek_swing_angle);
+////        mLeftSpeedBar = (AppCompatSeekBar) root.findViewById(R.id.seek_left_speed);
+////        mRightSpeedBar = (AppCompatSeekBar) root.findViewById(R.id.seek_right_speed);
+////
+////        mElevationAngleEdt = (AppCompatEditText) root.findViewById(R.id.edit_elevation_angle);
+////        mSwingAngleEdt = (AppCompatEditText) root.findViewById(R.id.edit_swing_angle);
+////        mLeftSpeedEdt = (AppCompatEditText) root.findViewById(R.id.edit_left_motor);
+////        mRightSpeedEdt = (AppCompatEditText) root.findViewById(R.id.edit_right_speed);
+//
+//        mElevationAngleView = (TextView) root.findViewById(R.id.elevation_angle);
+//        mSwingAngleView = (TextView) root.findViewById(R.id.swing_angle);
+//        mLeftSpeedView = (TextView) root.findViewById(R.id.left_speed);
+//        mRightSpeedView = (TextView) root.findViewById(R.id.right_speed);
+//
+//        mCurrentRightSpeedView = (TextView) root.findViewById(R.id.current_right_speed);
+//        mCurrentLeftSpeedView = (TextView) root.findViewById(R.id.current_left_speed);
+//
+//        mSendView = root.findViewById(R.id.send);
+//
+//        initView();
 
         setHasOptionsMenu(true);
         setRetainInstance(true);
