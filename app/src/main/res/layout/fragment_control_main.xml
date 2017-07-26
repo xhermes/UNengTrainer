@@ -18,16 +18,14 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_marginRight="5dp"
-            android:layout_marginTop="15dp"
             android:gravity="center"
             android:orientation="vertical">
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/ic_battery"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 app:srcCompat="@drawable/ic_battery" />
 
             <TextView
@@ -39,16 +37,18 @@
                 android:textSize="@dimen/text_size_minimum" />
         </LinearLayout>
 
-        <!-- 显示当前转速，角度-->
+        <!-- 显示当前转速-->
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal">
+            android:id="@+id/current_motor_speed_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="200dp"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center">
 
@@ -62,17 +62,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="0"
+                    android:text="0r/s"
                     android:textColor="@color/white" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:layout_weight="1"
                 android:gravity="center">
 
                 <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/appCompatImageView"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     app:srcCompat="@drawable/ic_motor_speed" />
@@ -82,13 +84,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="0"
+                    android:text="0r/s"
                     android:textColor="@color/white" />
             </LinearLayout>
+        </LinearLayout>
+        <!-- 显示当前角度 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="15dp"
+            android:layout_toRightOf="@id/current_motor_speed_layout"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center">
 
@@ -102,13 +113,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="123"
+                    android:text="123°"
                     android:textColor="@color/white" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:layout_weight="1"
                 android:gravity="center">
 
@@ -122,10 +134,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="123"
+                    android:text="123°"
                     android:textColor="@color/white" />
             </LinearLayout>
+
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:background="@color/colorAccent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"></LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -212,12 +234,28 @@
                     app:srcCompat="@drawable/ic_motor_speed_black" />
 
 
-                <android.support.v7.widget.AppCompatImageView
+
+                <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:padding="15dp"
+                    android:orientation="vertical"
+                    android:layout_height="match_parent">
+
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"
+                    android:layout_gravity="center_horizontal"
                     app:srcCompat="@drawable/ic_up_chevron" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:layout_gravity="center_horizontal"
+                        android:textSize="@dimen/text_size_tiny"
+                        android:text="增加仰角"/>
+                </LinearLayout>
 
                 <android.support.v7.widget.AppCompatImageView
                     android:layout_width="0dp"
@@ -245,7 +283,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:padding="15dp"
-                    app:srcCompat="@drawable/ic_down_chevron" />
+                    app:srcCompat="@drawable/ic_favourite_accent" />
 
                 <android.support.v7.widget.AppCompatImageView
                     android:layout_width="0dp"
@@ -255,6 +293,7 @@
                     app:srcCompat="@drawable/ic_right_chevron" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
