@@ -41,41 +41,13 @@ import me.xeno.unengtrainer.util.ToastUtils;
  */
 public class MainControlFragment extends BaseMainFragment implements View.OnTouchListener {
 
-    //    private TextView mDescription;
-//    private TextView mWrite1View;
-//    private TextView mWrite2View;
-//    private TextView tv_angle;
-//    private TextView tv_voltage;
-    private TextView angleView;
-    private TextView batteryView;
-//    private TextView stop;
-//
-//    private EditText motor1;
-//    private EditText motor2;
-//    private EditText input;
-//    private TextView makeZero;
+    private View mRunAxisSwingPositiveView;
+    private View mRunAxisSwingNegativeView;
+    private View mRunAxisElevationPositiveView;
+    private View mRunAxisElevationNegativeView;
 
-    private AppCompatSeekBar mElevationAngleBar;
-    private AppCompatSeekBar mSwingAngleBar;
-    private AppCompatSeekBar mLeftSpeedBar;
-    private AppCompatSeekBar mRightSpeedBar;
-
-    private EditText mElevationAngleEdt;
-    private EditText mSwingAngleEdt;
-    private EditText mLeftSpeedEdt;
-    private EditText mRightSpeedEdt;
-
-    private TextView mElevationAngleView;
-    private TextView mSwingAngleView;
-    private TextView mLeftSpeedView;
-    private TextView mRightSpeedView;
-
-    private AppCompatImageView mRunAxisSwingPositiveView;
-    private AppCompatImageView mRunAxisSwingNegativeView;
-    //    private AppCompatImageView mRunAxisSwingStopView;
-    private AppCompatImageView mRunAxisElevationPositiveView;
-    private AppCompatImageView mRunAxisElevationNegativeView;
-//    private AppCompatImageView mRunAxisElevationStopView;
+    private View mLeftMotorView;
+    private View mRightMotorView;
 
     private TextView mCurrentSwingAngleView;
     private TextView mCurrentElevationAngleView;
@@ -121,9 +93,9 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
     public void onResume() {
         super.onResume();
         //页面恢复时，重新开始获取电压
-        if(mBatteryDisposable == null)
+        if (mBatteryDisposable == null)
             mBatteryDisposable = getMainActivity().getPresenter().getBatteryVoltage(Config.GET_BATTERY_PERIOD);
-        if(mStatusDisposable == null) {
+        if (mStatusDisposable == null) {
             getMainActivity().getPresenter().startGetStatusTask(Config.GET_STATUS_PERIOD);
         }
     }
@@ -140,14 +112,6 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         super.onActivityCreated(savedInstanceState);
 
 
-//        mFloatingActionBtn =
-//                (FloatingActionButton) getActivity().findViewById(R.id.fab_edit_task_done);
-//        fab.setImageResource(R.drawable.ic_done);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//            }
-//        });
     }
 
     @Nullable
@@ -157,8 +121,8 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         View root = inflater.inflate(R.layout.fragment_control_main, container, false);
 
 //        input = (EditText) root.findViewById(R.id.input);
-//        motor1 = (EditText) root.findViewById(R.id.motor1);
-//        motor2 = (EditText) root.findViewById(R.id.motor2);
+        mLeftMotorView =  root.findViewById(R.id.set_left);
+        mRightMotorView =  root.findViewById(R.id.set_right);
 //        stop = (TextView) root.findViewById(R.id.stop);
 //        mWrite1View = (TextView) root.findViewById(R.id.write_1);
 //        mWrite2View = (TextView) root.findViewById(R.id.write_2);
@@ -171,11 +135,11 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 //        mCurrentSwingAngleView = (TextView) root.findViewById(R.id.current_swing_angle);
 //
 //
-//        mRunAxisSwingNegativeView = (AppCompatImageView) root.findViewById(R.id.swing_angle_negative);
-//        mRunAxisSwingPositiveView = (AppCompatImageView) root.findViewById(R.id.swing_angle_positive);
-////        mRunAxisSwingStopView = (AppCompatImageView) root.findViewById(R.id.swing_angle_stop);
-//        mRunAxisElevationNegativeView = (AppCompatImageView) root.findViewById(R.id.elevation_angle_negative);
-//        mRunAxisElevationPositiveView = (AppCompatImageView) root.findViewById(R.id.elevation_angle_positive);
+        mRunAxisSwingNegativeView = root.findViewById(R.id.swing_angle_negative);
+        mRunAxisSwingPositiveView = root.findViewById(R.id.swing_angle_positive);
+//        mRunAxisSwingStopView = (AppCompatImageView) root.findViewById(R.id.swing_angle_stop);
+        mRunAxisElevationNegativeView = root.findViewById(R.id.elevation_angle_negative);
+        mRunAxisElevationPositiveView = root.findViewById(R.id.elevation_angle_positive);
 ////        mRunAxisElevationStopView = (AppCompatImageView) root.findViewById(R.id.elevation_angle_stop);
 //
 ////        mElevationAngleBar = (AppCompatSeekBar) root.findViewById(R.id.seek_elevation_angle);
@@ -206,31 +170,6 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
     }
 
     private void initView() {
-        mElevationAngleView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showElevationAngleDialog();
-            }
-        });
-        mSwingAngleView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showSwingAngleDialog();
-            }
-        });
-        mLeftSpeedView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showLeftSpeedDialog();
-            }
-        });
-        mRightSpeedView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showRightSpeedDialog();
-            }
-        });
-
 
         mSendView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -473,10 +412,10 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 //            case R.id.action_send:
 ////                getMainActivity().getPresenter().send();
 //                break;
-            case R.id.action_favourite:
+//            case R.id.action_favourite:
 //                getMainActivity().getPresenter().addToFavourite();
-                showAddFavouriteDialog();
-                break;
+//                showAddFavouriteDialog();
+//                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -487,7 +426,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
     }
 
     public void stopGetCurrentAngle() {
-        if(mCurrentAngleDisposable != null && !mCurrentAngleDisposable.isDisposed()) {
+        if (mCurrentAngleDisposable != null && !mCurrentAngleDisposable.isDisposed()) {
             mCurrentAngleDisposable.dispose();
         }
     }
@@ -501,7 +440,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
     }
 
     public void showCurrentVoltage(String voltage) {
-        batteryView.setText(voltage + " V");
+//        batteryView.setText(voltage + " V");
     }
 
     public void showAddFavouriteDialog() {
@@ -521,53 +460,53 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
                 .show();
     }
 
-    public void showSwingAngleDialog() {
-        new MaterialDialog.Builder(getActivity())
-                .title("设置摆角")
-                .content("摆角范围：(-90 ~ 90)")
-                .inputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED)
-                .input("输入摆角", "", new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(MaterialDialog dialog, CharSequence input) {
-                        if (input.length() == 0) {
-                            return;
-                        }
-                        double inputValue = Double.valueOf(input.toString());
-                        if (inputValue >= -90 && inputValue <= 90) {
-                            mSwingAngle = inputValue;
-                            mSwingAngleView.setText("摆角：" + input.toString());
-                        } else {
-                            ToastUtils.toast(getActivity().getApplicationContext(), "输入超限！");
-                        }
-                    }
-                })
-                .positiveText("确定")
-                .show();
-    }
+//    public void showSwingAngleDialog() {
+//        new MaterialDialog.Builder(getActivity())
+//                .title("设置摆角")
+//                .content("摆角范围：(-90 ~ 90)")
+//                .inputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED)
+//                .input("输入摆角", "", new MaterialDialog.InputCallback() {
+//                    @Override
+//                    public void onInput(MaterialDialog dialog, CharSequence input) {
+//                        if (input.length() == 0) {
+//                            return;
+//                        }
+//                        double inputValue = Double.valueOf(input.toString());
+//                        if (inputValue >= -90 && inputValue <= 90) {
+//                            mSwingAngle = inputValue;
+//                            mSwingAngleView.setText("摆角：" + input.toString());
+//                        } else {
+//                            ToastUtils.toast(getActivity().getApplicationContext(), "输入超限！");
+//                        }
+//                    }
+//                })
+//                .positiveText("确定")
+//                .show();
+//    }
 
-    public void showElevationAngleDialog() {
-        new MaterialDialog.Builder(getActivity())
-                .title("设置仰角")
-                .content("仰角范围：(-90 ~ 50)")
-                .inputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED)
-                .input("输入仰角", "", new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(MaterialDialog dialog, CharSequence input) {
-                        if (input.length() == 0) {
-                            return;
-                        }
-                        double inputValue = Double.valueOf(input.toString());
-                        if (inputValue >= -90 && inputValue <= 50) {
-                            mElevationAngle = inputValue;
-                            mElevationAngleView.setText("仰角：" + input.toString());
-                        } else {
-                            ToastUtils.toast(getActivity().getApplicationContext(), "输入超限！");
-                        }
-                    }
-                })
-                .positiveText("确定")
-                .show();
-    }
+//    public void showElevationAngleDialog() {
+//        new MaterialDialog.Builder(getActivity())
+//                .title("设置仰角")
+//                .content("仰角范围：(-90 ~ 50)")
+//                .inputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED)
+//                .input("输入仰角", "", new MaterialDialog.InputCallback() {
+//                    @Override
+//                    public void onInput(MaterialDialog dialog, CharSequence input) {
+//                        if (input.length() == 0) {
+//                            return;
+//                        }
+//                        double inputValue = Double.valueOf(input.toString());
+//                        if (inputValue >= -90 && inputValue <= 50) {
+//                            mElevationAngle = inputValue;
+//                            mElevationAngleView.setText("仰角：" + input.toString());
+//                        } else {
+//                            ToastUtils.toast(getActivity().getApplicationContext(), "输入超限！");
+//                        }
+//                    }
+//                })
+//                .positiveText("确定")
+//                .show();
+//    }
 
     public void showLeftSpeedDialog() {
         new MaterialDialog.Builder(getActivity())
@@ -583,7 +522,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
                         int inputValue = Integer.valueOf(input.toString());
                         if (inputValue >= 0 && inputValue <= 100) {
                             mLeftSpeed = Integer.valueOf(input.toString());
-                            mLeftSpeedView.setText("左转速：" + input.toString());
+//                            mLeftSpeedView.setText("左转速：" + input.toString());
                         } else {
                             ToastUtils.toast(getActivity().getApplicationContext(), "输入超限！");
                         }
@@ -607,7 +546,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
                         int inputValue = Integer.valueOf(input.toString());
                         if (inputValue >= 0 && inputValue <= 100) {
                             mRightSpeed = Integer.valueOf(input.toString());
-                            mRightSpeedView.setText("右转速：" + input.toString());
+//                            mRightSpeedView.setText("右转速：" + input.toString());
                         } else {
                             ToastUtils.toast(getActivity().getApplicationContext(), "输入超限！");
                         }
@@ -623,7 +562,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 
     public void setSwingAngle(double swingAngle) {
         this.mSwingAngle = swingAngle;
-        mSwingAngleView.setText("摆角：" + swingAngle);
+//        mSwingAngleView.setText("摆角：" + swingAngle);
     }
 
     public double getElevationAngle() {
@@ -632,7 +571,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 
     public void setElevationAngle(double elevationAngle) {
         this.mElevationAngle = elevationAngle;
-        mElevationAngleView.setText("仰角：" + elevationAngle);
+//        mElevationAngleView.setText("仰角：" + elevationAngle);
     }
 
     public int getLeftSpeed() {
@@ -641,7 +580,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 
     public void setLeftSpeed(int leftSpeed) {
         this.mLeftSpeed = leftSpeed;
-        mLeftSpeedView.setText("左转速：" + leftSpeed);
+//        mLeftSpeedView.setText("左转速：" + leftSpeed);
     }
 
     public int getRightSpeed() {
@@ -650,7 +589,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 
     public void setRightSpeed(int rightSpeed) {
         this.mRightSpeed = rightSpeed;
-        mRightSpeedView.setText("右转速：" + rightSpeed);
+//        mRightSpeedView.setText("右转速：" + rightSpeed);
     }
 
     private void dispose(Disposable disposable) {
@@ -665,7 +604,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mRunAxisSwingPosDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_POSITIVE, Config.RUN_AXIS_STOP, Config.RUN_AXIS_PERIOD);
                 //开始单轴连续调整时，启动一个获取当前角度的任务
-                if(mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed()) {
+                if (mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed()) {
                     mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
                 }
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -677,7 +616,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         if (v == mRunAxisSwingNegativeView) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mRunAxisSwingNegDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_NEGATIVE, Config.RUN_AXIS_STOP, Config.RUN_AXIS_PERIOD);
-                if(mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed())  {
+                if (mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed()) {
                     mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
                 }
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -686,10 +625,10 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
                 Logger.info("单轴运行结束");
             }
         }
-        if(v == mRunAxisElevationPositiveView) {
+        if (v == mRunAxisElevationPositiveView) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mRunAxisElevationPosDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_POSITIVE, Config.RUN_AXIS_PERIOD);
-                if(mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed())  {
+                if (mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed()) {
                     mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
                 }
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -697,10 +636,10 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
                 Logger.info("单轴运行结束");
             }
         }
-        if(v == mRunAxisElevationNegativeView) {
+        if (v == mRunAxisElevationNegativeView) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mRunAxisElevationNegDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_NEGATIVE, Config.RUN_AXIS_PERIOD);
-                if(mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed())  {
+                if (mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed()) {
                     mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
                 }
             } else if (event.getAction() == MotionEvent.ACTION_UP) {

@@ -41,7 +41,7 @@
                 android:background="@drawable/selector_button_white"
                 android:paddingBottom="11dp"
                 android:paddingTop="11dp"
-                app:srcCompat="@drawable/ic_favourite" />
+                app:srcCompat="@drawable/ic_favourite_pink" />
 
             <ImageView
                 android:id="@+id/setting_btn"

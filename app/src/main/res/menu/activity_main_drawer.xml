@@ -8,7 +8,7 @@
             android:title="查看历史" />
         <item
             android:id="@+id/nav_favourite"
-            android:icon="@drawable/ic_favourite"
+            android:icon="@drawable/ic_favourite_pink"
             android:title="我的收藏" />
         <item
             android:id="@+id/nav_bluetooth"

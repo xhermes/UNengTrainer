@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/action_favourite"
-        android:icon="@drawable/ic_favourite"
-        android:orderInCategory="1"
-        android:title="收藏"
-        app:showAsAction="ifRoom" />
     <!--<item-->
-        <!--android:id="@+id/action_send"-->
-        <!--android:icon="@drawable/ic_send"-->
-        <!--android:orderInCategory="2"-->
-        <!--android:title="发送"-->
+        <!--android:id="@+id/action_favourite"-->
+        <!--android:icon="@drawable/ic_favourite_white"-->
+        <!--android:orderInCategory="1"-->
+        <!--android:title="收藏"-->
         <!--app:showAsAction="ifRoom" />-->
+    <item
+        android:id="@+id/action_connect"
+        android:icon="@drawable/ic_link"
+        android:orderInCategory="2"
+        android:title="连接"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_help"
+        android:icon="@drawable/ic_help"
+        android:orderInCategory="2"
+        android:title="帮助"
+        app:showAsAction="ifRoom" />
 </menu>

@@ -33,6 +33,7 @@ import me.xeno.unengtrainer.view.adapter.ShortcutAdapter;
 import me.xeno.unengtrainer.view.fragment.BluetoothDisabledFragment;
 import me.xeno.unengtrainer.view.fragment.DeviceRecyclerFragment;
 import me.xeno.unengtrainer.view.fragment.MainControlFragment;
+import me.xeno.unengtrainer.widget.DashboardView;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -57,6 +58,8 @@ public class MainActivity extends BaseActivity
     private View mFavouriteBtn;
     private View mSettingBtn;
 
+    private DashboardView mDashboardView;
+
     @Override
     protected void setContentView() {
         setContentView(R.layout.activity_main);
@@ -72,6 +75,8 @@ public class MainActivity extends BaseActivity
 
         mBottomActionBar = findViewById(R.id.bottom_action_bar);
         mFavouriteBtn = findViewById(R.id.favourite_btn);
+
+        mDashboardView = (DashboardView) findViewById(R.id.dashboard);
     }
 
     @Override
@@ -234,6 +239,7 @@ public class MainActivity extends BaseActivity
     }
 
     public void showMainControlFragment() {
+        mDashboardView.setVisibility(View.VISIBLE);
         if (mMainControlFragment == null) {
             mMainControlFragment = MainControlFragment.newInstance();
         }
