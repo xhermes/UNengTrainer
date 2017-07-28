@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/colorPrimaryDark"
     android:orientation="vertical">
 
     <!-- 参数设置，滑动调整 -->
@@ -35,23 +35,23 @@
                     android:layout_weight="1"
                     android:elevation="2dp"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rectangle_rounded_button"
+                    android:background="@drawable/rectangle_rounded_control_button"
                     android:orientation="vertical">
 
                     <android.support.v7.widget.AppCompatImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
                         android:layout_gravity="center"
                         android:layout_marginBottom="5dp"
-                        app:srcCompat="@drawable/ic_motor_speed_black" />
+                        app:srcCompat="@drawable/ic_motor_speed_primary_dark" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="30dp"
+                        android:layout_marginTop="25dp"
                         android:text="调整左轮速"
-                        android:textSize="@dimen/text_size_super_small" />
+                        android:textSize="@dimen/text_size_minimum" />
                 </FrameLayout>
 
                 <FrameLayout
@@ -61,12 +61,12 @@
                     android:layout_weight="1"
                     android:elevation="2dp"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rectangle_rounded_button"
+                    android:background="@drawable/rectangle_rounded_control_button"
                     android:orientation="vertical">
 
                     <android.support.v7.widget.AppCompatImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:layout_gravity="center"
                         android:layout_marginBottom="5dp"
                         app:srcCompat="@drawable/ic_up_chevron" />
@@ -75,9 +75,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="30dp"
+                        android:layout_marginTop="25dp"
+                        android:textColor="@color/colorPrimaryDark"
                         android:text="增加仰角"
-                        android:textSize="@dimen/text_size_super_small" />
+                        android:textSize="@dimen/text_size_minimum" />
                 </FrameLayout>
 
                 <FrameLayout
@@ -87,23 +88,23 @@
                     android:layout_weight="1"
                     android:elevation="2dp"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rectangle_rounded_button"
+                    android:background="@drawable/rectangle_rounded_control_button"
                     android:orientation="vertical">
 
                     <android.support.v7.widget.AppCompatImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
                         android:layout_gravity="center"
                         android:layout_marginBottom="5dp"
-                        app:srcCompat="@drawable/ic_motor_speed_black" />
+                        app:srcCompat="@drawable/ic_angle" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="30dp"
-                        android:text="调整右轮速"
-                        android:textSize="@dimen/text_size_super_small" />
+                        android:layout_marginTop="25dp"
+                        android:text="设置角度"
+                        android:textSize="@dimen/text_size_minimum" />
                 </FrameLayout>
 
             </LinearLayout>
@@ -120,12 +121,12 @@
                     android:layout_weight="1"
                     android:elevation="2dp"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rectangle_rounded_button"
+                    android:background="@drawable/rectangle_rounded_control_button"
                     android:orientation="vertical">
 
                     <android.support.v7.widget.AppCompatImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:layout_gravity="center"
                         android:layout_marginBottom="5dp"
                         app:srcCompat="@drawable/ic_left_chevron" />
@@ -134,9 +135,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="30dp"
-                        android:text="减少摆角"
-                        android:textSize="@dimen/text_size_super_small" />
+                        android:layout_marginTop="25dp"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:text="增加仰角"
+                        android:textSize="@dimen/text_size_minimum" />
                 </FrameLayout>
 
                 <FrameLayout
@@ -146,12 +148,12 @@
                     android:layout_weight="1"
                     android:elevation="2dp"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rectangle_rounded_button"
+                    android:background="@drawable/rectangle_rounded_control_button"
                     android:orientation="vertical">
 
                     <android.support.v7.widget.AppCompatImageView
-                        android:layout_width="50dp"
-                        android:layout_height="48dp"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
                         android:layout_gravity="center"
                         android:layout_marginBottom="5dp"
                         app:srcCompat="@drawable/ic_favourite_pink" />
@@ -160,9 +162,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="30dp"
+                        android:layout_marginTop="25dp"
+                        android:textColor="@color/colorPrimaryDark"
                         android:text="使用收藏"
-                        android:textSize="@dimen/text_size_super_small" />
+                        android:textSize="@dimen/text_size_minimum" />
                 </FrameLayout>
 
                 <FrameLayout
@@ -172,12 +175,12 @@
                     android:layout_weight="1"
                     android:elevation="2dp"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rectangle_rounded_button"
+                    android:background="@drawable/rectangle_rounded_control_button"
                     android:orientation="vertical">
 
                     <android.support.v7.widget.AppCompatImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:layout_gravity="center"
                         android:layout_marginBottom="5dp"
                         app:srcCompat="@drawable/ic_right_chevron" />
@@ -186,9 +189,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="30dp"
-                        android:text="增加摆角"
-                        android:textSize="@dimen/text_size_super_small" />
+                        android:layout_marginTop="25dp"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:text="增加仰角"
+                        android:textSize="@dimen/text_size_minimum" />
                 </FrameLayout>
 
             </LinearLayout>
@@ -210,12 +214,11 @@
                     android:layout_weight="1"
                     android:elevation="2dp"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rectangle_rounded_button"
+                    android:background="@drawable/rectangle_rounded_control_button"
                     android:orientation="vertical">
-
                     <android.support.v7.widget.AppCompatImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:layout_gravity="center"
                         android:layout_marginBottom="5dp"
                         app:srcCompat="@drawable/ic_down_chevron" />
@@ -224,9 +227,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="30dp"
-                        android:text="减少仰角"
-                        android:textSize="@dimen/text_size_super_small" />
+                        android:layout_marginTop="25dp"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:text="增加仰角"
+                        android:textSize="@dimen/text_size_minimum" />
                 </FrameLayout>
 
                 <View
@@ -243,7 +247,7 @@
     <!-- 底部按钮布局 -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
         android:elevation="4dp"
         android:background="@color/colorPrimary"
         android:layout_alignParentBottom="true"
@@ -256,8 +260,8 @@
             android:orientation="vertical">
 
             <android.support.v7.widget.AppCompatImageView
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:layout_marginBottom="5dp"
                 app:srcCompat="@drawable/ic_stop" />
@@ -266,10 +270,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:text="电机停止"
                 android:textColor="@color/white"
-                android:textSize="@dimen/text_size_super_small" />
+                android:textSize="@dimen/text_size_minimum" />
         </FrameLayout>
         <FrameLayout
             android:layout_width="0dp"
@@ -279,8 +283,8 @@
             android:orientation="vertical">
 
             <android.support.v7.widget.AppCompatImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="33dp"
+                android:layout_height="33dp"
                 android:layout_gravity="center"
                 android:layout_marginBottom="5dp"
                 app:srcCompat="@drawable/ic_return" />
@@ -289,10 +293,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:text="恢复到0度位置"
                 android:textColor="@color/white"
-                android:textSize="@dimen/text_size_super_small" />
+                android:textSize="@dimen/text_size_minimum" />
         </FrameLayout>
     </LinearLayout>
 </RelativeLayout>
