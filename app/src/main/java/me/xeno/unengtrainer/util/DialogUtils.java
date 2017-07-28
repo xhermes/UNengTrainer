@@ -3,6 +3,11 @@ package me.xeno.unengtrainer.util;
 import android.content.Context;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import android.support.v7.widget.*;
+import android.widget.SeekBar;
+
+import me.xeno.unengtrainer.R;
+import me.xeno.unengtrainer.widget.SetSpeedDialogWrapper;
 
 /**
  * Created by xeno on 2017/7/13.
@@ -10,7 +15,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 public class DialogUtils {
 
-    public static final void logDialog(Context context, String content) {
+    public static void logDialog(Context context, String content) {
         new MaterialDialog.Builder(context)
                 .title("调试信息")
                 .content(content)
@@ -18,4 +23,5 @@ public class DialogUtils {
                 .show();
 
     }
+
 }

@@ -219,7 +219,8 @@ public class MainActivity extends BaseActivity
     }
 
     public void displayAngle(String angle1, String angle2) {
-        mMainControlFragment.showCurrentAngle(angle1, angle2);
+        mDashboardView.setCurrentSwingAngle(angle1);
+        mDashboardView.setCurrentElevationAngle(angle2);
     }
 
     public void stopGetCurrentAngle() {
@@ -235,7 +236,8 @@ public class MainActivity extends BaseActivity
     }
 
     public void refreshCurrentSpeed(int left, int right) {
-        mMainControlFragment.refreshCurrentSpeed(left, right);
+        mDashboardView.setCurrentLeftSpeed(left);
+        mDashboardView.setCurrentRightSpeed(right);
     }
 
     public void showMainControlFragment() {

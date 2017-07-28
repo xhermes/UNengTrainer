@@ -23,8 +23,8 @@ import me.xeno.unengtrainer.util.TimeUtils;
 
 public class DashboardView extends LinearLayout {
 
-    private double mSwingAngle;
-    private double mElevationAngle;
+    private String mSwingAngle;
+    private String mElevationAngle;
     private int mLeftSpeed;
     private int mRightSpeed;
 
@@ -73,12 +73,12 @@ public class DashboardView extends LinearLayout {
         mRightMotorSpeedView.setText(speed + "%");
     }
 
-    public void setCurrentSwingAngle(double angle) {
+    public void setCurrentSwingAngle(String angle) {
         mSwingAngle = angle;
         mSwingAngleView.setText(angle + "°");
     }
 
-    public void setCurrentElevationAngle(double angle) {
+    public void setCurrentElevationAngle(String angle) {
         mElevationAngle = angle;
         mElevationAngleView.setText(angle + "°");
     }
@@ -105,17 +105,27 @@ public class DashboardView extends LinearLayout {
     public void showAddFavouriteDialog() {
         long count = DataManager.getInstance().getDaoSession().getFavouriteRecordDao().count();
 
-        new MaterialDialog.Builder(getContext())
+        MaterialDialog dialog = new MaterialDialog.Builder(getContext())
                 .title("收藏")
-                .content("将当前的参数保存到收藏列表，您可以在「我的收藏」中看到所有的收藏内容。")
-                .input("为此收藏记录命名", "记录" + (count + 1), new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(MaterialDialog dialog, CharSequence input) {
-                        addToFavourite(input.toString(), mSwingAngle, mElevationAngle, mLeftSpeed, mRightSpeed);
-                    }
-                })
+                .customView(R.layout.view_add_to_favourite, false)
+//                .input("为此收藏记录命名", "记录" + (count + 1), new MaterialDialog.InputCallback() {
+//                    @Override
+//                    public void onInput(MaterialDialog dialog, CharSequence input) {
+//                        addToFavourite(input.toString(), Double.valueOf(mSwingAngle), Double.valueOf(mElevationAngle), mLeftSpeed, mRightSpeed);
+//                    }
+//                })
                 .positiveText("添加收藏")
                 .negativeText("取消")
                 .show();
+
+        TextView leftSpeedView = (TextView) dialog.findViewById(R.id.left_speed);
+        TextView rightSpeedView = (TextView) dialog.findViewById(R.id.right_speed);
+        TextView swingAngleView = (TextView) dialog.findViewById(R.id.swing_angle);
+        TextView elevationView = (TextView) dialog.findViewById(R.id.elevation_angle);
+
+        leftSpeedView.setText(mLeftSpeed + "%");
+        rightSpeedView.setText(mRightSpeed + "%");
+        swingAngleView.setText(mSwingAngle + "°");
+        elevationView.setText(mElevationAngle + "°");
     }
 }

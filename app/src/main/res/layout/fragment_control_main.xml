@@ -29,7 +29,7 @@
                 android:orientation="horizontal">
 
                 <FrameLayout
-                    android:id="@+id/set_left"
+                    android:id="@+id/set_motor_speed"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -50,7 +50,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="25dp"
-                        android:text="调整左轮速"
+                        android:text="调整转速"
                         android:textSize="@dimen/text_size_minimum" />
                 </FrameLayout>
 
@@ -82,7 +82,7 @@
                 </FrameLayout>
 
                 <FrameLayout
-                    android:id="@+id/set_right"
+                    android:id="@+id/set_angle"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -103,7 +103,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="25dp"
-                        android:text="设置角度"
+                        android:text="输入角度"
                         android:textSize="@dimen/text_size_minimum" />
                 </FrameLayout>
 
@@ -137,7 +137,7 @@
                         android:layout_gravity="center"
                         android:layout_marginTop="25dp"
                         android:textColor="@color/colorPrimaryDark"
-                        android:text="增加仰角"
+                        android:text="减少摆角"
                         android:textSize="@dimen/text_size_minimum" />
                 </FrameLayout>
 
@@ -156,7 +156,7 @@
                         android:layout_height="35dp"
                         android:layout_gravity="center"
                         android:layout_marginBottom="5dp"
-                        app:srcCompat="@drawable/ic_favourite_pink" />
+                        app:srcCompat="@drawable/ic_favourite" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -191,7 +191,7 @@
                         android:layout_gravity="center"
                         android:layout_marginTop="25dp"
                         android:textColor="@color/colorPrimaryDark"
-                        android:text="增加仰角"
+                        android:text="增加摆角"
                         android:textSize="@dimen/text_size_minimum" />
                 </FrameLayout>
 
@@ -229,7 +229,7 @@
                         android:layout_gravity="center"
                         android:layout_marginTop="25dp"
                         android:textColor="@color/colorPrimaryDark"
-                        android:text="增加仰角"
+                        android:text="减少仰角"
                         android:textSize="@dimen/text_size_minimum" />
                 </FrameLayout>
 

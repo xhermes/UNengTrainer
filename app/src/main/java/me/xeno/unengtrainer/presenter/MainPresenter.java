@@ -206,7 +206,9 @@ public class MainPresenter {
      * @param motor2 电机2
      */
     public void setMotorSpeed(int motor1, int motor2) {
-        mBleService.writeData(mModel.setMotorSpeed(motor1, motor2));
+        Logger.warning("调用蓝牙接口：==>设置电机转速");
+        if(mModel != null)
+            mBleService.writeData(mModel.setMotorSpeed(motor1, motor2));
     }
 
 
@@ -218,9 +220,13 @@ public class MainPresenter {
      *
      * @param axis1 第一轴
      * @param axis2 第二轴
+     *              @param period 发送时间间隔
      * @return a rxjava disposable for unsubscribing
      */
     public Disposable runAxis(final int axis1, final int axis2, int period) {
+        Logger.info("开启单轴运行/停止任务，间隔：" + period);
+        if(mModel == null)
+            return null;
         return Observable.interval(0, period, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -233,6 +239,8 @@ public class MainPresenter {
     }
 
     public void stopAxis() {
+        Logger.warning("调用蓝牙接口：==>停止1,2单轴运行");
+        if(mModel != null)
         mBleService.writeData(mModel.runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_STOP));
     }
 
@@ -267,6 +275,7 @@ public class MainPresenter {
      * 启动一个任务，每隔一段时间调用一次获取角度接口
      */
     public Disposable startGetAxisAngleTask(int periodInMilliSec) {
+        Logger.info("开启获取角度任务，间隔：" + periodInMilliSec +"毫秒");
         if(mModel != null) {
             return Observable.interval(0, periodInMilliSec, TimeUnit.MILLISECONDS)
                     .subscribeOn(Schedulers.io())
@@ -274,7 +283,7 @@ public class MainPresenter {
                     .subscribe(new Consumer<Long>() {
                         @Override
                         public void accept(@NonNull Long aLong) throws Exception {
-                            Logger.info("获取角度");
+                            Logger.warning("调用蓝牙接口：==>获取角度");
                             mBleService.writeData(mModel.getAxisAngle());
                         }
                     });

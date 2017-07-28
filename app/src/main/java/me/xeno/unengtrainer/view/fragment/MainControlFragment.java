@@ -1,5 +1,7 @@
 package me.xeno.unengtrainer.view.fragment;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatEditText;
@@ -33,8 +35,10 @@ import io.reactivex.schedulers.Schedulers;
 import me.xeno.unengtrainer.R;
 import me.xeno.unengtrainer.application.Config;
 import me.xeno.unengtrainer.application.DataManager;
+import me.xeno.unengtrainer.util.DialogUtils;
 import me.xeno.unengtrainer.util.Logger;
 import me.xeno.unengtrainer.util.ToastUtils;
+import me.xeno.unengtrainer.widget.SetSpeedDialogWrapper;
 
 /**
  * Main UI for the add task screen. Users can enter a task title and description.
@@ -46,8 +50,8 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
     private View mRunAxisElevationPositiveView;
     private View mRunAxisElevationNegativeView;
 
-    private View mLeftMotorView;
-    private View mRightMotorView;
+    private View mSetMotorView;//设置左右电机速度
+    private View mSetAngleView;//输入设置调整角度
 
     private TextView mCurrentSwingAngleView;
     private TextView mCurrentElevationAngleView;
@@ -120,17 +124,8 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_control_main, container, false);
 
-//        input = (EditText) root.findViewById(R.id.input);
-        mLeftMotorView =  root.findViewById(R.id.set_left);
-        mRightMotorView =  root.findViewById(R.id.set_right);
-//        stop = (TextView) root.findViewById(R.id.stop);
-//        mWrite1View = (TextView) root.findViewById(R.id.write_1);
-//        mWrite2View = (TextView) root.findViewById(R.id.write_2);
-//        makeZero = (TextView) root.findViewById(R.id.make_zero);
-//        tv_angle = (TextView) root.findViewById(R.id.angle);
-//        tv_voltage = (TextView) root.findViewById(R.id.battery);
-//        batteryView = (TextView) root.findViewById(R.id.tv_battery);
-//
+        mSetMotorView =  root.findViewById(R.id.set_motor_speed);
+        mSetAngleView =  root.findViewById(R.id.set_angle);
 //        mCurrentElevationAngleView = (TextView) root.findViewById(R.id.current_elevation_angle);
 //        mCurrentSwingAngleView = (TextView) root.findViewById(R.id.current_swing_angle);
 //
@@ -162,7 +157,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 //
 //        mSendView = root.findViewById(R.id.send);
 //
-//        initView();
+        initView();
 
         setHasOptionsMenu(true);
         setRetainInstance(true);
@@ -171,193 +166,26 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 
     private void initView() {
 
-        mSendView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
-
-                getMainActivity().getPresenter().send(mSwingAngle, mElevationAngle, mLeftSpeed, mRightSpeed);
-            }
-        });
-//        mWrite1View.setOnClickListener(new View.OnClickListener() {
+//        mSendView.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
+//                mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
 //
-//                Observable.interval(0,50, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread())
-//                        .subscribe(new Observer<Long>() {
-//                            @Override
-//                            public void onSubscribe(@NonNull Disposable d) {
-//                                cd.add(d);
-//                            }
-//
-//                            @Override
-//                            public void onNext(@NonNull Long aLong) {
-//                                Logger.info(aLong + "");
-//                                getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_POSITIVE);
-//                            }
-//
-//                            @Override
-//                            public void onError(@NonNull Throwable e) {
-//
-//                            }
-//
-//                            @Override
-//                            public void onComplete() {
-//
-//                            }
-//                        });
-////
+//                getMainActivity().getPresenter().send(mSwingAngle, mElevationAngle, mLeftSpeed, mRightSpeed);
 //            }
 //        });
-//        stop.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_STOP);
-//                cd.clear();
-//            }
-//        });
-//
-//        mWrite2View.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                getMainActivity().getPresenter().setAxisAngle(Double.valueOf(input.getText().toString()), Double.valueOf(input.getText().toString()));
-//            }
-//        });
-//        makeZero.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                getMainActivity().getPresenter().setMotorSpeed(Integer.valueOf(motor1.getText().toString()),Integer.valueOf(motor2.getText().toString()));
-//            }
-//        });
-//
-//        tv_angle.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                getMainActivity().getPresenter().getAxisAngle();
-//            }
-//        });
-//        tv_voltage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                getMainActivity().getPresenter().getBatteryVoltage();
-//            }
-//        });
-//        mRunAxis1View.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                pick = 100;
-//                new MaterialDialog.Builder(getMainActivity())
-//                        .items("第一轴", "第二轴")
-//                        .alwaysCallSingleChoiceCallback()
-//                        .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
-//                            @Override
-//                            public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-//                                pick = which;
-//                                return true;
-//                            }
-//                        })
-//                        .cancelable(true)
-//                        .negativeText("取消")
-//                        .positiveText("确定")
-//                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-//                            @Override
-//                            public void onClick(@android.support.annotation.NonNull MaterialDialog dialog, @android.support.annotation.NonNull DialogAction which) {
-//                                if(pick != 100) {
-//                                    if(pick == 0) {
-//                                       //第一轴
-//                                        mDisposable1 = Observable.just(1).repeat()
-//                                                .subscribeOn(Schedulers.io())
-//                                                .observeOn(Schedulers.io())
-//                                                .subscribe(new Consumer<Integer>() {
-//                                                    @Override
-//                                                    public void accept(@NonNull Integer integer) throws Exception {
-//                                                        getMainActivity().getPresenter().runAxis(1, 0);
-//                                                    }
-//                                                });
-//
-//                                    } else if(pick == 1) {
-//                                        //第二轴
-//                                        mDisposable2 = Observable.just(1).repeat()
-//                                                .subscribeOn(Schedulers.io())
-//                                                .observeOn(Schedulers.io())
-//                                                .subscribe(new Consumer<Integer>() {
-//                                                    @Override
-//                                                    public void accept(@NonNull Integer integer) throws Exception {
-//                                                        getMainActivity().getPresenter().runAxis(0, 1);
-//                                                    }
-//                                                });
-//
-//                                    }
-//                                }
-//                            }
-//                        })
-//                        .show();
-//            }
-//        });
-//        mRunAxis2View.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                pick = 100;
-//                new MaterialDialog.Builder(getMainActivity())
-//                        .items("第一轴", "第二轴")
-//                        .alwaysCallSingleChoiceCallback()
-//                        .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
-//                            @Override
-//                            public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-//                                pick = which;
-//                                return true;
-//                            }
-//                        })
-//                        .cancelable(true)
-//                        .negativeText("取消")
-//                        .positiveText("确定")
-//                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-//                            @Override
-//                            public void onClick(@android.support.annotation.NonNull MaterialDialog dialog, @android.support.annotation.NonNull DialogAction which) {
-//                                if(pick != 100) {
-//                                    if(pick == 0) {
-//                                        //第一轴
-//                                        mDisposable1 = Observable.just(1).repeat()
-//                                                .subscribeOn(Schedulers.io())
-//                                                .observeOn(Schedulers.io())
-//                                                .subscribe(new Consumer<Integer>() {
-//                                                    @Override
-//                                                    public void accept(@NonNull Integer integer) throws Exception {
-//                                                        getMainActivity().getPresenter().runAxis(2, 0);
-//                                                    }
-//                                                });
-//
-//                                    } else if(pick == 1) {
-//                                        //第二轴
-//                                        mDisposable1 = Observable.just(1).repeat()
-//                                                .subscribeOn(Schedulers.io())
-//                                                .observeOn(Schedulers.io())
-//                                                .subscribe(new Consumer<Integer>() {
-//                                                    @Override
-//                                                    public void accept(@NonNull Integer integer) throws Exception {
-//                                                        getMainActivity().getPresenter().runAxis(0, 2);
-//                                                    }
-//                                                });
-//
-//                                    }
-//                                }
-//                            }
-//                        })
-//                        .show();
-//            }
-//        });
-//        mRunAxisStopView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
-
 
         mRunAxisSwingPositiveView.setOnTouchListener(this);
         mRunAxisSwingNegativeView.setOnTouchListener(this);
         mRunAxisElevationPositiveView.setOnTouchListener(this);
         mRunAxisElevationNegativeView.setOnTouchListener(this);
+
+        mSetMotorView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSetMotorSpeedDialog();
+            }
+        });
 //        mRunAxisSwingStopView.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -508,28 +336,18 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 //                .show();
 //    }
 
-    public void showLeftSpeedDialog() {
-        new MaterialDialog.Builder(getActivity())
-                .title("设置左转速")
-                .content("转速范围：(0 ~ 100)")
-                .inputType(InputType.TYPE_CLASS_NUMBER)
-                .input("输入转速", "", new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(MaterialDialog dialog, CharSequence input) {
-                        if (input.length() == 0) {
-                            return;
-                        }
-                        int inputValue = Integer.valueOf(input.toString());
-                        if (inputValue >= 0 && inputValue <= 100) {
-                            mLeftSpeed = Integer.valueOf(input.toString());
-//                            mLeftSpeedView.setText("左转速：" + input.toString());
-                        } else {
-                            ToastUtils.toast(getActivity().getApplicationContext(), "输入超限！");
-                        }
-                    }
-                })
-                .positiveText("确定")
-                .show();
+    public void showSetMotorSpeedDialog() {
+        Logger.info("弹出对话框， leftspeed: " + mCurrentLeftSpeed + " rightspeed: " + mCurrentRightSpeed);
+        final SetSpeedDialogWrapper ssd = new SetSpeedDialogWrapper(getMainActivity(), mCurrentLeftSpeed, mCurrentRightSpeed);
+        ssd.showDialog();
+        ssd.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                mCurrentLeftSpeed = ssd.getLeftSpeed();
+                mCurrentRightSpeed = ssd.getRightSpeed();
+                getMainActivity().refreshCurrentSpeed(mCurrentLeftSpeed, mCurrentRightSpeed);
+            }
+        });
     }
 
     public void showRightSpeedDialog() {
@@ -608,9 +426,10 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
                     mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
                 }
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                getMainActivity().getPresenter().stopAxis();
                 dispose(mRunAxisSwingPosDisposable);
                 dispose(mCurrentAngleDisposable);
-                Logger.info("单轴运行结束");
+                Logger.info("单轴运行任务结束");
             }
         }
         if (v == mRunAxisSwingNegativeView) {
@@ -620,9 +439,10 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
                     mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
                 }
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                getMainActivity().getPresenter().stopAxis();
                 dispose(mRunAxisSwingNegDisposable);
                 dispose(mCurrentAngleDisposable);
-                Logger.info("单轴运行结束");
+                Logger.info("单轴运行任务结束");
             }
         }
         if (v == mRunAxisElevationPositiveView) {
@@ -632,8 +452,10 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
                     mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
                 }
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                getMainActivity().getPresenter().stopAxis();
                 dispose(mRunAxisElevationPosDisposable);
-                Logger.info("单轴运行结束");
+                dispose(mCurrentAngleDisposable);
+                Logger.info("单轴运行任务结束");
             }
         }
         if (v == mRunAxisElevationNegativeView) {
@@ -643,8 +465,10 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
                     mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
                 }
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                getMainActivity().getPresenter().stopAxis();
                 dispose(mRunAxisElevationNegDisposable);
-                Logger.info("单轴运行结束");
+                dispose(mCurrentAngleDisposable);
+                Logger.info("单轴运行任务结束");
             }
         }
 
