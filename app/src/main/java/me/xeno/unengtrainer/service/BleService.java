@@ -83,6 +83,8 @@ public class BleService extends Service {
 
         @Override
         public void onConnectFailure(BleException exception) {
+            //FIXME onConnectFailure() exception = ConnectException{gattStatus=133, bluetoothGatt=android.bluetooth.BluetoothGatt@4bcb88d} BleException { code=201, description='Gatt Exception Occurred! '}
+            //FIXME 有时候点击连接设备，已经进入了maincontrol但是会出现以上错误，此时蓝牙连接失败，然而所有按钮都有响应，于是会引起未知错误。
             Logger.info("onConnectFailure() exception = " + exception.toString());
         }
 
@@ -148,18 +150,18 @@ public class BleService extends Service {
 //                                public static final int WRITE_TYPE_SIGNED = 0x04;
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
             super.onCharacteristicWrite(gatt, characteristic, status);
-            Logger.info("onCharacteristicWrite()");
+            Logger.debug("onCharacteristicWrite()");
 
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 //TODO 此方法只作为发送写指令成功时的回调，Log成功就可以了
-                Logger.info("onCharacteristicWrite(): write SUCCESS");
+                Logger.debug("onCharacteristicWrite(): write SUCCESS");
             }
         }
 
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             super.onCharacteristicChanged(gatt, characteristic);
-            Logger.info("onCharacteristicChanged(): value = " + bytes2HexString(characteristic.getValue()));
+            Logger.debug("onCharacteristicChanged(): value = " + bytes2HexString(characteristic.getValue()));
 
             //监听，这里还在非主线程
             handleReceivedData(characteristic.getValue());
@@ -201,12 +203,14 @@ public class BleService extends Service {
     BleCharacterCallback mBleCharacterCallback = new BleCharacterCallback() {
         @Override
         public void onSuccess(BluetoothGattCharacteristic characteristic) {
-            Logger.info("BleCharacterCallback onSuccess() ");
+            Logger.debug("BleCharacterCallback onSuccess() ");
         }
 
         @Override
         public void onFailure(BleException exception) {
-            Logger.info("BleCharacterCallback onFailure() exception: " + exception.toString());
+            //FIXME code=301, description='this characteristic not support write!
+            Logger.error("BleCharacterCallback onFailure() exception: " + exception.toString());
+            //TODO 每次发送命令如果机器没有响应，这里会抓到错误，考虑要不要在这里加回调
         }
     };
 
@@ -321,7 +325,7 @@ public class BleService extends Service {
                 crcCalculate+=b;
             }
         }
-        Logger.info("接收：crcCalculate = " + crcCalculate);
+        Logger.debug("接收：crcCalculate = " + crcCalculate);
         //TODO 校验位的计算可能有问题，关于溢出忽略
         if(crcCalculate > 255) {
             crcCalculate = crcCalculate & 0xFF;
@@ -333,56 +337,58 @@ public class BleService extends Service {
         }
 
         //打印数据长度
-        Logger.info("handleReceivedData: data Length = " + length);
+        Logger.debug("handleReceivedData: data Length = " + length);
 
         //根据命令号处理，需要切换到主线程
         final byte[] finalData = data;
 
-        Observable.just(new Object())
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Object>() {
+        //如果data为null，直接放弃处理
+        if(finalData != null) {
+            Observable.just(new Object())
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<Object>() {
 
-                    @Override
-                    public void accept(@NonNull Object o) throws Exception {
-                        switch (type) {
-                            case Config.DATA_TYPE_GET_STATUS:
-                                mListener.onGetStatus(mProcessor.handleGetStatus(finalData));
-                                break;
-                            case Config.DATA_TYPE_ENABLE:
-                                mListener.onEnable(mProcessor.handleEnable(finalData));
-                                break;
-                            case Config.DATA_TYPE_SWITCH_BRAKE:
-                                mListener.onTurnBrake(mProcessor.handleTurnBrake(finalData));
-                                break;
-                            case Config.DATA_TYPE_MAKE_ZERO:
-                                mListener.onMakeZeroCompleted(mProcessor.handleMakeZeroCompleted(finalData));
-                                break;
-                            case Config.DATA_TYPE_SET_AXIS_ANGLE:
-                                mListener.onSetAxisAngle(mProcessor.handleSetAxisAngle(finalData));
-                                break;
-                            case Config.DATA_TYPE_RUN_AXIS:
-                                mListener.onRunAxis(mProcessor.handleRunAxis(finalData));
-                                break;
-                            case Config.DATA_TYPE_SET_AXIS_SPEED:
-                                mListener.onSetAxisSpeed(mProcessor.handleSetAxisSpeed(finalData));
-                                break;
-                            case Config.DATA_TYPE_GET_AXIS_ANGLE:
-                                if(finalData != null) {
-                                    mListener.onGetAxisAngle(mProcessor.handleGetAxisAngle(finalData));
-                                } else {
-                                    Logger.info("数据包长度为0");
-                                }
-                                break;
-                            case Config.DATA_TYPE_SET_MOTOR_SPEED:
-                                mListener.onSetMotorSpeed(mProcessor.handleSetMotorSpeed(finalData));
-                                break;
-                            case Config.DATA_TYPE_GET_BATTERY_VOLTAGE:
-                                mListener.onGetBatteryVoltage(mProcessor.handleGetBatteryVoltage(finalData));
-                                break;
+                        @Override
+                        public void accept(@NonNull Object o) throws Exception {
+                            switch (type) {
+                                case Config.DATA_TYPE_GET_STATUS:
+                                    mListener.onGetStatus(mProcessor.handleGetStatus(finalData));
+                                    break;
+                                case Config.DATA_TYPE_ENABLE:
+                                    mListener.onEnable(mProcessor.handleEnable(finalData));
+                                    break;
+                                case Config.DATA_TYPE_SWITCH_BRAKE:
+                                    mListener.onTurnBrake(mProcessor.handleTurnBrake(finalData));
+                                    break;
+                                case Config.DATA_TYPE_MAKE_ZERO:
+                                    mListener.onMakeZeroCompleted(mProcessor.handleMakeZeroCompleted(finalData));
+                                    break;
+                                case Config.DATA_TYPE_SET_AXIS_ANGLE:
+                                    mListener.onSetAxisAngle(mProcessor.handleSetAxisAngle(finalData));
+                                    break;
+                                case Config.DATA_TYPE_RUN_AXIS:
+                                    mListener.onRunAxis(mProcessor.handleRunAxis(finalData));
+                                    break;
+                                case Config.DATA_TYPE_SET_AXIS_SPEED:
+                                    mListener.onSetAxisSpeed(mProcessor.handleSetAxisSpeed(finalData));
+                                    break;
+                                case Config.DATA_TYPE_GET_AXIS_ANGLE:
+                                    if (finalData != null) {
+                                        mListener.onGetAxisAngle(mProcessor.handleGetAxisAngle(finalData));
+                                    } else {
+                                        Logger.info("数据包长度为0");
+                                    }
+                                    break;
+                                case Config.DATA_TYPE_SET_MOTOR_SPEED:
+                                    mListener.onSetMotorSpeed(mProcessor.handleSetMotorSpeed(finalData));
+                                    break;
+                                case Config.DATA_TYPE_GET_BATTERY_VOLTAGE:
+                                    mListener.onGetBatteryVoltage(mProcessor.handleGetBatteryVoltage(finalData));
+                                    break;
+                            }
                         }
-                    }
-                });
-
+                    });
+        }
     }
 
     /**

@@ -253,6 +253,7 @@
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
         <FrameLayout
+            android:id="@+id/stop_both_electric"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -276,6 +277,31 @@
                 android:textSize="@dimen/text_size_minimum" />
         </FrameLayout>
         <FrameLayout
+            android:id="@+id/return_to_zero2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_button_primary"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="33dp"
+                android:layout_height="33dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dp"
+                app:srcCompat="@drawable/ic_return" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:text="恢复到0度位置"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_minimum" />
+        </FrameLayout>
+        <FrameLayout
+            android:id="@+id/return_to_zero"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

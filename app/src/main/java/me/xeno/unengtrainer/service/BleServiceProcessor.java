@@ -45,7 +45,7 @@ public class BleServiceProcessor {
 
 
     public GetStatusWrapper handleGetStatus(byte[] data) {
-
+//  TODO Caused by: java.lang.NullPointerException: Attempt to read from null array
         byte axis1 = data[0];
         byte axis2 = data[1];
 

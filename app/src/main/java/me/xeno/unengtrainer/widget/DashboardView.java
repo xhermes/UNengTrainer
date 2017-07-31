@@ -1,13 +1,16 @@
 package me.xeno.unengtrainer.widget;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.AppCompatEditText;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.text.ParseException;
@@ -34,6 +37,8 @@ public class DashboardView extends LinearLayout {
     private TextView mSwingAngleView;
 
     private View mAddToFavView;
+
+    private  AppCompatEditText inputView;
 
 
     public DashboardView(Context context) {
@@ -108,24 +113,36 @@ public class DashboardView extends LinearLayout {
         MaterialDialog dialog = new MaterialDialog.Builder(getContext())
                 .title("收藏")
                 .customView(R.layout.view_add_to_favourite, false)
+                .positiveText("添加收藏")
+                .negativeText("取消")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        addToFavourite(inputView.getText().toString(), Double.valueOf(mSwingAngle), Double.valueOf(mElevationAngle), mLeftSpeed, mRightSpeed);
+                    }
+                })
+                .build();
 //                .input("为此收藏记录命名", "记录" + (count + 1), new MaterialDialog.InputCallback() {
 //                    @Override
 //                    public void onInput(MaterialDialog dialog, CharSequence input) {
 //                        addToFavourite(input.toString(), Double.valueOf(mSwingAngle), Double.valueOf(mElevationAngle), mLeftSpeed, mRightSpeed);
 //                    }
 //                })
-                .positiveText("添加收藏")
-                .negativeText("取消")
-                .show();
 
         TextView leftSpeedView = (TextView) dialog.findViewById(R.id.left_speed);
         TextView rightSpeedView = (TextView) dialog.findViewById(R.id.right_speed);
         TextView swingAngleView = (TextView) dialog.findViewById(R.id.swing_angle);
         TextView elevationView = (TextView) dialog.findViewById(R.id.elevation_angle);
+        inputView = (AppCompatEditText) dialog.findViewById(R.id.record_name_edt) ;
+
+        inputView.setHint("输入名称");
+        inputView.setText("记录" + ((count + 1)));
 
         leftSpeedView.setText(mLeftSpeed + "%");
         rightSpeedView.setText(mRightSpeed + "%");
         swingAngleView.setText(mSwingAngle + "°");
         elevationView.setText(mElevationAngle + "°");
+
+        dialog.show();
     }
 }

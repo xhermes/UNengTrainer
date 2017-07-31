@@ -207,14 +207,7 @@ public class MainActivity extends BaseActivity
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == FavouriteActivity.REQUEST_CODE_FAVOURITE && resultCode == RESULT_OK) {
             long id = data.getLongExtra("id", 0);
-            if(id != 0) {
-                FavouriteRecord record = DataManager.getInstance().getDaoSession().getFavouriteRecordDao().load(id);
-                mMainControlFragment.setElevationAngle(record.getElevationAngle());
-                mMainControlFragment.setSwingAngle(record.getSwingAngle());
-                mMainControlFragment.setLeftSpeed(record.getLeftMotorSpeed());
-                mMainControlFragment.setRightSpeed(record.getRightMotorSpeed());
-            }
-
+            mMainControlFragment.selectFromFavourite(id);
         }
     }
 

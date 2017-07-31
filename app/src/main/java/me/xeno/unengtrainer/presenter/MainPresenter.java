@@ -184,7 +184,6 @@ public class MainPresenter {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
     }
 
     /**
@@ -192,7 +191,10 @@ public class MainPresenter {
      * @param angle2 第二轴角度
      */
     public void setAxisAngle(double angle1, double angle2) {
-        mBleService.writeData(mModel.setAxisAngle(angle1, angle2));
+        Logger.warning("调用蓝牙接口：==>设置角度");
+        if(mModel != null) {
+            mBleService.writeData(mModel.setAxisAngle(angle1, angle2));
+        }
     }
 
     public void makeZero() {
@@ -275,7 +277,7 @@ public class MainPresenter {
      * 启动一个任务，每隔一段时间调用一次获取角度接口
      */
     public Disposable startGetAxisAngleTask(int periodInMilliSec) {
-        Logger.info("开启获取角度任务，间隔：" + periodInMilliSec +"毫秒");
+        Logger.info("=========================开启获取角度任务，间隔：" + periodInMilliSec +"毫秒");
         if(mModel != null) {
             return Observable.interval(0, periodInMilliSec, TimeUnit.MILLISECONDS)
                     .subscribeOn(Schedulers.io())

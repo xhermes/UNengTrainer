@@ -30,4 +30,5 @@ public interface BleServiceListener {
     void onGetAxisAngle(GetAxisAngleWrapper wrapper);
     void onSetMotorSpeed(SetMotorSpeedWrapper wrapper);
     void onGetBatteryVoltage(GetBatteryVoltageWrapper wrapper);
+
 }

@@ -156,7 +156,7 @@ public class BluetoothModel {
                 crc += b;
             }
         }
-        Logger.info("发送：crc = " + crc);
+        Logger.debug("发送：crc = " + crc);
         //TODO 超过255忽略溢出部分，还需要考虑-127,255问题，不知道会不会有问题
         if (crc > 255) {
             crc = crc & 0xFF;
@@ -168,7 +168,7 @@ public class BluetoothModel {
 
         byte[] result = outputStream.toByteArray();
 //        byte[] result = new byte[]{FRAME_HEADER, type, length, FRAME_END};
-        Logger.info(CommonUtils.bytes2HexString(result));
+        Logger.debug(CommonUtils.bytes2HexString(result));
 
         return result;
     }

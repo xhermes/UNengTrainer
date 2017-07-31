@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import java.lang.ref.WeakReference;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -35,9 +36,14 @@ import io.reactivex.schedulers.Schedulers;
 import me.xeno.unengtrainer.R;
 import me.xeno.unengtrainer.application.Config;
 import me.xeno.unengtrainer.application.DataManager;
+import me.xeno.unengtrainer.model.entity.FavouriteRecord;
 import me.xeno.unengtrainer.util.DialogUtils;
 import me.xeno.unengtrainer.util.Logger;
+import me.xeno.unengtrainer.util.RxUtils;
 import me.xeno.unengtrainer.util.ToastUtils;
+import me.xeno.unengtrainer.view.activity.BaseActivity;
+import me.xeno.unengtrainer.view.activity.FavouriteActivity;
+import me.xeno.unengtrainer.view.activity.MainActivity;
 import me.xeno.unengtrainer.widget.SetSpeedDialogWrapper;
 
 /**
@@ -49,6 +55,12 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
     private View mRunAxisSwingNegativeView;
     private View mRunAxisElevationPositiveView;
     private View mRunAxisElevationNegativeView;
+
+    private View mStopElectricView;
+    private View mReturnToZeroView;
+    private View mReturnToZero2View;
+
+    private View mFromFavView;
 
     private View mSetMotorView;//设置左右电机速度
     private View mSetAngleView;//输入设置调整角度
@@ -126,6 +138,12 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 
         mSetMotorView =  root.findViewById(R.id.set_motor_speed);
         mSetAngleView =  root.findViewById(R.id.set_angle);
+
+        mStopElectricView = root.findViewById(R.id.stop_both_electric);
+        mReturnToZeroView = root.findViewById(R.id.return_to_zero);
+        mReturnToZero2View = root.findViewById(R.id.return_to_zero2);
+
+        mFromFavView = root.findViewById(R.id.from_fav);
 //        mCurrentElevationAngleView = (TextView) root.findViewById(R.id.current_elevation_angle);
 //        mCurrentSwingAngleView = (TextView) root.findViewById(R.id.current_swing_angle);
 //
@@ -137,15 +155,6 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         mRunAxisElevationPositiveView = root.findViewById(R.id.elevation_angle_positive);
 ////        mRunAxisElevationStopView = (AppCompatImageView) root.findViewById(R.id.elevation_angle_stop);
 //
-////        mElevationAngleBar = (AppCompatSeekBar) root.findViewById(R.id.seek_elevation_angle);
-////        mSwingAngleBar = (AppCompatSeekBar) root.findViewById(R.id.seek_swing_angle);
-////        mLeftSpeedBar = (AppCompatSeekBar) root.findViewById(R.id.seek_left_speed);
-////        mRightSpeedBar = (AppCompatSeekBar) root.findViewById(R.id.seek_right_speed);
-////
-////        mElevationAngleEdt = (AppCompatEditText) root.findViewById(R.id.edit_elevation_angle);
-////        mSwingAngleEdt = (AppCompatEditText) root.findViewById(R.id.edit_swing_angle);
-////        mLeftSpeedEdt = (AppCompatEditText) root.findViewById(R.id.edit_left_motor);
-////        mRightSpeedEdt = (AppCompatEditText) root.findViewById(R.id.edit_right_speed);
 //
 //        mElevationAngleView = (TextView) root.findViewById(R.id.elevation_angle);
 //        mSwingAngleView = (TextView) root.findViewById(R.id.swing_angle);
@@ -155,7 +164,6 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 //        mCurrentRightSpeedView = (TextView) root.findViewById(R.id.current_right_speed);
 //        mCurrentLeftSpeedView = (TextView) root.findViewById(R.id.current_left_speed);
 //
-//        mSendView = root.findViewById(R.id.send);
 //
         initView();
 
@@ -175,6 +183,23 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 //            }
 //        });
 
+        mStopElectricView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCurrentLeftSpeed = 0;
+                mCurrentRightSpeed = 0;
+                getMainActivity().getPresenter().setMotorSpeed(0, 0);
+                getMainActivity().refreshCurrentSpeed(0, 0);
+            }
+        });
+        mReturnToZeroView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getMainActivity().getPresenter().setAxisAngle(0, 0);
+                startGetCurrentAngleTask();
+            }
+        });
+
         mRunAxisSwingPositiveView.setOnTouchListener(this);
         mRunAxisSwingNegativeView.setOnTouchListener(this);
         mRunAxisElevationPositiveView.setOnTouchListener(this);
@@ -186,6 +211,14 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
                 showSetMotorSpeedDialog();
             }
         });
+
+        mFromFavView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FavouriteActivity.goFromActivityForResult(new WeakReference<BaseActivity>(getMainActivity()));
+            }
+        });
+
 //        mRunAxisSwingStopView.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -259,6 +292,12 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         }
     }
 
+    public void startGetCurrentAngleTask() {
+        if (mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed()) {
+            mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
+        }
+    }
+
     public void showCurrentAngle(String angle1, String angle2) {
         mCurrentSwingAngle = Double.valueOf(angle1);
         mCurrentElevationAngle = Double.valueOf(angle2);
@@ -286,6 +325,32 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
                 .positiveText("添加收藏")
                 .negativeText("取消")
                 .show();
+    }
+
+    public void selectFromFavourite(long id) {
+        if(id != 0) {
+            final FavouriteRecord record = DataManager.getInstance().getDaoSession().getFavouriteRecordDao().load(id);
+
+            mCurrentLeftSpeed = record.getLeftMotorSpeed();
+            mCurrentRightSpeed = record.getRightMotorSpeed();
+
+            //请求调整转速
+            getMainActivity().getPresenter().setMotorSpeed(record.getLeftMotorSpeed(), record.getRightMotorSpeed());
+
+            //延时发送调整角度命令，防止机器来不及处理，忽略命令
+            RxUtils.timer(1).subscribe(new Consumer<Long>() {
+                @Override
+                public void accept(@NonNull Long aLong) throws Exception {
+                    startGetCurrentAngleTask();
+                    getMainActivity().getPresenter().setAxisAngle(record.getSwingAngle(), record.getElevationAngle());
+
+                }
+            });
+
+            getMainActivity().refreshCurrentSpeed(record.getLeftMotorSpeed(), record.getRightMotorSpeed());
+        } else {
+            Logger.error("selectFromFavourite(), id = 0");
+        }
     }
 
 //    public void showSwingAngleDialog() {
@@ -412,6 +477,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 
     private void dispose(Disposable disposable) {
         if (disposable != null && !disposable.isDisposed()) {
+            Logger.info("=====================停止获取角度任务!");
             disposable.dispose();
         }
     }
@@ -422,9 +488,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mRunAxisSwingPosDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_POSITIVE, Config.RUN_AXIS_STOP, Config.RUN_AXIS_PERIOD);
                 //开始单轴连续调整时，启动一个获取当前角度的任务
-                if (mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed()) {
-                    mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
-                }
+                startGetCurrentAngleTask();
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 getMainActivity().getPresenter().stopAxis();
                 dispose(mRunAxisSwingPosDisposable);
@@ -435,9 +499,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         if (v == mRunAxisSwingNegativeView) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mRunAxisSwingNegDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_NEGATIVE, Config.RUN_AXIS_STOP, Config.RUN_AXIS_PERIOD);
-                if (mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed()) {
-                    mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
-                }
+                startGetCurrentAngleTask();
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 getMainActivity().getPresenter().stopAxis();
                 dispose(mRunAxisSwingNegDisposable);
@@ -448,9 +510,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         if (v == mRunAxisElevationPositiveView) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mRunAxisElevationPosDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_POSITIVE, Config.RUN_AXIS_PERIOD);
-                if (mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed()) {
-                    mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
-                }
+                startGetCurrentAngleTask();
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 getMainActivity().getPresenter().stopAxis();
                 dispose(mRunAxisElevationPosDisposable);
@@ -461,9 +521,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         if (v == mRunAxisElevationNegativeView) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mRunAxisElevationNegDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_NEGATIVE, Config.RUN_AXIS_PERIOD);
-                if (mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed()) {
-                    mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
-                }
+                startGetCurrentAngleTask();
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 getMainActivity().getPresenter().stopAxis();
                 dispose(mRunAxisElevationNegDisposable);
