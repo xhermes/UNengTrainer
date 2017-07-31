@@ -310,22 +310,22 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 //        batteryView.setText(voltage + " V");
     }
 
-    public void showAddFavouriteDialog() {
-        long count = DataManager.getInstance().getDaoSession().getFavouriteRecordDao().count();
-
-        new MaterialDialog.Builder(getActivity())
-                .title("收藏")
-                .content("将当前的参数保存到收藏列表，您可以在「我的收藏」中看到所有的收藏内容。")
-                .input("为此收藏记录命名", "记录" + (count + 1), new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(MaterialDialog dialog, CharSequence input) {
-                        getMainActivity().getPresenter().addToFavourite(input.toString(), mSwingAngle, mElevationAngle, mLeftSpeed, mRightSpeed);
-                    }
-                })
-                .positiveText("添加收藏")
-                .negativeText("取消")
-                .show();
-    }
+//    public void showAddFavouriteDialog() {
+//        long count = DataManager.getInstance().getDaoSession().getFavouriteRecordDao().count();
+//
+//        new MaterialDialog.Builder(getActivity())
+//                .title("收藏")
+//                .content("将当前的参数保存到收藏列表，您可以在「我的收藏」中看到所有的收藏内容。")
+//                .input("为此收藏记录命名", "记录" + (count + 1), new MaterialDialog.InputCallback() {
+//                    @Override
+//                    public void onInput(MaterialDialog dialog, CharSequence input) {
+//                        getMainActivity().getPresenter().addToFavourite(input.toString(), mSwingAngle, mElevationAngle, mLeftSpeed, mRightSpeed);
+//                    }
+//                })
+//                .positiveText("添加收藏")
+//                .negativeText("取消")
+//                .show();
+//    }
 
     public void selectFromFavourite(long id) {
         if(id != 0) {

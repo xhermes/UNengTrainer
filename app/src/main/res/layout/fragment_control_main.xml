@@ -115,7 +115,7 @@
                 android:orientation="horizontal">
 
                 <FrameLayout
-                    android:id="@+id/swing_angle_negative"
+                    android:id="@+id/swing_angle_positive"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -169,7 +169,7 @@
                 </FrameLayout>
 
                 <FrameLayout
-                    android:id="@+id/swing_angle_positive"
+                    android:id="@+id/swing_angle_negative"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -279,6 +279,7 @@
         <FrameLayout
             android:id="@+id/return_to_zero2"
             android:layout_width="0dp"
+            android:visibility="gone"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/selector_button_primary"

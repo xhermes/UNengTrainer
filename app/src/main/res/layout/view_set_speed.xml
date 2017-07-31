@@ -37,7 +37,7 @@
     <android.support.v7.widget.AppCompatSeekBar
         android:id="@+id/left_speed"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="50dp" />
 
     <TextView
         android:id="@+id/left_speed_text"
@@ -70,7 +70,7 @@
     <android.support.v7.widget.AppCompatSeekBar
         android:id="@+id/right_speed"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="50dp" />
 
     <TextView
         android:id="@+id/right_speed_text"

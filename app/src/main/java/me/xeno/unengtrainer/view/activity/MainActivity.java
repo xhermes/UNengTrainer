@@ -29,6 +29,7 @@ import me.xeno.unengtrainer.presenter.MainPresenter;
 import me.xeno.unengtrainer.service.BleService;
 import me.xeno.unengtrainer.util.ActivityUtils;
 import me.xeno.unengtrainer.util.Logger;
+import me.xeno.unengtrainer.util.NumberUtils;
 import me.xeno.unengtrainer.view.adapter.ShortcutAdapter;
 import me.xeno.unengtrainer.view.fragment.BluetoothDisabledFragment;
 import me.xeno.unengtrainer.view.fragment.DeviceRecyclerFragment;
@@ -212,8 +213,8 @@ public class MainActivity extends BaseActivity
     }
 
     public void displayAngle(String angle1, String angle2) {
-        mDashboardView.setCurrentSwingAngle(angle1);
-        mDashboardView.setCurrentElevationAngle(angle2);
+        mDashboardView.setCurrentSwingAngle(NumberUtils.showNumber1Decimal(angle1));
+        mDashboardView.setCurrentElevationAngle(NumberUtils.showNumber1Decimal(angle2));
     }
 
     public void stopGetCurrentAngle() {

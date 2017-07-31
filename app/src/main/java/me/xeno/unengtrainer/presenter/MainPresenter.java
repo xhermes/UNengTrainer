@@ -168,23 +168,23 @@ public class MainPresenter {
 
     }
 
-    public void addToFavourite(String name, double angle1, double angle2, int speed1, int speed2) {
-        try {
-            String currentTime = TimeUtils.longToString(System.currentTimeMillis(), "yyyy-MM-dd HH:mm");
-            FavouriteRecord record = new FavouriteRecord();
-//            name, currentTime, currentTime, angle1, angle2, speed1, speed2
-            record.setName(name);
-            record.setCreateTime(currentTime);
-            record.setModifyTime(currentTime);
-            record.setSwingAngle(angle1);
-            record.setElevationAngle(angle2);
-            record.setLeftMotorSpeed(speed1);
-            record.setRightMotorSpeed(speed2);
-            DataManager.getInstance().getDaoSession().getFavouriteRecordDao().insert(record);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-    }
+//    public void addToFavourite(String name, double angle1, double angle2, int speed1, int speed2) {
+//        try {
+//            String currentTime = TimeUtils.longToString(System.currentTimeMillis(), "yyyy-MM-dd HH:mm");
+//            FavouriteRecord record = new FavouriteRecord();
+////            name, currentTime, currentTime, angle1, angle2, speed1, speed2
+//            record.setName(name);
+//            record.setCreateTime(currentTime);
+//            record.setModifyTime(currentTime);
+//            record.setSwingAngle(angle1);
+//            record.setElevationAngle(angle2);
+//            record.setLeftMotorSpeed(speed1);
+//            record.setRightMotorSpeed(speed2);
+//            DataManager.getInstance().getDaoSession().getFavouriteRecordDao().insert(record);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     /**
      * @param angle1 第一轴角度

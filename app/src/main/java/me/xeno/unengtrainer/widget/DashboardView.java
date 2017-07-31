@@ -26,8 +26,8 @@ import me.xeno.unengtrainer.util.TimeUtils;
 
 public class DashboardView extends LinearLayout {
 
-    private String mSwingAngle;
-    private String mElevationAngle;
+    private String mSwingAngle = "0";
+    private String mElevationAngle = "0";
     private int mLeftSpeed;
     private int mRightSpeed;
 
