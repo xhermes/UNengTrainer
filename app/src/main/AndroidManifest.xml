@@ -40,6 +40,9 @@
         <activity
             android:name=".view.activity.TestActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".test.TestActivity"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".service.BleService">
