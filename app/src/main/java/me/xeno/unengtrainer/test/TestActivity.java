@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -81,5 +84,7 @@ public class TestActivity extends AppCompatActivity {
                         Logger.info( "onComplete " + Thread.currentThread().getName());
                     }
                 });
+
+
     }
 }

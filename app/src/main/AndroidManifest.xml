@@ -41,7 +41,7 @@
             android:name=".view.activity.TestActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".test.TestActivity"
+            android:name=".test.TestMyActivity"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
