@@ -17,12 +17,12 @@ public class Observable {
 
     /**
      * 让本Observable和传入的Observer产生订阅关系
-     * @param observer
+     * @param subscriber
      * @return
      */
-    public Disposable subscribe(Observer observer) {
+    public Disposable subscribe(Subscriber subscriber) {
         //生产了订阅关系以后，首先执行call()中的事件源的代码
-        mOnsubscribe.call();
+        mOnsubscribe.call(subscriber);
     }
 
     //OnSubscribe作为Observable的内部类，每个Observable持有一个引用，并且在创建时必须传入一个。

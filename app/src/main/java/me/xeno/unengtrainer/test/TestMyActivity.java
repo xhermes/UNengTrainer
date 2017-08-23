@@ -36,7 +36,8 @@ public class TestMyActivity extends BaseActivity {
 
             @Override
             public void call(Subscriber subscriber) {
-
+                subscriber.onNext();
+                subscriber.onCompleted();
             }
         }).subscribe(new Observer() {
             @Override
