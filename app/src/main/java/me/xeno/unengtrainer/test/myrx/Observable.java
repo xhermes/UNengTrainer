@@ -5,12 +5,19 @@ package me.xeno.unengtrainer.test.myrx;
  */
 
 public class Observable {
+
     private OnSubscribe mOnsubscribe;
 
     private Observable(OnSubscribe onSubscribe) {
         mOnsubscribe = onSubscribe;
     }
 
+    /**
+     * create就是一个带onSubscribe的new的操作
+     * @param onSubscribe 传入持有一个onSubscribe引用，OnSubscribe需要重写call()方法，
+     *                    列出事件源中应该执行的任务
+     * @return
+     */
     public static Observable create(OnSubscribe onSubscribe) {
         return new Observable(onSubscribe);
     }
@@ -20,9 +27,13 @@ public class Observable {
      * @param subscriber
      * @return
      */
-    public Disposable subscribe(Subscriber subscriber) {
+    public void subscribe(Subscriber subscriber) {
         //生产了订阅关系以后，首先执行call()中的事件源的代码
         mOnsubscribe.call(subscriber);
+    }
+
+    public <T,R> Observable map(Function<T,R> function) {
+
     }
 
     //OnSubscribe作为Observable的内部类，每个Observable持有一个引用，并且在创建时必须传入一个。

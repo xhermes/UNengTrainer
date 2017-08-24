@@ -11,6 +11,10 @@ import me.xeno.unengtrainer.view.activity.BaseActivity;
  */
 
 public class TestMyActivity extends BaseActivity {
+
+    private Observable.OnSubscribe<String> mOnSubscribe;
+
+
     @Override
     protected void setContentView() {
 
@@ -31,34 +35,38 @@ public class TestMyActivity extends BaseActivity {
 
     }
 
-    public void test() {
-        Observable.create(new Observable.OnSubscribe() {
-
+    public void createSource() {
+        mOnSubscribe = new Observable.OnSubscribe<String>() {
             @Override
-            public void call(Subscriber subscriber) {
-                subscriber.onNext();
+            public void call(Subscriber<String> subscriber) {
+                subscriber.onNext("123");
                 subscriber.onCompleted();
             }
-        }).subscribe(new Observer() {
-            @Override
-            public void onSubscribe() {
+        };
+    }
 
-            }
+    public void test() {
+        Observable.create(mOnSubscribe)
+                .subscribe(new Subscriber() {
+                    @Override
+                    public void onSubscribe() {
 
-            @Override
-            public void onNext(Object o) {
+                    }
 
-            }
+                    @Override
+                    public void onNext(Object o) {
 
-            @Override
-            public void onCompleted() {
+                    }
 
-            }
+                    @Override
+                    public void onCompleted() {
 
-            @Override
-            public void onError(Exception e) {
+                    }
 
-            }
-        });
+                    @Override
+                    public void onError(Exception e) {
+
+                    }
+                });
     }
 }
