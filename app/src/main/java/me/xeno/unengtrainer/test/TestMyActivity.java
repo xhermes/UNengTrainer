@@ -1,5 +1,6 @@
 package me.xeno.unengtrainer.test;
 
+import me.xeno.unengtrainer.test.myrx.Function;
 import me.xeno.unengtrainer.test.myrx.Observable;
 import me.xeno.unengtrainer.test.myrx.Observer;
 import me.xeno.unengtrainer.test.myrx.Subscriber;
@@ -27,6 +28,7 @@ public class TestMyActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        createSource();
         test();
     }
 
@@ -39,34 +41,42 @@ public class TestMyActivity extends BaseActivity {
         mOnSubscribe = new Observable.OnSubscribe<String>() {
             @Override
             public void call(Subscriber<String> subscriber) {
+                Logger.info("call");
                 subscriber.onNext("123");
-                subscriber.onCompleted();
             }
         };
     }
 
     public void test() {
         Observable.create(mOnSubscribe)
-                .subscribe(new Subscriber() {
-                    @Override
-                    public void onSubscribe() {
+                .map(new Function<String, Object>() {
 
+                    @Override
+                    public Object fun(String s) {
+                        return "R";
                     }
+                })
+                .map(new Function<Object, Object>() {
+
+                    @Override
+                    public Object fun(Object s) {
+                        return "R";
+                    }
+                })
+                .map(new Function<Object, Object>() {
+
+                    @Override
+                    public Object fun(Object s) {
+                        return "R";
+                    }
+                })
+                .subscribe(new Subscriber() {
 
                     @Override
                     public void onNext(Object o) {
-
+                               Logger.info("onNext");
                     }
 
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-
-                    }
                 });
     }
 }

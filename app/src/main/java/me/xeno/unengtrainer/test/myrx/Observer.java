@@ -5,8 +5,8 @@ package me.xeno.unengtrainer.test.myrx;
  */
 
 public interface Observer<T> {
-    void onSubscribe();
+//    void onSubscribe();
     void onNext(T t);
-    void onCompleted();
-    void onError(Exception e);
+//    void onCompleted();
+//    void onError(Exception e);
 }
