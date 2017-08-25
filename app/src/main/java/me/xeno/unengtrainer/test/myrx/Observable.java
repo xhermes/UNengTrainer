@@ -4,6 +4,7 @@ import me.xeno.unengtrainer.util.Logger;
 
 /**
  * Created by xeno on 2017/8/22.
+ *
  */
 
 public class Observable<T> {
