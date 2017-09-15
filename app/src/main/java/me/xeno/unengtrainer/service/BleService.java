@@ -307,7 +307,9 @@ public class BleService extends Service {
                 data[i-3] = dataPacket[i];
             }
         }
-        byte crc = dataPacket[dataPacket.length - 2];
+        int crc = dataPacket[dataPacket.length - 2];
+        if(crc<0)
+            crc+=256;
         byte end = dataPacket[dataPacket.length - 1];
 
         //回复帧头固定为0xFC，若非直接抛弃
@@ -326,14 +328,14 @@ public class BleService extends Service {
             }
         }
         Logger.debug("接收：crcCalculate = " + crcCalculate);
-        //TODO 校验位的计算可能有问题，关于溢出忽略
+
         if(crcCalculate > 255) {
             crcCalculate = crcCalculate & 0xFF;
         }
 
         if(crc != crcCalculate) {
             Logger.warning("接收到蓝牙数据，校验错误！crc=" + crc + " ,crcCalculate=" + crcCalculate);
-//            return;
+            return;
         }
 
         //打印数据长度

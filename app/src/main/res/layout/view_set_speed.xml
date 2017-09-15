@@ -10,10 +10,10 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="25dp"
         android:text="说明文字说明文字说明文字说明文字说明文字说明文字"
         android:textColor="@color/grey99"
-        android:layout_marginBottom="25dp"
-        android:textSize="@dimen/text_size_content"/>
+        android:textSize="@dimen/text_size_content" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,24 +28,69 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/text_size_content"
             android:layout_marginLeft="5dp"
-            android:text="左轮转速" />
+            android:text="左轮转速"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/text_size_content" />
     </LinearLayout>
 
     <android.support.v7.widget.AppCompatSeekBar
         android:id="@+id/left_speed"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:layout_height="40dp"
+        />
 
-    <TextView
-        android:id="@+id/left_speed_text"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:gravity="center"
-        android:text="0%"
-        android:textSize="@dimen/text_size_big" />
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/left_reduce_double"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:srcCompat="@drawable/ic_speed_reduce_double"
+            android:background="@drawable/rectangle_primary_dark"/>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/left_reduce"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            app:srcCompat="@drawable/ic_speed_reduce"
+            android:background="@drawable/rectangle_primary_dark"/>
+
+        <TextView
+            android:id="@+id/left_speed_text"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="0%"
+            android:textSize="@dimen/text_size_big" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/left_increase"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:srcCompat="@drawable/ic_speed_increase"
+            android:background="@drawable/rectangle_primary_dark"/>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/left_increase_double"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            app:srcCompat="@drawable/ic_speed_increase_double"
+            android:background="@drawable/rectangle_primary_dark"/>
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -61,24 +106,67 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/text_size_content"
             android:layout_marginLeft="5dp"
-            android:text="右轮转速" />
+            android:text="右轮转速"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/text_size_content" />
     </LinearLayout>
 
     <android.support.v7.widget.AppCompatSeekBar
         android:id="@+id/right_speed"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:layout_height="40dp"
+        />
 
-    <TextView
-        android:id="@+id/right_speed_text"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="0%"
-        android:textSize="@dimen/text_size_big" />
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:orientation="horizontal">
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/right_reduce_double"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:srcCompat="@drawable/ic_speed_reduce_double"
+            android:background="@drawable/rectangle_primary_dark"/>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/right_reduce"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            app:srcCompat="@drawable/ic_speed_reduce"
+            android:background="@drawable/rectangle_primary_dark"/>
+
+        <TextView
+            android:id="@+id/right_speed_text"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="0%"
+            android:textSize="@dimen/text_size_big" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/right_increase"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:srcCompat="@drawable/ic_speed_increase"
+            android:background="@drawable/rectangle_primary_dark"/>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/right_increase_double"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            app:srcCompat="@drawable/ic_speed_increase_double"
+            android:background="@drawable/rectangle_primary_dark"/>
+    </LinearLayout>
 
 
 </LinearLayout>

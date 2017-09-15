@@ -112,7 +112,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         if (mBatteryDisposable == null)
             mBatteryDisposable = getMainActivity().getPresenter().getBatteryVoltage(Config.GET_BATTERY_PERIOD);
         if (mStatusDisposable == null) {
-            getMainActivity().getPresenter().startGetStatusTask(Config.GET_STATUS_PERIOD);
+            mStatusDisposable = getMainActivity().getPresenter().startGetStatusTask(Config.GET_STATUS_PERIOD);
         }
     }
 
@@ -293,9 +293,55 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
     }
 
     public void startGetCurrentAngleTask() {
-        if (mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed()) {
-            mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
-        }
+//        if (mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed()) {
+////            mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
+//
+//
+//
+//
+//
+//            Observable.interval(0, 300, TimeUnit.MILLISECONDS)
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(new Observer<Long>() {
+//                        @Override
+//                        public void onSubscribe(@NonNull Disposable d) {
+//                            mCurrentAngleDisposable = d;
+//                        }
+//
+//                        @Override
+//                        public void onNext(@NonNull Long aLong) {
+//                            Logger.warning("调用蓝牙接口：==>获取角度");
+//                            getMainActivity().getPresenter().getBleService().writeData(getMainActivity().getPresenter().getModel().getAxisAngle());
+//
+//                        }
+//
+//                        @Override
+//                        public void onError(@NonNull Throwable e) {
+//                            e.printStackTrace();
+//                        }
+//
+//                        @Override
+//                        public void onComplete() {
+//                            Logger.warning("onCom!!!!!!!!!!!");
+//                        }
+//                    });
+//
+////                    .subscribe(new Consumer<Long>() {
+////                        @Override
+////                        public void accept(@NonNull Long aLong) throws Exception {
+////                            Logger.warning("调用蓝牙接口：==>获取角度");
+////                            getMainActivity().getPresenter().getBleService().writeData(getMainActivity().getPresenter().getModel().getAxisAngle());
+////                        }
+////                    });
+//
+
+
+
+
+
+
+//        }
     }
 
     public void showCurrentAngle(String angle1, String angle2) {
@@ -477,7 +523,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 
     private void dispose(Disposable disposable) {
         if (disposable != null && !disposable.isDisposed()) {
-            Logger.info("=====================停止获取角度任务!");
+            Logger.warning("=====================停止获取角度任务!");
             disposable.dispose();
         }
     }
@@ -542,5 +588,12 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 //
 //        }
         return true;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //在页面结束时停止获取状态任务
+        dispose(mStatusDisposable);
     }
 }

@@ -123,6 +123,7 @@ public class MainPresenter {
 
         @Override
         public void onGetAxisAngle(GetAxisAngleWrapper wrapper) {
+            Logger.warning("获取角度");
             mActivity.displayAngle(wrapper.getAxis1Angle(), wrapper.getAxis2Angle());
         }
 
