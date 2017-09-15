@@ -14,6 +14,7 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.ReplaySubject;
@@ -84,6 +85,45 @@ public class TestActivity extends AppCompatActivity {
                         Logger.info( "onComplete " + Thread.currentThread().getName());
                     }
                 });
+
+
+
+
+        Observable.create(new ObservableOnSubscribe<Object>() {
+
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<Object> e) throws Exception {
+                //源业务代码
+            }
+        }).map(new Function<Object, String>() {
+
+            @Override
+            public String apply(@NonNull Object o) throws Exception {
+                //转换业务代码
+                return "Obj";
+            }
+        }).subscribe(new Observer<Object>() {
+
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(@NonNull Object o) {
+                //订阅业务代码
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
 
 
     }

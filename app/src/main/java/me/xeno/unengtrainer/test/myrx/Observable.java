@@ -44,10 +44,11 @@ public class Observable<T> {
         OnSubscribe<R> onSubscribe2 = new OnSubscribe<R>() {
             @Override
             public void call(final Subscriber<R> subscriber) {
-                Logger.info("call:(onSubscribe2)");
+                Logger.info("map的call层：" + Thread.currentThread().getName());
                 Observable.this.subscribe(new Subscriber<T>() {
                     @Override
                     public void onNext(T o) {
+                        Logger.info("onNext层：" + Thread.currentThread().getName());
                         subscriber.onNext(function.fun(o));
                     }
 
@@ -58,6 +59,44 @@ public class Observable<T> {
        Observable<R> observable2 = create(onSubscribe2);
 
         return observable2;
+    }
+
+    public Observable<T> subscribeOn(final Scheduler scheduler) {
+        return create(new OnSubscribe<T>() {
+            @Override
+            public void call(final Subscriber<T> subscriber) {
+                Logger.info("subscribeOn() call");
+                //使用用户选择的线程池创建一个worker，并且在这里执行上一级的call
+                scheduler.createWorker().schedule(new Runnable() {
+                    @Override
+                    public void run() {
+                        //注意这里没有调用上层的subscribe()在链上创建一个onNext，而是直接调用了上层的call()
+                        mOnsubscribe.call(subscriber);
+                    }
+                });
+            }
+        });
+    }
+
+    public Observable<T> observeOn(final Scheduler scheduler) {
+        return Observable.create(new OnSubscribe<T>() {
+            @Override
+            public void call(final Subscriber subscriber) {
+                final Scheduler.Worker worker = scheduler.createWorker();
+                Observable.this.mOnsubscribe.call(new Subscriber<T>() {
+
+                    @Override
+                    public void onNext(final T var1) {
+                        worker.schedule(new Runnable() {
+                            @Override
+                            public void run() {
+                                subscriber.onNext(var1);
+                            }
+                        });
+                    }
+                });
+            }
+        });
     }
 
     //OnSubscribe作为Observable的内部类，每个Observable持有一个引用，并且在创建时必须传入一个。
