@@ -17,7 +17,7 @@ import me.xeno.unengtrainer.view.activity.MainActivity;
  * Created by xeno on 2017/7/28.
  */
 
-public class SetSpeedDialogWrapper implements View.OnClickListener {
+public class RandomDialogWrapper implements View.OnClickListener {
 
     private MainActivity mActivity;
 
@@ -44,7 +44,7 @@ public class SetSpeedDialogWrapper implements View.OnClickListener {
     private int mLeftSpeed;
     private int mRightSpeed;
 
-    public SetSpeedDialogWrapper(Context context, int leftSpeed, int rightSpeed) {
+    public RandomDialogWrapper(Context context, int leftSpeed, int rightSpeed) {
         mActivity = (MainActivity)context;
         mLeftSpeed = leftSpeed;
         mRightSpeed = rightSpeed;
@@ -191,6 +191,6 @@ public class SetSpeedDialogWrapper implements View.OnClickListener {
         mRightSpeed = newSpeed;
         mRightSpeedView.setText(mRightSpeed + "%");
         mRightSpeedBar.setProgress(mRightSpeed);
-        mActivity.getPresenter().setMotorSpeed(mLeftSpeed, mRightSpeed);
+        mActivity.getPresenter().setMotorSpeed(mRightSpeed, mRightSpeed);
     }
 }

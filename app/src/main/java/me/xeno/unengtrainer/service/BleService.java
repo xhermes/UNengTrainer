@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
+import android.bluetooth.BluetoothProfile;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
@@ -92,6 +93,12 @@ public class BleService extends Service {
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             super.onConnectionStateChange(gatt, status, newState);
             Logger.info("onConnectionStateChange()");
+
+            //2017.9.16 如果检测到机器已断开蓝牙连接（比如机器已关机）
+            if(newState == BluetoothProfile.STATE_DISCONNECTED) {
+               disconnect();
+                mListener.onDisconnect();
+            }
         }
 
         @Override

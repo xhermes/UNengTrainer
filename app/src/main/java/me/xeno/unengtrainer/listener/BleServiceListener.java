@@ -31,4 +31,9 @@ public interface BleServiceListener {
     void onSetMotorSpeed(SetMotorSpeedWrapper wrapper);
     void onGetBatteryVoltage(GetBatteryVoltageWrapper wrapper);
 
+    /**
+     * 检测到机器断开蓝牙连接
+     */
+    void onDisconnect();
+
 }

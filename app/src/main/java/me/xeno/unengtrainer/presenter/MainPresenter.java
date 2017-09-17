@@ -137,6 +137,11 @@ public class MainPresenter {
             Logger.info("获取电量：" + wrapper.getVoltage());
             mActivity.displayBattery(wrapper.getVoltage());
         }
+
+        @Override
+        public void onDisconnect() {
+            mActivity.finish();
+        }
     };
 
 
