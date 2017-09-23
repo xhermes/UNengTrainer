@@ -85,7 +85,7 @@ public class DeviceRecyclerFragment extends BaseMainFragment implements DeviceRe
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                ToastUtils.toast(getActivity(), "refresh");
+                startSearching();
                 break;
         }
         return true;
@@ -104,6 +104,13 @@ public class DeviceRecyclerFragment extends BaseMainFragment implements DeviceRe
     }
 
     private void startSearching() {
+        ToastUtils.toast(getMainActivity(), mSearchingDisposable + "");
+
+        if(mSearchingDisposable != null && !mSearchingDisposable.isDisposed()) {
+            Logger.warning("任务已经在执行");
+            return;
+        }
+
         getMainActivity().getPresenter()
                 .scanForDevices().subscribe(new Observer<ScanResult>() {
             @Override
@@ -120,17 +127,24 @@ public class DeviceRecyclerFragment extends BaseMainFragment implements DeviceRe
             @Override
             public void onError(@NonNull Throwable e) {
                 e.printStackTrace();
+                dispose();
             }
 
             @Override
             public void onComplete() {
-
+                dispose();
             }
         });
     }
 
     public void addDeviceToList(ScanResult scanResult) {
         mAdapter.addDataToList(scanResult);
+    }
+
+    public void dispose() {
+        if(mSearchingDisposable != null && !mSearchingDisposable.isDisposed()){
+            mSearchingDisposable.dispose();
+        }
     }
 
     @Override
