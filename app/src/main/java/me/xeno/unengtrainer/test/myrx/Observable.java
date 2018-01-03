@@ -45,7 +45,7 @@ public class Observable<T> {
             @Override
             public void call(final Subscriber<R> subscriber) {
                 Logger.info("map的call层：" + Thread.currentThread().getName());
-                Observable.this.subscribe(new Subscriber<T>() {
+                subscribe(new Subscriber<T>() {
                     @Override
                     public void onNext(T o) {
                         Logger.info("onNext层：" + Thread.currentThread().getName());
@@ -83,7 +83,7 @@ public class Observable<T> {
             @Override
             public void call(final Subscriber subscriber) {
                 final Scheduler.Worker worker = scheduler.createWorker();
-                Observable.this.mOnsubscribe.call(new Subscriber<T>() {
+                mOnsubscribe.call(new Subscriber<T>() {
 
                     @Override
                     public void onNext(final T var1) {

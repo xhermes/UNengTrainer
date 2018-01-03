@@ -44,6 +44,7 @@ import me.xeno.unengtrainer.util.Logger;
 import me.xeno.unengtrainer.util.RxUtils;
 import me.xeno.unengtrainer.util.SpUtils;
 import me.xeno.unengtrainer.util.TimeUtils;
+import me.xeno.unengtrainer.util.ToastUtils;
 import me.xeno.unengtrainer.view.activity.MainActivity;
 
 import static android.content.Context.BIND_AUTO_CREATE;
@@ -140,7 +141,9 @@ public class MainPresenter {
 
         @Override
         public void onDisconnect() {
-            mActivity.finish();
+            //TODO 暂时在蓝牙断开的时候只进行提示
+            ToastUtils.toast(mActivity, "蓝牙连接已断开");
+//            mActivity.finish();
         }
     };
 

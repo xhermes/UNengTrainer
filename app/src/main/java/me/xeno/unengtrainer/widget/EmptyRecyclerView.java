@@ -47,7 +47,7 @@ public class EmptyRecyclerView extends RecyclerView implements ObservableView {
             if (adapter != null && mEmptyView != null) {
                 if (adapter.getItemCount() == 0) {
                     mEmptyView.setVisibility(View.VISIBLE);
-                    EmptyRecyclerView.this.setVisibility(View.GONE);
+                    setVisibility(View.GONE);
                 } else {
                     mEmptyView.setVisibility(View.GONE);
                     EmptyRecyclerView.this.setVisibility(View.VISIBLE);
