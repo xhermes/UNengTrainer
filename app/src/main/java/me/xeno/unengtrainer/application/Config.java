@@ -6,6 +6,16 @@ package me.xeno.unengtrainer.application;
 
 public class Config {
 
+    public static final int DEBUG_MODE_OFF = 0;
+    public static final int DEBUG_MODE_CTRL = 1;//调试主控界面时使用
+    public static final int DEBUG_MODE_BLUETOOTH = 2;//调试蓝牙界面时使用
+
+    //TODO 调试模式，发版时记得调成off
+    public static final int DEBUG_MODE = DEBUG_MODE_OFF;
+    public static boolean isDebugging() {
+        return DEBUG_MODE > 0;
+    }
+
     public static final int GET_STATUS_PERIOD = 5;//获取状态间隔，单位秒
     public static final int GET_BATTERY_PERIOD = 5;//获取电压间隔，单位秒
     public static final int GET_ANGLE_PERIOD = 300;//获取角度间隔，单位豪秒

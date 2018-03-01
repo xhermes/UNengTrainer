@@ -142,6 +142,8 @@ public class MainPresenter {
         @Override
         public void onDisconnect() {
             //TODO 暂时在蓝牙断开的时候只进行提示
+            //FIXME java.lang.RuntimeException: Can't create handler inside thread that has not called Looper.prepare()
+            //不能在子线程中弹toast
             ToastUtils.toast(mActivity, "蓝牙连接已断开");
 //            mActivity.finish();
         }
@@ -270,11 +272,12 @@ public class MainPresenter {
                         }
                     });
         }
+        Logger.error("getBatteryVoltage() mModel == null");
         return null;
     }
 
     /**
-     * 单词获取角度
+     * 单次获取角度
      */
     public void getAxisAngle() {
         if (mModel != null) {

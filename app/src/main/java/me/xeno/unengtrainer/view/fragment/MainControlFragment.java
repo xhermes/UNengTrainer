@@ -36,6 +36,7 @@ import io.reactivex.schedulers.Schedulers;
 import me.xeno.unengtrainer.R;
 import me.xeno.unengtrainer.application.Config;
 import me.xeno.unengtrainer.application.DataManager;
+import me.xeno.unengtrainer.model.BatteryModel;
 import me.xeno.unengtrainer.model.entity.FavouriteRecord;
 import me.xeno.unengtrainer.util.DialogUtils;
 import me.xeno.unengtrainer.util.Logger;
@@ -83,6 +84,8 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
     private TextView mCurrentRightSpeedView;
     private TextView mCurrentLeftSpeedView;
 
+    private TextView batteryView;
+
     private int pick;
 
     private Disposable mBatteryDisposable;
@@ -109,8 +112,10 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
     public void onResume() {
         super.onResume();
         //页面恢复时，重新开始获取电压
-        if (mBatteryDisposable == null)
+        if (mBatteryDisposable != null && !mBatteryDisposable.isDisposed()) {
+        } else {
             mBatteryDisposable = getMainActivity().getPresenter().getBatteryVoltage(Config.GET_BATTERY_PERIOD);
+        }
         if (mStatusDisposable == null) {
             mStatusDisposable = getMainActivity().getPresenter().startGetStatusTask(Config.GET_STATUS_PERIOD);
         }
@@ -120,7 +125,10 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
     public void onPause() {
         super.onPause();
         //页面休眠时，停止获取电压
+        Logger.info("页面休眠，获取电压循环任务已停止");
         dispose(mBatteryDisposable);
+
+        //TODO 看看要不要在休眠时让获取状态任务也暂停，以节省电量
     }
 
     @Override
@@ -154,7 +162,8 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         mRunAxisElevationNegativeView = root.findViewById(R.id.elevation_angle_negative);
         mRunAxisElevationPositiveView = root.findViewById(R.id.elevation_angle_positive);
 ////        mRunAxisElevationStopView = (AppCompatImageView) root.findViewById(R.id.elevation_angle_stop);
-//
+
+        batteryView = (TextView) root.findViewById(R.id.tv_battery);
 //
 //        mElevationAngleView = (TextView) root.findViewById(R.id.elevation_angle);
 //        mSwingAngleView = (TextView) root.findViewById(R.id.swing_angle);
@@ -353,7 +362,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
     }
 
     public void showCurrentVoltage(String voltage) {
-//        batteryView.setText(voltage + " V");
+        batteryView.setText(BatteryModel.getCurrentBatteryPercentage(voltage));
     }
 
 //    public void showAddFavouriteDialog() {
@@ -523,7 +532,9 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 
     private void dispose(Disposable disposable) {
         if (disposable != null && !disposable.isDisposed()) {
-            Logger.warning("=====================停止获取角度任务!");
+            if(Config.isDebugging()) {
+                ToastUtils.toast(getActivity().getApplicationContext(), "循环任务已停止");
+            }
             disposable.dispose();
         }
     }

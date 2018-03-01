@@ -20,6 +20,7 @@ import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import me.xeno.unengtrainer.R;
+import me.xeno.unengtrainer.application.Config;
 import me.xeno.unengtrainer.model.BluetoothModel;
 import me.xeno.unengtrainer.util.Logger;
 import me.xeno.unengtrainer.util.ToastUtils;
@@ -104,7 +105,9 @@ public class DeviceRecyclerFragment extends BaseMainFragment implements DeviceRe
     }
 
     private void startSearching() {
-        ToastUtils.toast(getMainActivity(), mSearchingDisposable + "");
+        if(Config.isDebugging())
+            ToastUtils.toast(getActivity().getApplication(), "尝试开始搜索蓝牙设备，任务状态："
+                     + mSearchingDisposable == null?"当前没有搜索任务":"当前搜索任务已经在执行");
 
         if(mSearchingDisposable != null && !mSearchingDisposable.isDisposed()) {
             Logger.warning("任务已经在执行");

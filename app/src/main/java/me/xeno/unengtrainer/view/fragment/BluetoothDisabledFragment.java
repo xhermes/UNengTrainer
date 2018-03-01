@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import me.xeno.unengtrainer.R;
+import me.xeno.unengtrainer.application.Config;
 import me.xeno.unengtrainer.application.DataManager;
 import me.xeno.unengtrainer.presenter.MainPresenter;
 
@@ -53,12 +54,15 @@ public class BluetoothDisabledFragment extends BaseMainFragment {
         mConnectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //检查有没有开启蓝牙，如果开启了，直接切换到DeviceRecyclerFragment
-                //否则请求开启蓝牙，开启成功后在onActivityResult中切换到DeviceRecyclerFragment
-                checkPermissionAndEnableBluetooth();
+                if(Config.DEBUG_MODE == Config.DEBUG_MODE_CTRL) {
+                    //调试模式时直接不连蓝牙，进入主控界面
+                    getMainActivity().showMainControlFragment();
+                } else {
+                    //检查有没有开启蓝牙，如果开启了，直接切换到DeviceRecyclerFragment
+                    //否则请求开启蓝牙，开启成功后在onActivityResult中切换到DeviceRecyclerFragment
+                    checkPermissionAndEnableBluetooth();
+                }
 
-                //TODO 调试
-//                getMainActivity().showMainControlFragment();
 
             }
         });
