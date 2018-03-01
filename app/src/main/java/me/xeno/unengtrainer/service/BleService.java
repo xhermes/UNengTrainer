@@ -87,6 +87,8 @@ public class BleService extends Service {
             //FIXME onConnectFailure() exception = ConnectException{gattStatus=133, bluetoothGatt=android.bluetooth.BluetoothGatt@4bcb88d} BleException { code=201, description='Gatt Exception Occurred! '}
             //FIXME 有时候点击连接设备，已经进入了maincontrol但是会出现以上错误，此时蓝牙连接失败，然而所有按钮都有响应，于是会引起未知错误。
             Logger.info("onConnectFailure() exception = " + exception.toString());
+            disconnect();//关闭gatt
+            mListener.onDisconnect();
         }
 
         @Override
@@ -95,10 +97,9 @@ public class BleService extends Service {
             Logger.info("onConnectionStateChange()");
 
             //2017.9.16 如果检测到机器已断开蓝牙连接（比如机器已关机）
-            if(newState == BluetoothProfile.STATE_DISCONNECTED) {
-               disconnect();
-                mListener.onDisconnect();
-            }
+//            if(newState == BluetoothProfile.STATE_DISCONNECTED) {
+
+//            }
         }
 
         @Override

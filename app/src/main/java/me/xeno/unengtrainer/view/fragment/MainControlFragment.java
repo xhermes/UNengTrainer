@@ -228,45 +228,9 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
             }
         });
 
-//        mRunAxisSwingStopView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                getMainActivity().getPresenter().stopAxis();
-//            }
-//    });
 
-
-//        mRunAxisElevationPositiveView.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-//                    mRunAxisDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_POSITIVE, Config.RUN_AXIS_PERIOD);
-//                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-//                    dispose(mRunAxisDisposable);
-//                    Logger.info("单轴运行结束");
-//                }
-//                return true;
-//            }
-//        });
-//        mRunAxisElevationNegativeView.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-//                    mRunAxisDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_NEGATIVE, Config.RUN_AXIS_PERIOD);
-//                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-//                    dispose(mRunAxisDisposable);
-//                    Logger.info("单轴运行结束");
-//                }
-//                return true;
-//            }
-//        });
-//        mRunAxisElevationStopView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                getMainActivity().getPresenter().stopAxis();
-//            }
-//        });
-
+        //进入控制界面后两秒获取一次当前角度信息
+        initCurrentAngle();
 
     }
 
@@ -293,6 +257,16 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
     public void refreshCurrentSpeed(int left, int right) {
         mCurrentLeftSpeedView.setText(left + "");
         mCurrentRightSpeedView.setText(right + "");
+    }
+
+    private void initCurrentAngle() {
+        RxUtils.timer(3).subscribe(new Consumer<Long>() {
+            @Override
+            public void accept(@NonNull Long aLong) throws Exception {
+               getMainActivity().getPresenter().getAxisAngle();
+
+            }
+        });
     }
 
     public void stopGetCurrentAngle() {
@@ -408,53 +382,6 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         }
     }
 
-//    public void showSwingAngleDialog() {
-//        new MaterialDialog.Builder(getActivity())
-//                .title("设置摆角")
-//                .content("摆角范围：(-90 ~ 90)")
-//                .inputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED)
-//                .input("输入摆角", "", new MaterialDialog.InputCallback() {
-//                    @Override
-//                    public void onInput(MaterialDialog dialog, CharSequence input) {
-//                        if (input.length() == 0) {
-//                            return;
-//                        }
-//                        double inputValue = Double.valueOf(input.toString());
-//                        if (inputValue >= -90 && inputValue <= 90) {
-//                            mSwingAngle = inputValue;
-//                            mSwingAngleView.setText("摆角：" + input.toString());
-//                        } else {
-//                            ToastUtils.toast(getActivity().getApplicationContext(), "输入超限！");
-//                        }
-//                    }
-//                })
-//                .positiveText("确定")
-//                .show();
-//    }
-
-//    public void showElevationAngleDialog() {
-//        new MaterialDialog.Builder(getActivity())
-//                .title("设置仰角")
-//                .content("仰角范围：(-90 ~ 50)")
-//                .inputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED)
-//                .input("输入仰角", "", new MaterialDialog.InputCallback() {
-//                    @Override
-//                    public void onInput(MaterialDialog dialog, CharSequence input) {
-//                        if (input.length() == 0) {
-//                            return;
-//                        }
-//                        double inputValue = Double.valueOf(input.toString());
-//                        if (inputValue >= -90 && inputValue <= 50) {
-//                            mElevationAngle = inputValue;
-//                            mElevationAngleView.setText("仰角：" + input.toString());
-//                        } else {
-//                            ToastUtils.toast(getActivity().getApplicationContext(), "输入超限！");
-//                        }
-//                    }
-//                })
-//                .positiveText("确定")
-//                .show();
-//    }
 
     public void showSetMotorSpeedDialog() {
         Logger.info("弹出对话框， leftspeed: " + mCurrentLeftSpeed + " rightspeed: " + mCurrentRightSpeed);

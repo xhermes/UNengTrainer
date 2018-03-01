@@ -24,4 +24,17 @@ public class DialogUtils {
 
     }
 
+    public static void dialog(Context context, String title, String content, String posText, String negText,
+                              MaterialDialog.SingleButtonCallback posCallback, MaterialDialog.SingleButtonCallback negCallback) {
+        new MaterialDialog.Builder(context)
+                .title(title)
+                .content(content)
+                .cancelable(false)
+                .positiveText(posText)
+                .negativeText(negText)
+                .onPositive(posCallback)
+                .onNegative(negCallback)
+                .show();
+    }
+
 }

@@ -7,6 +7,7 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.SystemClock;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.clj.fastble.data.ScanResult;
 import com.clj.fastble.scan.ListScanCallback;
@@ -141,11 +142,8 @@ public class MainPresenter {
 
         @Override
         public void onDisconnect() {
-            //TODO 暂时在蓝牙断开的时候只进行提示
-            //FIXME java.lang.RuntimeException: Can't create handler inside thread that has not called Looper.prepare()
-            //不能在子线程中弹toast
-            ToastUtils.toast(mActivity, "蓝牙连接已断开");
 //            mActivity.finish();
+            onBleDisconnect();
         }
     };
 
@@ -272,7 +270,6 @@ public class MainPresenter {
                         }
                     });
         }
-        Logger.error("getBatteryVoltage() mModel == null");
         return null;
     }
 
@@ -371,6 +368,7 @@ public class MainPresenter {
 
                             @Override
                             public void onScanComplete(ScanResult[] results) {
+                                Logger.warning("onScanComplete");
                                 e.onComplete();
                             }
                         });
@@ -390,6 +388,32 @@ public class MainPresenter {
             mActivity.unbindService(mServiceConnection);
             sServiceState = STATE_DISCONNECTED;
         }
+    }
+
+    public void onBleDisconnect() {
+        Logger.error("蓝牙连接已经断开！");
+        Observable.just(1)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(@NonNull Integer integer) throws Exception {
+                        DialogUtils.dialog(mActivity, "已断开", "蓝牙连接已断开，请重新连接。",
+                                "退出", "取消", new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@android.support.annotation.NonNull MaterialDialog dialog, @android.support.annotation.NonNull DialogAction which) {
+                                        mActivity.showBlueToothFragment();
+                                        mActivity.unbindService(mServiceConnection);
+                                        sServiceState = STATE_DISCONNECTED;
+                                        ToastUtils.toast(mActivity, "蓝牙连接已断开！");
+                                    }
+                                }, new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@android.support.annotation.NonNull MaterialDialog dialog, @android.support.annotation.NonNull DialogAction which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                    }
+                });
     }
 
     public BluetoothModel getModel() {

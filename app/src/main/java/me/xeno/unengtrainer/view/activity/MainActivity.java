@@ -242,6 +242,7 @@ public class MainActivity extends BaseActivity
         ActivityUtils.replaceFragment(getSupportFragmentManager(), mMainControlFragment, R.id.frame_content);
     }
     public void showBlueToothFragment() {
+        mDashboardView.setVisibility(View.GONE);
         if (mBlueToothDisabledFragment == null) {
             mBlueToothDisabledFragment = BluetoothDisabledFragment.newInstance();
         }
