@@ -133,6 +133,8 @@ public class FavouriteActivity extends BaseActivity implements OnFavItemSelectLi
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
         mode.getMenuInflater().inflate(R.menu.action_fav_edit, menu);
+
+        mode.setTitle("编辑模式");
         return true;
     }
 
@@ -143,6 +145,7 @@ public class FavouriteActivity extends BaseActivity implements OnFavItemSelectLi
 
     @Override
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        //TODO 选中时显示subTitle（已选中x项）
         switch (item.getItemId()) {
             case R.id.action_select_all:
 
