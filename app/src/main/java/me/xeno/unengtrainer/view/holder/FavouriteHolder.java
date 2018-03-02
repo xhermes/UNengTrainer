@@ -1,5 +1,6 @@
 package me.xeno.unengtrainer.view.holder;
 
+import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -16,6 +17,8 @@ public class FavouriteHolder extends RecyclerView.ViewHolder  {
     private TextView nameView;
     private TextView modifyTimeView;
 
+    private AppCompatCheckBox checkBox;
+
     private TextView swingAngleView;
     private TextView elevationAngleView;
     private TextView leftSpeedView;
@@ -30,6 +33,15 @@ public class FavouriteHolder extends RecyclerView.ViewHolder  {
         elevationAngleView = (TextView) itemView.findViewById(R.id.elevation_angle);
         leftSpeedView = (TextView) itemView.findViewById(R.id.left_speed);
         rightSpeedView = (TextView) itemView.findViewById(R.id.right_speed);
+        checkBox = (AppCompatCheckBox) itemView.findViewById(R.id.cbx);
+    }
+
+    public AppCompatCheckBox getCheckBox() {
+        return checkBox;
+    }
+
+    public void setCheckBox(AppCompatCheckBox checkBox) {
+        this.checkBox = checkBox;
     }
 
     public View getRootView() {

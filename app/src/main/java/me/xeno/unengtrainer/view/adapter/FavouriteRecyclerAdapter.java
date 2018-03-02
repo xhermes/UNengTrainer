@@ -21,6 +21,8 @@ import me.xeno.unengtrainer.view.holder.FavouriteHolder;
 public class FavouriteRecyclerAdapter extends RecyclerView.Adapter<FavouriteHolder>  {
 
 
+    private boolean mEditMode = false;
+
     private Context mContext;
 
     private OnFavItemSelectListener mListener;
@@ -63,10 +65,35 @@ public class FavouriteRecyclerAdapter extends RecyclerView.Adapter<FavouriteHold
         holder.getLeftSpeedView().setText("左转速：" + record.getLeftMotorSpeed());
         holder.getRightSpeedView().setText("右转速：" + record.getRightMotorSpeed());
 
+        //长按进入编辑模式才显示checkbox显示
+        if(mEditMode) {
+            holder.getCheckBox().setVisibility(View.VISIBLE);
+        } else {
+            holder.getCheckBox().setVisibility(View.GONE);
+        }
+
         holder.getRootView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onSelect(record.getId());
+                mListener.onSelect(record);
+            }
+        });
+
+        holder.getRootView().setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                //如果已经处在编辑模式，不响应长按事件，不消费事件
+                if(mEditMode)
+                    return false;
+
+                //长按后要通知上层RecyclerView，还要通知Activity
+                mListener.onItemLongClick(record);
+                notifyDataSetChanged();
+
+                mEditMode = true;
+
+                //由子View消费长按事件
+                return true;
             }
         });
     }
@@ -76,4 +103,11 @@ public class FavouriteRecyclerAdapter extends RecyclerView.Adapter<FavouriteHold
         return dataList.size();
     }
 
+    public boolean isEditMode() {
+        return mEditMode;
+    }
+
+    public void setEditMode(boolean editMode) {
+        this.mEditMode = editMode;
+    }
 }

@@ -1,8 +1,10 @@
 package me.xeno.unengtrainer.view.activity;
 
 import android.content.Intent;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -13,16 +15,19 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 import me.xeno.unengtrainer.R;
+import me.xeno.unengtrainer.application.Config;
 import me.xeno.unengtrainer.listener.OnFavItemSelectListener;
 import me.xeno.unengtrainer.model.entity.FavouriteRecord;
 import me.xeno.unengtrainer.presenter.FavouritePresenter;
+import me.xeno.unengtrainer.util.Logger;
+import me.xeno.unengtrainer.util.ToastUtils;
 import me.xeno.unengtrainer.view.adapter.FavouriteRecyclerAdapter;
 
 /**
  * Created by Administrator on 2017/5/14.
  */
 
-public class FavouriteActivity extends BaseActivity implements OnFavItemSelectListener {
+public class FavouriteActivity extends BaseActivity implements OnFavItemSelectListener, ActionMode.Callback {
 
     public static final int REQUEST_CODE_FAVOURITE = 2;
 
@@ -104,10 +109,60 @@ public class FavouriteActivity extends BaseActivity implements OnFavItemSelectLi
     }
 
     @Override
-    public void onSelect(long id) {
+    public void onSelect(FavouriteRecord record) {
+        if(Config.isDebugging()){
+            ToastUtils.toast(this.getApplicationContext(),
+                    "选择收藏：id= " + record.getId());
+        }
         Intent intent = new Intent();
-        intent.putExtra("id", id);
+        intent.putExtra("id", record.getId());
         setResult(RESULT_OK, intent);
         finish();
     }
+
+    @Override
+    public void onItemLongClick(FavouriteRecord record) {
+        if(!mAdapter.isEditMode()) {
+            //打开ActionMode
+            Logger.error("打开ActionMode");
+            startSupportActionMode(this);
+        }
+    }
+
+
+    @Override
+    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        mode.getMenuInflater().inflate(R.menu.action_fav_edit, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        return false;
+    }
+
+    @Override
+    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_select_all:
+
+                //通知RecyclerView全选
+                return true;
+            case R.id.action_delete:
+                //通知RecyclerView删除
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onDestroyActionMode(ActionMode mode) {
+        Logger.error("onDestroyActionMode");
+        //通知RecyclerView恢复item样式
+        if(mAdapter.isEditMode())
+            mAdapter.setEditMode(false);
+        mAdapter.notifyDataSetChanged();
+    }
+
+
 }

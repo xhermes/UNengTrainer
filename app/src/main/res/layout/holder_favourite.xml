@@ -6,17 +6,32 @@
     android:background="@color/greyBackground"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/root"
         android:layout_width="match_parent"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="3dp"
+        android:layout_height="100dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="2dp"
         android:background="@drawable/selector_button_white"
-        android:layout_height="100dp"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/cbx"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+    <!-- actual content -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:elevation="1dp"
-        android:padding="15dp">
+        android:paddingLeft="10dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:paddingRight="15dp">
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/icon"
             android:layout_width="20dp"
@@ -68,5 +83,6 @@
             android:layout_height="wrap_content"
             android:text="right"/>
     </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>
