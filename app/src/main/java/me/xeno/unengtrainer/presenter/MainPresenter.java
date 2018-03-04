@@ -62,6 +62,25 @@ public class MainPresenter {
     public static final int STATE_CONNECTING = 1;
     public static final int STATE_CONNECTED = 2;
 
+    private String mCurrentElevationAngle;
+    private String mCurrentSwingAngle;
+
+    public String getCurrentElevationAngle() {
+        return mCurrentElevationAngle;
+    }
+
+    public void setCurrentElevationAngle(String currentElevationAngle) {
+        this.mCurrentElevationAngle = currentElevationAngle;
+    }
+
+    public String getCurrentSwingAngle() {
+        return mCurrentSwingAngle;
+    }
+
+    public void setCurrentSwingAngle(String currentSwingAngle) {
+        this.mCurrentSwingAngle = currentSwingAngle;
+    }
+
     private MainActivity mActivity;
     private BluetoothModel mModel;
 
@@ -83,6 +102,7 @@ public class MainPresenter {
 
             //如果检测到两轴均为停止状态，就不再轮询角度，节省电量
             if(axisStatus1.getRunning() == Config.AXIS_STATUS_RUNNING_STOP && axisStatus2.getRunning() == Config.AXIS_STATUS_RUNNING_STOP)
+                Logger.warning("停止！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！");
                 mActivity.stopGetCurrentAngle();
 
             String content = sb.toString();
@@ -126,6 +146,9 @@ public class MainPresenter {
         @Override
         public void onGetAxisAngle(GetAxisAngleWrapper wrapper) {
             Logger.warning("获取角度");
+            //任务获取到角度时保存到属性
+            setCurrentElevationAngle(wrapper.getAxis1Angle());
+            setCurrentSwingAngle(wrapper.getAxis2Angle());
             mActivity.displayAngle(wrapper.getAxis1Angle(), wrapper.getAxis2Angle());
         }
 

@@ -17,6 +17,7 @@ import java.text.ParseException;
 
 import me.xeno.unengtrainer.R;
 import me.xeno.unengtrainer.application.DataManager;
+import me.xeno.unengtrainer.model.BatteryModel;
 import me.xeno.unengtrainer.model.entity.FavouriteRecord;
 import me.xeno.unengtrainer.util.TimeUtils;
 
@@ -38,6 +39,8 @@ public class DashboardView extends LinearLayout {
 
     private View mAddToFavView;
 
+    private TextView batteryView;
+
     private  AppCompatEditText inputView;
 
 
@@ -52,6 +55,8 @@ public class DashboardView extends LinearLayout {
 
     private void init() {
         LayoutInflater.from(getContext()).inflate(R.layout.view_dashboard, this);
+
+        batteryView = (TextView) findViewById(R.id.tv_battery);
 
         mLeftMotorSpeedView = (TextView) findViewById(R.id.current_left_speed);
         mRightMotorSpeedView = (TextView) findViewById(R.id.current_right_speed);
@@ -144,5 +149,10 @@ public class DashboardView extends LinearLayout {
         elevationView.setText(mElevationAngle + "°");
 
         dialog.show();
+    }
+
+    public void showCurrentVoltage(String voltage) {
+        if(batteryView != null)
+            batteryView.setText(voltage + "V " +BatteryModel.getCurrentBatteryPercentage(voltage));
     }
 }

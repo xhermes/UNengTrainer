@@ -16,4 +16,9 @@ public class NumberUtils {
         DecimalFormat df = new DecimalFormat("0.0");
         return String.valueOf(df.format(Double.valueOf(number)));
     }
+
+    public static String showNumber1Decimal(float number) {
+        DecimalFormat df = new DecimalFormat("0.0");
+        return String.valueOf(df.format(number));
+    }
 }

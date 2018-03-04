@@ -226,7 +226,7 @@ public class MainActivity extends BaseActivity
     }
 
     public void displayBattery(String voltage) {
-        mMainControlFragment.showCurrentVoltage(voltage);
+        mDashboardView.showCurrentVoltage(voltage);
     }
 
     public void refreshCurrentSpeed(int left, int right) {

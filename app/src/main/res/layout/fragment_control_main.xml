@@ -202,10 +202,31 @@
                 android:layout_height="100dp"
                 android:orientation="horizontal">
 
-                <View
+                <FrameLayout
+                    android:id="@+id/random_mode"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:elevation="2dp"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/rectangle_rounded_control_button"
+                    android:orientation="vertical">
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="5dp"
+                        app:srcCompat="@drawable/ic_random" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="25dp"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:text="随机模式"
+                        android:textSize="@dimen/text_size_minimum" />
+                </FrameLayout>
 
                 <FrameLayout
                     android:id="@+id/elevation_angle_negative"

@@ -1,12 +1,8 @@
 package me.xeno.unengtrainer.view.fragment;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.AppCompatSeekBar;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,36 +11,26 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.lang.ref.WeakReference;
-import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 import me.xeno.unengtrainer.R;
 import me.xeno.unengtrainer.application.Config;
 import me.xeno.unengtrainer.application.DataManager;
-import me.xeno.unengtrainer.model.BatteryModel;
 import me.xeno.unengtrainer.model.entity.FavouriteRecord;
-import me.xeno.unengtrainer.util.DialogUtils;
 import me.xeno.unengtrainer.util.Logger;
 import me.xeno.unengtrainer.util.RxUtils;
 import me.xeno.unengtrainer.util.ToastUtils;
 import me.xeno.unengtrainer.view.activity.BaseActivity;
 import me.xeno.unengtrainer.view.activity.FavouriteActivity;
-import me.xeno.unengtrainer.view.activity.MainActivity;
+import me.xeno.unengtrainer.widget.RandomDialogWrapper;
 import me.xeno.unengtrainer.widget.SetSpeedDialogWrapper;
 
 /**
@@ -66,18 +52,20 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
     private View mSetMotorView;//设置左右电机速度
     private View mSetAngleView;//输入设置调整角度
 
+    private View mRandomModeView;
+
     private TextView mCurrentSwingAngleView;
     private TextView mCurrentElevationAngleView;
 
     private View mSendView;
 
-    private double mSwingAngle;
-    private double mElevationAngle;
+//    private double mSwingAngle;
+//    private double mElevationAngle;
     private int mLeftSpeed;
     private int mRightSpeed;
 
-    private double mCurrentSwingAngle;
-    private double mCurrentElevationAngle;
+//    private double mCurrentSwingAngle;
+//    private double mCurrentElevationAngle;
     private int mCurrentLeftSpeed;
     private int mCurrentRightSpeed;
 
@@ -116,8 +104,14 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         } else {
             mBatteryDisposable = getMainActivity().getPresenter().getBatteryVoltage(Config.GET_BATTERY_PERIOD);
         }
-        if (mStatusDisposable == null) {
+        if (mStatusDisposable != null && !mStatusDisposable.isDisposed()) {
             mStatusDisposable = getMainActivity().getPresenter().startGetStatusTask(Config.GET_STATUS_PERIOD);
+        }
+
+        //开始一个获取角度的任务
+        if(mCurrentAngleDisposable != null && !mCurrentAngleDisposable.isDisposed()) {
+        } else {
+            mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(1000);
         }
     }
 
@@ -127,6 +121,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         //页面休眠时，停止获取电压
         Logger.info("页面休眠，获取电压循环任务已停止");
         dispose(mBatteryDisposable);
+        dispose(mCurrentAngleDisposable);
 
         //TODO 看看要不要在休眠时让获取状态任务也暂停，以节省电量
     }
@@ -164,6 +159,8 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 ////        mRunAxisElevationStopView = (AppCompatImageView) root.findViewById(R.id.elevation_angle_stop);
 
         batteryView = (TextView) root.findViewById(R.id.tv_battery);
+
+        mRandomModeView = root.findViewById(R.id.random_mode);
 //
 //        mElevationAngleView = (TextView) root.findViewById(R.id.elevation_angle);
 //        mSwingAngleView = (TextView) root.findViewById(R.id.swing_angle);
@@ -213,6 +210,14 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         mRunAxisSwingNegativeView.setOnTouchListener(this);
         mRunAxisElevationPositiveView.setOnTouchListener(this);
         mRunAxisElevationNegativeView.setOnTouchListener(this);
+
+        mRandomModeView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //FIXME 刚连上蓝牙的时候角度还没有获取到，不能弹出dialog，不然会空指针
+                showRandomModeDialog();
+            }
+        });
 
         mSetMotorView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -328,15 +333,11 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
     }
 
     public void showCurrentAngle(String angle1, String angle2) {
-        mCurrentSwingAngle = Double.valueOf(angle1);
-        mCurrentElevationAngle = Double.valueOf(angle2);
+//        mCurrentSwingAngle = Double.valueOf(angle1);
+//        mCurrentElevationAngle = Double.valueOf(angle2);
 
         mCurrentElevationAngleView.setText(angle2);
         mCurrentSwingAngleView.setText(angle1);
-    }
-
-    public void showCurrentVoltage(String voltage) {
-        batteryView.setText(BatteryModel.getCurrentBatteryPercentage(voltage));
     }
 
 //    public void showAddFavouriteDialog() {
@@ -397,6 +398,11 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         });
     }
 
+    public void showRandomModeDialog() {
+        RandomDialogWrapper rdw = new RandomDialogWrapper(getMainActivity(), getMainActivity().getPresenter().getCurrentElevationAngle() + "", getMainActivity().getPresenter().getCurrentSwingAngle()+ "");
+        rdw.showDialog();
+    }
+
     public void showRightSpeedDialog() {
         new MaterialDialog.Builder(getActivity())
                 .title("设置右转速")
@@ -421,23 +427,23 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
                 .show();
     }
 
-    public double getSwingAngle() {
-        return mSwingAngle;
-    }
-
-    public void setSwingAngle(double swingAngle) {
-        this.mSwingAngle = swingAngle;
-//        mSwingAngleView.setText("摆角：" + swingAngle);
-    }
-
-    public double getElevationAngle() {
-        return mElevationAngle;
-    }
-
-    public void setElevationAngle(double elevationAngle) {
-        this.mElevationAngle = elevationAngle;
-//        mElevationAngleView.setText("仰角：" + elevationAngle);
-    }
+//    public double getSwingAngle() {
+//        return mSwingAngle;
+//    }
+//
+//    public void setSwingAngle(double swingAngle) {
+//        this.mSwingAngle = swingAngle;
+////        mSwingAngleView.setText("摆角：" + swingAngle);
+//    }
+//
+//    public double getElevationAngle() {
+//        return mElevationAngle;
+//    }
+//
+//    public void setElevationAngle(double elevationAngle) {
+//        this.mElevationAngle = elevationAngle;
+////        mElevationAngleView.setText("仰角：" + elevationAngle);
+//    }
 
     public int getLeftSpeed() {
         return mLeftSpeed;
@@ -477,6 +483,8 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
                 getMainActivity().getPresenter().stopAxis();
                 dispose(mRunAxisSwingPosDisposable);
                 dispose(mCurrentAngleDisposable);
+                //停止快速更新角度，同时重新开启慢速获取角度任务
+                getMainActivity().getPresenter().startGetAxisAngleTask(1000);
                 Logger.info("单轴运行任务结束");
             }
         }
@@ -488,6 +496,8 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
                 getMainActivity().getPresenter().stopAxis();
                 dispose(mRunAxisSwingNegDisposable);
                 dispose(mCurrentAngleDisposable);
+                //停止快速更新角度，同时重新开启慢速获取角度任务
+                getMainActivity().getPresenter().startGetAxisAngleTask(1000);
                 Logger.info("单轴运行任务结束");
             }
         }
@@ -499,6 +509,8 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
                 getMainActivity().getPresenter().stopAxis();
                 dispose(mRunAxisElevationPosDisposable);
                 dispose(mCurrentAngleDisposable);
+                //停止快速更新角度，同时重新开启慢速获取角度任务
+                getMainActivity().getPresenter().startGetAxisAngleTask(1000);
                 Logger.info("单轴运行任务结束");
             }
         }
@@ -510,6 +522,8 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
                 getMainActivity().getPresenter().stopAxis();
                 dispose(mRunAxisElevationNegDisposable);
                 dispose(mCurrentAngleDisposable);
+                //停止快速更新角度，同时重新开启慢速获取角度任务
+                getMainActivity().getPresenter().startGetAxisAngleTask(1000);
                 Logger.info("单轴运行任务结束");
             }
         }

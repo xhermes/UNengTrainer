@@ -1,5 +1,7 @@
 package me.xeno.unengtrainer.model;
 
+import me.xeno.unengtrainer.util.NumberUtils;
+
 /**
  * Created by xeno on 2018/3/1.
  * 电量信息
@@ -20,15 +22,17 @@ public class BatteryModel {
         }
 
         if(voltageFloat > 0) {
-            float percentage = 0;
+            String percentageStr = null;
             if(voltageFloat >= 30 && voltageFloat <= 41.5f) {
-                percentage =  (voltageFloat - LOWER_LIMIT) / (HIGHER_LIMIT - LOWER_LIMIT) ;
+                float percentage =  (voltageFloat - LOWER_LIMIT) * 100 / (HIGHER_LIMIT - LOWER_LIMIT) ;
+                //保留一位小数
+                percentageStr = NumberUtils.showNumber1Decimal(percentage);
             } else if(voltageFloat < LOWER_LIMIT) {
-                percentage = 1;
+                percentageStr = "1";
             } else if(voltageFloat > HIGHER_LIMIT) {
-                percentage = 100;
+                percentageStr = "100";
             }
-            return percentage + "%";
+            return percentageStr + "%";
         }
         return "-%";
     }
