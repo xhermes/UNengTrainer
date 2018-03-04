@@ -86,6 +86,7 @@ public class RandomDialogWrapper implements View.OnClickListener {
     private void init(Context context) {
         mDialog = new MaterialDialog.Builder(context)
                 .customView(R.layout.view_random, false)
+                .canceledOnTouchOutside(false)
                 .title("随机模式")
                 .build();
 
