@@ -2,14 +2,18 @@ package me.xeno.unengtrainer.widget;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.AppCompatSeekBar;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -25,6 +29,7 @@ import me.xeno.unengtrainer.application.Config;
 import me.xeno.unengtrainer.util.Logger;
 import me.xeno.unengtrainer.util.RxUtils;
 import me.xeno.unengtrainer.util.TimeUtils;
+import me.xeno.unengtrainer.util.ToastUtils;
 import me.xeno.unengtrainer.view.activity.MainActivity;
 
 /**
@@ -33,44 +38,36 @@ import me.xeno.unengtrainer.view.activity.MainActivity;
 
 public class RandomDialogWrapper implements View.OnClickListener {
 
+//    private ArrayList<GoalkeeperModeTacticItemView> mTacticItemList = new ArrayList<>();
+    private static final int TACTIC_LIMIT = 5;
+
+    private static final int PLAY_MODE_FORWARD = 0;
+    private static final int PLAY_MODE_RANDOM = 1;
+    private int mPlayMode;
+    private int mCurrentPlaying = -1;
+
     private MainActivity mActivity;
 
     private MaterialDialog mDialog;
 
-//    private AppCompatSeekBar mLeftSpeedBar;
-//    private AppCompatSeekBar mRightSpeedBar;
-//
-//    private View mLeftReduceView;
-//    private View mLeftReduceDoubleView;
-//    private View mLeftIncreaseView;
-//    private View mLeftIncreaseDoubleView;
-//
-//    private View mRightReduceView;
-//    private View mRightReduceDoubleView;
-//    private View mRightIncreaseView;
-//    private View mRightIncreaseDoubleView;
-//
-//    private TextView mLeftSpeedView;
-//    private TextView mRightSpeedView;
-
 //    private DialogInterface.OnDismissListener mOndismissListener;
 
-    private TextView mElevationAngleView;//显示当前仰角
-    private TextView mSwingAngleView;//显示
-
-    private EditText mBorder1LeftSpeedEdt;
-    private EditText mBorder1RightSpeedEdt;
-    private EditText mBorder2LeftSpeedEdt;
-    private EditText mBorder2RightSpeedEdt;
+//    private TextView mElevationAngleView;//显示当前仰角
+//    private TextView mSwingAngleView;//显示
 
 //    private int mLeftSpeed;
 //    private int mRightSpeed;
 
-    private String mElevationAngle;
-    private String mSwingAngle;
+//    private String mElevationAngle;
+//    private String mSwingAngle;
 
     private TextView btn;
-    private TextView currentView;
+
+    private LinearLayout mTacticsLayout;
+    private View mAddTacticView;
+
+    private AppCompatRadioButton mForwardRadioBtn;
+    private AppCompatRadioButton mRandomRadioBtn;
 
 //    private Disposable mRandomTaskDisposable;
 
@@ -78,8 +75,8 @@ public class RandomDialogWrapper implements View.OnClickListener {
         mActivity = (MainActivity)context;
 //        mLeftSpeed = leftSpeed;
 //        mRightSpeed = rightSpeed;
-        mElevationAngle = elevationAngle;
-        mSwingAngle = swingAngle;
+//        mElevationAngle = elevationAngle;
+//        mSwingAngle = swingAngle;
         init(context);
     }
 
@@ -90,87 +87,39 @@ public class RandomDialogWrapper implements View.OnClickListener {
                 .title("随机模式")
                 .build();
 
-        mBorder1LeftSpeedEdt = (EditText) mDialog.findViewById(R.id.border1_left_speed);
-        mBorder1RightSpeedEdt = (EditText) mDialog.findViewById(R.id.border1_right_speed);
-        mBorder2LeftSpeedEdt = (EditText) mDialog.findViewById(R.id.border2_left_speed);
-        mBorder2RightSpeedEdt = (EditText) mDialog.findViewById(R.id.border2_right_speed);
         btn =(TextView) mDialog.findViewById(R.id.confirm);
-        currentView = (TextView) mDialog.findViewById(R.id.current);
 
-        mElevationAngleView = (TextView) mDialog.findViewById(R.id.elevation_angle);
-        mSwingAngleView = (TextView) mDialog.findViewById(R.id.swing_angle);
+        mForwardRadioBtn = (AppCompatRadioButton) mDialog.findViewById(R.id.rb_forward);
+        mRandomRadioBtn = (AppCompatRadioButton) mDialog.findViewById(R.id.rb_random);
+//        mElevationAngleView = (TextView) mDialog.findViewById(R.id.elevation_angle);
+//        mSwingAngleView = (TextView) mDialog.findViewById(R.id.swing_angle);
 
-//        mLeftSpeedBar = (AppCompatSeekBar) mDialog.findViewById(R.id.left_speed);
-//        mRightSpeedBar = (AppCompatSeekBar) mDialog.findViewById(R.id.right_speed);
-//
-//        mLeftReduceView = mDialog.findViewById(R.id.left_reduce);
-//        mLeftReduceDoubleView = mDialog.findViewById(R.id.left_reduce_double);
-//        mLeftIncreaseView = mDialog.findViewById(R.id.left_increase);
-//        mLeftIncreaseDoubleView = mDialog.findViewById(R.id.left_increase_double);
-//        mRightReduceView = mDialog.findViewById(R.id.right_reduce);
-//        mRightReduceDoubleView = mDialog.findViewById(R.id.right_reduce_double);
-//        mRightIncreaseView = mDialog.findViewById(R.id.right_increase);
-//        mRightIncreaseDoubleView = mDialog.findViewById(R.id.right_increase_double);
-//
-//        mLeftSpeedView = (TextView) mDialog.findViewById(R.id.left_speed_text);
-//        mRightSpeedView = (TextView) mDialog.findViewById(R.id.right_speed_text);
-//
-//        mLeftReduceView.setOnClickListener(this);
-//        mLeftReduceDoubleView.setOnClickListener(this);
-//        mLeftIncreaseView.setOnClickListener(this);
-//        mLeftIncreaseDoubleView.setOnClickListener(this);
-//        mRightReduceView.setOnClickListener(this);
-//        mRightReduceDoubleView.setOnClickListener(this);
-//        mRightIncreaseView.setOnClickListener(this);
-//        mRightIncreaseDoubleView.setOnClickListener(this);
+        mTacticsLayout = (LinearLayout) mDialog.findViewById(R.id.tactics_layout);
+        mAddTacticView = mDialog.findViewById(R.id.add_tactic);
 
-//        mLeftSpeedBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//            @Override
-//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//                mLeftSpeed = progress;
-//                mLeftSpeedView.setText(progress + "%");
-//            }
-//
-//            @Override
-//            public void onStartTrackingTouch(SeekBar seekBar) {
-//
-//            }
-//
-//            @Override
-//            public void onStopTrackingTouch(SeekBar seekBar) {
-//                Logger.info("拖动结束，调用接口");
-//                mActivity.getPresenter().setMotorSpeed(mLeftSpeed, mRightSpeed);
-//            }
-//        });
-//
-//        mRightSpeedBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//            @Override
-//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//                mRightSpeed = progress;
-//                mRightSpeedView.setText(progress + "%");
-//            }
-//
-//            @Override
-//            public void onStartTrackingTouch(SeekBar seekBar) {
-//
-//            }
-//
-//            @Override
-//            public void onStopTrackingTouch(SeekBar seekBar) {
-//                Logger.info("拖动结束，调用接口");
-//                mActivity.getPresenter().setMotorSpeed(mLeftSpeed, mRightSpeed);
-//            }
-//        });
-
-//        mLeftSpeedView.setText(mLeftSpeed + "%");
-//        mRightSpeedView.setText(mRightSpeed + "%");
-//        mLeftSpeedBar.setProgress(mLeftSpeed);
-//        mRightSpeedBar.setProgress(mRightSpeed);
-
-        mElevationAngleView.setText(mElevationAngle);
-        mSwingAngleView.setText(mSwingAngle);
+//        mElevationAngleView.setText(mElevationAngle);
+//        mSwingAngleView.setText(mSwingAngle);
 
         btn.setOnClickListener(this);
+        mAddTacticView.setOnClickListener(this);
+
+        mForwardRadioBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked)
+                    mPlayMode = PLAY_MODE_FORWARD;
+            }
+        });
+        mRandomRadioBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked)
+                    mPlayMode = PLAY_MODE_RANDOM;
+            }
+        });
+        //默认顺序
+        mForwardRadioBtn.setChecked(true);
+        mPlayMode = PLAY_MODE_FORWARD;
     }
 
 
@@ -196,11 +145,14 @@ public class RandomDialogWrapper implements View.OnClickListener {
 
         switch (v.getId()) {
             case R.id.confirm:
+                if(mTacticsLayout.getChildCount() <= 1)
+                    return;
 
-                nextSpeed(mBorder1LeftSpeedEdt.getText().toString(),
-                            mBorder1RightSpeedEdt.getText().toString(),
-                            mBorder2LeftSpeedEdt.getText().toString(),
-                            mBorder2RightSpeedEdt.getText().toString());
+                    if(mPlayMode == PLAY_MODE_FORWARD) {
+                        playNextForward();
+                    } else if(mPlayMode == PLAY_MODE_RANDOM) {
+                        playNextRandom();
+                    }
 
 //                if(mRandomTaskDisposable != null && !mRandomTaskDisposable.isDisposed()) {
 //                    //停止任务
@@ -217,36 +169,82 @@ public class RandomDialogWrapper implements View.OnClickListener {
 //                    btn.setText("停止");
 //                }
                 break;
-//            case R.id.left_reduce_double:
-//                if(mLeftSpeed > 4)
-//                changeLeftSpeed(mLeftSpeed-5);
-//                break;
-//            case R.id.left_increase:
-//                if(mLeftSpeed < 100)
-//                changeLeftSpeed(mLeftSpeed+1);
-//                break;
-//            case R.id.left_increase_double:
-//                if(mLeftSpeed < 96)
-//                changeLeftSpeed(mLeftSpeed+5);
-//                break;
-//            case R.id.right_reduce:
-//                if(mRightSpeed > 0)
-//                    changeRightSpeed(mRightSpeed-1);
-//                break;
-//            case R.id.right_reduce_double:
-//                if(mRightSpeed > 4)
-//                    changeRightSpeed(mRightSpeed-5);
-//                break;
-//            case R.id.right_increase:
-//                if(mRightSpeed < 100)
-//                changeRightSpeed(mRightSpeed+1);
-//                break;
-//            case R.id.right_increase_double:
-//                if(mRightSpeed < 96)
-//                changeRightSpeed(mRightSpeed+5);
-//                break;
+
+            case R.id.add_tactic:
+                GoalkeeperModeTacticItemView.OnRemoveListener listener = new GoalkeeperModeTacticItemView.OnRemoveListener() {
+                    @Override
+                    public void onRemove(View v, int index) {
+                        Logger.warning("onRemove(): 当前共" + mTacticsLayout.getChildCount() +"个child，删除第" + index);
+                        mTacticsLayout.removeViewAt(index);
+                        //删除一项的时候，更新每一项的index
+                        for(int i=0; i<mTacticsLayout.getChildCount()-1; i++){
+                            GoalkeeperModeTacticItemView view = ((GoalkeeperModeTacticItemView)mTacticsLayout.getChildAt(i));
+                            view.updateIndex(i);
+                            view.setName((i+1)+".");
+                        }
+                        if(mAddTacticView.getVisibility() == View.GONE) {
+                            mAddTacticView.setVisibility(View.VISIBLE);
+                        }
+                        //只要删除了就从头开始
+                        mCurrentPlaying = -1;
+                    }
+                };
+                Logger.warning("add: 当前共"+mTacticsLayout.getChildCount()+"个child");
+                GoalkeeperModeTacticItemView itemView = new GoalkeeperModeTacticItemView(mActivity, mTacticsLayout.getChildCount() - 1, listener);
+                mTacticsLayout.addView(itemView, mTacticsLayout.getChildCount() - 1);
+                itemView.setName((mTacticsLayout.getChildCount()-1)+".");
+                //超过个数隐藏添加按钮
+                if(mTacticsLayout.getChildCount() > TACTIC_LIMIT) {
+                    mAddTacticView.setVisibility(View.GONE);
+                }
+                break;
         }
     }
+
+
+    private void playNextRandom() {
+        //重复没有意义
+        Random r = new Random();
+        int lastPlay = mCurrentPlaying;
+        do {
+            mCurrentPlaying = r.nextInt(mTacticsLayout.getChildCount() - 1);
+            Logger.warning(mCurrentPlaying);
+
+            for (int i = 0; i < mTacticsLayout.getChildCount() - 1; i++) {
+                if (i == mCurrentPlaying) {
+                    GoalkeeperModeTacticItemView itemView = (GoalkeeperModeTacticItemView) mTacticsLayout.getChildAt(i);
+                    itemView.setPlaying(true);
+                    mActivity.getPresenter().setMotorSpeed(itemView.getLeftSpeed(), itemView.getRightSpeed());
+                } else {
+                    GoalkeeperModeTacticItemView itemView = (GoalkeeperModeTacticItemView) mTacticsLayout.getChildAt(i);
+                    itemView.setPlaying(false);
+                }
+            }
+        } while (lastPlay == mCurrentPlaying);
+    }
+
+    private void playNextForward() {
+        mCurrentPlaying++;
+        if(mCurrentPlaying > mTacticsLayout.getChildCount() - 2) {
+            mCurrentPlaying = 0;
+        }
+
+        for(int i=0;i<mTacticsLayout.getChildCount()-1;i++){
+            if(i == mCurrentPlaying) {
+                GoalkeeperModeTacticItemView itemView = (GoalkeeperModeTacticItemView) mTacticsLayout.getChildAt(i);
+                itemView.setPlaying(true);
+                mActivity.getPresenter().setMotorSpeed(itemView.getLeftSpeed(), itemView.getRightSpeed());
+            } else {
+                GoalkeeperModeTacticItemView itemView = (GoalkeeperModeTacticItemView) mTacticsLayout.getChildAt(i);
+                itemView.setPlaying(false);
+            }
+        }
+
+
+
+
+    }
+
 
     private void nextSpeed(String border1l,String border1r,String border2l,String border2r) {
         final int border1lInt = Integer.valueOf(border1l);
@@ -276,7 +274,6 @@ public class RandomDialogWrapper implements View.OnClickListener {
             rightSpeed = border3rInt;
         }
 
-        currentView.setText("当前转速：" + leftSpeed + ", " + rightSpeed);
 
 //                        if(Config.isDebugging())
         Logger.warning("random data sent: left: " + leftSpeed + ", right: " + rightSpeed);

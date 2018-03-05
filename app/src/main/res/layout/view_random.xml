@@ -18,171 +18,103 @@
     <!--<LinearLayout-->
     <!--android:layout_width="match_parent"-->
     <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="5dp"-->
     <!--android:orientation="horizontal">-->
+
     <!--<LinearLayout-->
     <!--android:layout_width="0dp"-->
     <!--android:layout_height="wrap_content"-->
-    <!--android:gravity="center"-->
     <!--android:layout_weight="1"-->
+    <!--android:gravity="center"-->
     <!--android:orientation="vertical">-->
 
     <!--<TextView-->
     <!--android:layout_width="wrap_content"-->
     <!--android:layout_height="wrap_content"-->
-    <!--android:textSize="@dimen/text_size_small"-->
+    <!--android:text="摆角"-->
     <!--android:textColor="@color/grey99"-->
-    <!--android:text="左轮转速"/>-->
+    <!--android:textSize="@dimen/text_size_small" />-->
+
     <!--<TextView-->
-    <!--android:id="@+id/left_speed"-->
+    <!--android:id="@+id/swing_angle"-->
     <!--android:layout_width="wrap_content"-->
     <!--android:layout_height="wrap_content"-->
     <!--android:layout_marginTop="4dp"-->
-    <!--android:textSize="@dimen/text_size_big"-->
+    <!--android:text="0°"-->
     <!--android:textColor="@color/pink_fav"-->
-    <!--android:text="0%"/>-->
+    <!--android:textSize="@dimen/text_size_big" />-->
     <!--</LinearLayout>-->
+
     <!--<LinearLayout-->
     <!--android:layout_width="0dp"-->
+    <!--android:layout_height="wrap_content"-->
     <!--android:layout_weight="1"-->
     <!--android:gravity="center"-->
-    <!--android:layout_height="wrap_content"-->
     <!--android:orientation="vertical">-->
 
     <!--<TextView-->
     <!--android:layout_width="wrap_content"-->
     <!--android:layout_height="wrap_content"-->
-    <!--android:textSize="@dimen/text_size_small"-->
+    <!--android:text="仰角"-->
     <!--android:textColor="@color/grey99"-->
-    <!--android:text="右轮转速"/>-->
+    <!--android:textSize="@dimen/text_size_small" />-->
+
     <!--<TextView-->
-    <!--android:id="@+id/right_speed"-->
+    <!--android:id="@+id/elevation_angle"-->
     <!--android:layout_width="wrap_content"-->
     <!--android:layout_height="wrap_content"-->
     <!--android:layout_marginTop="4dp"-->
-    <!--android:textSize="@dimen/text_size_big"-->
+    <!--android:text="0°"-->
     <!--android:textColor="@color/pink_fav"-->
-    <!--android:text="0%"/>-->
+    <!--android:textSize="@dimen/text_size_big" />-->
     <!--</LinearLayout>-->
     <!--</LinearLayout>-->
 
     <LinearLayout
+        android:id="@+id/tactics_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/add_tactic"
+            android:drawableLeft="@drawable/ic_add_circle"
+            android:layout_width="wrap_content"
+            android:text="新增策略"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:drawablePadding="10dp"
             android:gravity="center"
-            android:orientation="vertical">
+            android:layout_height="50dp" />
+    </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="摆角"
-                android:textColor="@color/grey99"
-                android:textSize="@dimen/text_size_small" />
-
-            <TextView
-                android:id="@+id/swing_angle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="0°"
-                android:textColor="@color/pink_fav"
-                android:textSize="@dimen/text_size_big" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:orientation="horizontal">
+        <android.support.v7.widget.AppCompatRadioButton
+            android:id="@+id/rb_forward"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="仰角"
-                android:textColor="@color/grey99"
-                android:textSize="@dimen/text_size_small" />
-
-            <TextView
-                android:id="@+id/elevation_angle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="0°"
-                android:textColor="@color/pink_fav"
-                android:textSize="@dimen/text_size_big" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:text="边界1" />
-
-        <EditText
-            android:id="@+id/border1_left_speed"
-            android:inputType="numberSigned"
-            android:layout_width="100dp"
-            android:layout_height="50dp" />
-
-        <EditText
-            android:id="@+id/border1_right_speed"
-            android:inputType="numberSigned"
-            android:layout_width="100dp"
-            android:layout_height="50dp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:text="边界2" />
-
-        <EditText
-            android:id="@+id/border2_left_speed"
-            android:layout_width="100dp"
-            android:inputType="numberSigned"
-            android:layout_height="50dp" />
-
-        <EditText
-            android:id="@+id/border2_right_speed"
-            android:layout_width="100dp"
-            android:inputType="numberSigned"
-            android:layout_height="50dp" />
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/current"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="30dp"
-       android:gravity="center_vertical"
-        android:text="当前转速："
-        android:layout_marginBottom="30dp"/>
+            android:textColor="@color/colorPrimary"
+            android:text="顺序选择"/>
+        <android.support.v7.widget.AppCompatRadioButton
+            android:id="@+id/rb_random"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginLeft="15dp"
+            android:text="随机选择"/>
+    </RadioGroup>
 
     <TextView
         android:id="@+id/confirm"
         style="@style/ButtonPrimary"
-        android:text="开始"
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:layout_height="50dp"
+        android:text="下一个策略" />
 
 
 </LinearLayout>
