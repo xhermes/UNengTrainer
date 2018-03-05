@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.lang.ref.WeakReference;
@@ -25,6 +26,7 @@ import me.xeno.unengtrainer.R;
 import me.xeno.unengtrainer.application.Config;
 import me.xeno.unengtrainer.application.DataManager;
 import me.xeno.unengtrainer.model.entity.FavouriteRecord;
+import me.xeno.unengtrainer.util.DialogUtils;
 import me.xeno.unengtrainer.util.Logger;
 import me.xeno.unengtrainer.util.RxUtils;
 import me.xeno.unengtrainer.util.ToastUtils;
@@ -201,8 +203,20 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         mReturnToZeroView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getMainActivity().getPresenter().setAxisAngle(0, 0);
-                startGetCurrentAngleTask();
+                DialogUtils.dialog(getMainActivity(), "恢复零位", "确定要恢复到0度位置吗？",
+                        "恢复", "取消", new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@android.support.annotation.NonNull MaterialDialog dialog, @android.support.annotation.NonNull DialogAction which) {
+                                dialog.dismiss();
+                                getMainActivity().getPresenter().setAxisAngle(0, 0);
+                                startGetCurrentAngleTask();
+                            }
+                        }, new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@android.support.annotation.NonNull MaterialDialog dialog, @android.support.annotation.NonNull DialogAction which) {
+                                dialog.dismiss();
+                            }
+                        });
             }
         });
 

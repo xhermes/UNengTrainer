@@ -111,6 +111,10 @@ public class FavouriteActivity extends BaseActivity implements OnFavItemSelectLi
 
     @Override
     public void onSelect(FavouriteRecord record) {
+
+        if(mAdapter.isEditMode())
+            return;
+
         if(Config.isDebugging()){
             ToastUtils.toast(this.getApplicationContext(),
                     "选择收藏：id= " + record.getId());
@@ -126,6 +130,7 @@ public class FavouriteActivity extends BaseActivity implements OnFavItemSelectLi
         if(!mAdapter.isEditMode()) {
             //打开ActionMode
             Logger.error("打开ActionMode");
+            mAdapter.setEditMode(true);
             startSupportActionMode(this);
         }
     }
@@ -192,10 +197,12 @@ public class FavouriteActivity extends BaseActivity implements OnFavItemSelectLi
         for(FavouriteRecord fr: mAdapter.getDataList()) {
             if(!fr.getChecked())
                 newRecords.add(fr);
+            else
+                mPresenter.deleteFavouriteFromDb(fr.getId());
         }
         mAdapter.setDataList(newRecords);
         mAdapter.notifyDataSetChanged();
-        //TODO 还要在sp里也删除
+
     }
 
 

@@ -11,7 +11,7 @@ public class Config {
     public static final int DEBUG_MODE_BLUETOOTH = 2;//调试蓝牙界面时使用
 
     //TODO 调试模式，发版时记得调成off
-    public static final int DEBUG_MODE = DEBUG_MODE_BLUETOOTH;
+    public static final int DEBUG_MODE = DEBUG_MODE_OFF;
     public static boolean isDebugging() {
         return DEBUG_MODE > 0;
     }

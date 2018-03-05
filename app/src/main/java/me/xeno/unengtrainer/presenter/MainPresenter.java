@@ -415,6 +415,7 @@ public class MainPresenter {
 
     public void onBleDisconnect() {
         Logger.error("蓝牙连接已经断开！");
+        //切换到主线程
         Observable.just(1)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Integer>() {

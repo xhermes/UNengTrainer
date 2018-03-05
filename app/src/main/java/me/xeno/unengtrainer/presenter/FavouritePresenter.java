@@ -52,6 +52,10 @@ public class FavouritePresenter {
                 });
     }
 
+    public void deleteFavouriteFromDb(long id) {
+        mModel.deleteFavouriteFromDb(id);
+    }
+
     public void onDestroy() {
         if(mLoadFavDisposable != null && !mLoadFavDisposable.isDisposed())
             mLoadFavDisposable.dispose();

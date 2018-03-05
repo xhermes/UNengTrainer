@@ -34,4 +34,9 @@ public class FavouriteModel {
         wrapper.setDataList(records);
         return wrapper;
     }
+
+    public void deleteFavouriteFromDb(long id) {
+        FavouriteRecordDao mDao = DataManager.getInstance().getDaoSession().getFavouriteRecordDao();
+        mDao.deleteByKey(id);
+    }
 }
