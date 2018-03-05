@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,10 @@ public class FavouriteRecyclerAdapter extends RecyclerView.Adapter<FavouriteHold
         notifyDataSetChanged();
     }
 
+    public List<FavouriteRecord> getDataList() {
+        return dataList;
+    }
+
     @Override
     public FavouriteHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.holder_favourite, null);
@@ -72,6 +77,13 @@ public class FavouriteRecyclerAdapter extends RecyclerView.Adapter<FavouriteHold
             holder.getCheckBox().setVisibility(View.GONE);
         }
 
+        if(mEditMode) {
+            if(record.getChecked())
+                holder.getCheckBox().setChecked(true);
+            else
+                holder.getCheckBox().setChecked(false);
+        }
+
         holder.getRootView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,6 +106,12 @@ public class FavouriteRecyclerAdapter extends RecyclerView.Adapter<FavouriteHold
 
                 //由子View消费长按事件
                 return true;
+            }
+        });
+        holder.getCheckBox().setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                record.setChecked(isChecked);
             }
         });
     }

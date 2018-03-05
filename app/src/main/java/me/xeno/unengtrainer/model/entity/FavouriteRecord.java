@@ -21,10 +21,11 @@ public class FavouriteRecord {
     private double elevationAngle;
     private int leftMotorSpeed;
     private int rightMotorSpeed;
-    @Generated(hash = 1644622795)
+    private boolean checked;
+    @Generated(hash = 747301113)
     public FavouriteRecord(Long id, String name, String createTime,
             String modifyTime, double swingAngle, double elevationAngle,
-            int leftMotorSpeed, int rightMotorSpeed) {
+            int leftMotorSpeed, int rightMotorSpeed, boolean checked) {
         this.id = id;
         this.name = name;
         this.createTime = createTime;
@@ -33,6 +34,7 @@ public class FavouriteRecord {
         this.elevationAngle = elevationAngle;
         this.leftMotorSpeed = leftMotorSpeed;
         this.rightMotorSpeed = rightMotorSpeed;
+        this.checked = checked;
     }
     @Generated(hash = 902397497)
     public FavouriteRecord() {
@@ -84,6 +86,12 @@ public class FavouriteRecord {
     }
     public void setRightMotorSpeed(int rightMotorSpeed) {
         this.rightMotorSpeed = rightMotorSpeed;
+    }
+    public boolean getChecked() {
+        return this.checked;
+    }
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
   
 

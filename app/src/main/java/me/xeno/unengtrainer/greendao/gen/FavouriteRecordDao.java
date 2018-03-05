@@ -32,6 +32,7 @@ public class FavouriteRecordDao extends AbstractDao<FavouriteRecord, Long> {
         public final static Property ElevationAngle = new Property(5, double.class, "elevationAngle", false, "ELEVATION_ANGLE");
         public final static Property LeftMotorSpeed = new Property(6, int.class, "leftMotorSpeed", false, "LEFT_MOTOR_SPEED");
         public final static Property RightMotorSpeed = new Property(7, int.class, "rightMotorSpeed", false, "RIGHT_MOTOR_SPEED");
+        public final static Property Checked = new Property(8, boolean.class, "checked", false, "CHECKED");
     }
 
 
@@ -54,7 +55,8 @@ public class FavouriteRecordDao extends AbstractDao<FavouriteRecord, Long> {
                 "\"SWING_ANGLE\" REAL NOT NULL ," + // 4: swingAngle
                 "\"ELEVATION_ANGLE\" REAL NOT NULL ," + // 5: elevationAngle
                 "\"LEFT_MOTOR_SPEED\" INTEGER NOT NULL ," + // 6: leftMotorSpeed
-                "\"RIGHT_MOTOR_SPEED\" INTEGER NOT NULL );"); // 7: rightMotorSpeed
+                "\"RIGHT_MOTOR_SPEED\" INTEGER NOT NULL ," + // 7: rightMotorSpeed
+                "\"CHECKED\" INTEGER NOT NULL );"); // 8: checked
     }
 
     /** Drops the underlying database table. */
@@ -90,6 +92,7 @@ public class FavouriteRecordDao extends AbstractDao<FavouriteRecord, Long> {
         stmt.bindDouble(6, entity.getElevationAngle());
         stmt.bindLong(7, entity.getLeftMotorSpeed());
         stmt.bindLong(8, entity.getRightMotorSpeed());
+        stmt.bindLong(9, entity.getChecked() ? 1L: 0L);
     }
 
     @Override
@@ -119,6 +122,7 @@ public class FavouriteRecordDao extends AbstractDao<FavouriteRecord, Long> {
         stmt.bindDouble(6, entity.getElevationAngle());
         stmt.bindLong(7, entity.getLeftMotorSpeed());
         stmt.bindLong(8, entity.getRightMotorSpeed());
+        stmt.bindLong(9, entity.getChecked() ? 1L: 0L);
     }
 
     @Override
@@ -136,7 +140,8 @@ public class FavouriteRecordDao extends AbstractDao<FavouriteRecord, Long> {
             cursor.getDouble(offset + 4), // swingAngle
             cursor.getDouble(offset + 5), // elevationAngle
             cursor.getInt(offset + 6), // leftMotorSpeed
-            cursor.getInt(offset + 7) // rightMotorSpeed
+            cursor.getInt(offset + 7), // rightMotorSpeed
+            cursor.getShort(offset + 8) != 0 // checked
         );
         return entity;
     }
@@ -151,6 +156,7 @@ public class FavouriteRecordDao extends AbstractDao<FavouriteRecord, Long> {
         entity.setElevationAngle(cursor.getDouble(offset + 5));
         entity.setLeftMotorSpeed(cursor.getInt(offset + 6));
         entity.setRightMotorSpeed(cursor.getInt(offset + 7));
+        entity.setChecked(cursor.getShort(offset + 8) != 0);
      }
     
     @Override

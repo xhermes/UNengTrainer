@@ -12,6 +12,7 @@ import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 
 import me.xeno.unengtrainer.R;
@@ -148,11 +149,13 @@ public class FavouriteActivity extends BaseActivity implements OnFavItemSelectLi
         //TODO 选中时显示subTitle（已选中x项）
         switch (item.getItemId()) {
             case R.id.action_select_all:
-
+                Logger.error("全选");
                 //通知RecyclerView全选
+                selectAll();
                 return true;
             case R.id.action_delete:
                 //通知RecyclerView删除
+                deleteSelected();
                 return true;
         }
         return false;
@@ -165,6 +168,34 @@ public class FavouriteActivity extends BaseActivity implements OnFavItemSelectLi
         if(mAdapter.isEditMode())
             mAdapter.setEditMode(false);
         mAdapter.notifyDataSetChanged();
+    }
+
+    private void selectAll() {
+        boolean allSelected = true;
+        for(FavouriteRecord fr: mAdapter.getDataList()) {
+            if(!fr.getChecked())
+                allSelected = false;
+        }
+        for(FavouriteRecord fr: mAdapter.getDataList()) {
+            if(allSelected)
+                fr.setChecked(false);
+            else
+                fr.setChecked(true);
+        }
+
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void deleteSelected() {
+        ArrayList<FavouriteRecord> newRecords = new ArrayList<>();
+
+        for(FavouriteRecord fr: mAdapter.getDataList()) {
+            if(!fr.getChecked())
+                newRecords.add(fr);
+        }
+        mAdapter.setDataList(newRecords);
+        mAdapter.notifyDataSetChanged();
+        //TODO 还要在sp里也删除
     }
 
 
