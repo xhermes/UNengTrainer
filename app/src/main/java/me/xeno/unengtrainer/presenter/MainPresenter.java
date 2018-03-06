@@ -101,9 +101,9 @@ public class MainPresenter {
                     .append("负限位：").append(axisStatus1.getNegativeSpacing()).append(axisStatus2.getNegativeSpacing()).append("\n");
 
             //如果检测到两轴均为停止状态，就不再轮询角度，节省电量
-            if(axisStatus1.getRunning() == Config.AXIS_STATUS_RUNNING_STOP && axisStatus2.getRunning() == Config.AXIS_STATUS_RUNNING_STOP)
-                Logger.warning("停止！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！");
-                mActivity.stopGetCurrentAngle();
+            //现在不管什么状态，均维持一个低频率的常规更新角度任务
+//            if(axisStatus1.getRunning() == Config.AXIS_STATUS_RUNNING_STOP && axisStatus2.getRunning() == Config.AXIS_STATUS_RUNNING_STOP)
+//                mActivity.stopGetCurrentAngle();
 
             String content = sb.toString();
 
@@ -309,9 +309,9 @@ public class MainPresenter {
      * 启动一个任务，每隔一段时间调用一次获取角度接口
      */
     public Disposable startGetAxisAngleTask(int periodInMilliSec) {
-        Logger.info("=========================开启获取角度任务，间隔：" + periodInMilliSec +"毫秒");
-        if(mModel != null) {
-            return Observable.interval(0, periodInMilliSec, TimeUnit.MILLISECONDS)
+             if(mModel != null) {
+                 Logger.info("=========================开启获取角度任务，间隔：" + periodInMilliSec +"毫秒");
+                 return Observable.interval(0, periodInMilliSec, TimeUnit.MILLISECONDS)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Consumer<Long>() {
@@ -321,8 +321,10 @@ public class MainPresenter {
                             mBleService.writeData(mModel.getAxisAngle());
                         }
                     });
-        }
-        return null;
+        } else {
+                 Logger.warning("startGetAxisAngleTask(): model == null");
+                 return null;
+             }
     }
 
     /**

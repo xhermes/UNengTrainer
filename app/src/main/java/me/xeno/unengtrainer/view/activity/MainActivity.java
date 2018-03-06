@@ -217,9 +217,9 @@ public class MainActivity extends BaseActivity
         mDashboardView.setCurrentElevationAngle(NumberUtils.showNumber1Decimal(angle2));
     }
 
-    public void stopGetCurrentAngle() {
-        mMainControlFragment.stopGetCurrentAngle();
-    }
+//    public void stopGetCurrentAngle() {
+//        mMainControlFragment.stopGetCurrentAngle();
+//    }
 
     public void setTitle(String title) {
         getSupportActionBar().setTitle(title);

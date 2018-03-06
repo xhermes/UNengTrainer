@@ -79,6 +79,8 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
     private int pick;
 
     private Disposable mBatteryDisposable;
+    private Disposable mCurrentAngleInfrequentlyDisposable;
+
     private Disposable mCurrentAngleDisposable;
 
     private Disposable mRunAxisSwingPosDisposable;
@@ -111,9 +113,9 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         }
 
         //开始一个获取角度的任务
-        if(mCurrentAngleDisposable != null && !mCurrentAngleDisposable.isDisposed()) {
+        if(mCurrentAngleInfrequentlyDisposable != null && !mCurrentAngleInfrequentlyDisposable.isDisposed()) {
         } else {
-            mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(1000);
+            mCurrentAngleInfrequentlyDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD_INFREQUENTLY);
         }
     }
 
@@ -123,7 +125,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         //页面休眠时，停止获取电压
         Logger.info("页面休眠，获取电压循环任务已停止");
         dispose(mBatteryDisposable);
-        dispose(mCurrentAngleDisposable);
+        dispose(mCurrentAngleInfrequentlyDisposable);
 
         //TODO 看看要不要在休眠时让获取状态任务也暂停，以节省电量
     }
@@ -209,7 +211,6 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
                             public void onClick(@android.support.annotation.NonNull MaterialDialog dialog, @android.support.annotation.NonNull DialogAction which) {
                                 dialog.dismiss();
                                 getMainActivity().getPresenter().setAxisAngle(0, 0);
-                                startGetCurrentAngleTask();
                             }
                         }, new MaterialDialog.SingleButtonCallback() {
                             @Override
@@ -288,63 +289,11 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         });
     }
 
-    public void stopGetCurrentAngle() {
-        if (mCurrentAngleDisposable != null && !mCurrentAngleDisposable.isDisposed()) {
-            mCurrentAngleDisposable.dispose();
-        }
-    }
-
-    public void startGetCurrentAngleTask() {
-//        if (mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed()) {
-////            mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
-//
-//
-//
-//
-//
-//            Observable.interval(0, 300, TimeUnit.MILLISECONDS)
-//                    .subscribeOn(Schedulers.io())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe(new Observer<Long>() {
-//                        @Override
-//                        public void onSubscribe(@NonNull Disposable d) {
-//                            mCurrentAngleDisposable = d;
-//                        }
-//
-//                        @Override
-//                        public void onNext(@NonNull Long aLong) {
-//                            Logger.warning("调用蓝牙接口：==>获取角度");
-//                            getMainActivity().getPresenter().getBleService().writeData(getMainActivity().getPresenter().getModel().getAxisAngle());
-//
-//                        }
-//
-//                        @Override
-//                        public void onError(@NonNull Throwable e) {
-//                            e.printStackTrace();
-//                        }
-//
-//                        @Override
-//                        public void onComplete() {
-//                            Logger.warning("onCom!!!!!!!!!!!");
-//                        }
-//                    });
-//
-////                    .subscribe(new Consumer<Long>() {
-////                        @Override
-////                        public void accept(@NonNull Long aLong) throws Exception {
-////                            Logger.warning("调用蓝牙接口：==>获取角度");
-////                            getMainActivity().getPresenter().getBleService().writeData(getMainActivity().getPresenter().getModel().getAxisAngle());
-////                        }
-////                    });
-//
-
-
-
-
-
-
+//    public void stopGetCurrentAngle() {
+//        if (mCurrentAngleDisposable != null && !mCurrentAngleDisposable.isDisposed()) {
+//            mCurrentAngleDisposable.dispose();
 //        }
-    }
+//    }
 
     public void showCurrentAngle(String angle1, String angle2) {
 //        mCurrentSwingAngle = Double.valueOf(angle1);
@@ -385,9 +334,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
             RxUtils.timer(1).subscribe(new Consumer<Long>() {
                 @Override
                 public void accept(@NonNull Long aLong) throws Exception {
-                    startGetCurrentAngleTask();
                     getMainActivity().getPresenter().setAxisAngle(record.getSwingAngle(), record.getElevationAngle());
-
                 }
             });
 
@@ -478,6 +425,9 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
     }
 
     private void dispose(Disposable disposable) {
+        if(disposable == mCurrentAngleDisposable) {
+            Logger.error("尝试销毁快速获取角度任务");
+        }
         if (disposable != null && !disposable.isDisposed()) {
             if(Config.isDebugging()) {
                 ToastUtils.toast(getActivity().getApplicationContext(), "循环任务已停止");
@@ -491,54 +441,52 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         if (v == mRunAxisSwingPositiveView) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mRunAxisSwingPosDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_POSITIVE, Config.RUN_AXIS_STOP, Config.RUN_AXIS_PERIOD);
-                //开始单轴连续调整时，启动一个获取当前角度的任务
-                startGetCurrentAngleTask();
+
+                mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 getMainActivity().getPresenter().stopAxis();
                 dispose(mRunAxisSwingPosDisposable);
+                //抬起时销毁快速获取角度任务
                 dispose(mCurrentAngleDisposable);
-                //停止快速更新角度，同时重新开启慢速获取角度任务
-                getMainActivity().getPresenter().startGetAxisAngleTask(1000);
+
                 Logger.info("单轴运行任务结束");
             }
         }
         if (v == mRunAxisSwingNegativeView) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mRunAxisSwingNegDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_NEGATIVE, Config.RUN_AXIS_STOP, Config.RUN_AXIS_PERIOD);
-                startGetCurrentAngleTask();
+                mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 getMainActivity().getPresenter().stopAxis();
                 dispose(mRunAxisSwingNegDisposable);
+                //抬起时销毁快速获取角度任务
                 dispose(mCurrentAngleDisposable);
-                //停止快速更新角度，同时重新开启慢速获取角度任务
-                getMainActivity().getPresenter().startGetAxisAngleTask(1000);
+
                 Logger.info("单轴运行任务结束");
             }
         }
         if (v == mRunAxisElevationPositiveView) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mRunAxisElevationPosDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_POSITIVE, Config.RUN_AXIS_PERIOD);
-                startGetCurrentAngleTask();
+                mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 getMainActivity().getPresenter().stopAxis();
                 dispose(mRunAxisElevationPosDisposable);
+                //抬起时销毁快速获取角度任务
                 dispose(mCurrentAngleDisposable);
-                //停止快速更新角度，同时重新开启慢速获取角度任务
-                getMainActivity().getPresenter().startGetAxisAngleTask(1000);
-                Logger.info("单轴运行任务结束");
+                     Logger.info("单轴运行任务结束");
             }
         }
         if (v == mRunAxisElevationNegativeView) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mRunAxisElevationNegDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_NEGATIVE, Config.RUN_AXIS_PERIOD);
-                startGetCurrentAngleTask();
+                mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 getMainActivity().getPresenter().stopAxis();
                 dispose(mRunAxisElevationNegDisposable);
+                //抬起时销毁快速获取角度任务
                 dispose(mCurrentAngleDisposable);
-                //停止快速更新角度，同时重新开启慢速获取角度任务
-                getMainActivity().getPresenter().startGetAxisAngleTask(1000);
-                Logger.info("单轴运行任务结束");
+                    Logger.info("单轴运行任务结束");
             }
         }
 

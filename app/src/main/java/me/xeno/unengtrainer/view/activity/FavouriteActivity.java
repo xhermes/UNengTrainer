@@ -117,7 +117,7 @@ public class FavouriteActivity extends BaseActivity implements OnFavItemSelectLi
 
         if(Config.isDebugging()){
             ToastUtils.toast(this.getApplicationContext(),
-                    "选择收藏：id= " + record.getId());
+                    "选择收藏：id= " + record.getId() + "，" + record.getSwingAngle()+","+record.getElevationAngle());
         }
         Intent intent = new Intent();
         intent.putExtra("id", record.getId());
