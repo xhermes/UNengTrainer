@@ -13,6 +13,7 @@ import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import me.xeno.unengtrainer.R;
@@ -92,6 +93,7 @@ public class FavouriteActivity extends BaseActivity implements OnFavItemSelectLi
 
     public void updateRecycler(List<FavouriteRecord> dataList) {
         mAdapter.setDataList(dataList);
+        mAdapter.notifyDataSetChanged();
     }
 
     public static void goFromActivityForResult(WeakReference<BaseActivity> reference) {
@@ -172,6 +174,11 @@ public class FavouriteActivity extends BaseActivity implements OnFavItemSelectLi
         //通知RecyclerView恢复item样式
         if(mAdapter.isEditMode())
             mAdapter.setEditMode(false);
+        for(FavouriteRecord fr:mAdapter.getDataList()) {
+            //退出编辑时，放弃所有选择
+            fr.setChecked(false);
+        }
+
         mAdapter.notifyDataSetChanged();
     }
 
@@ -192,16 +199,23 @@ public class FavouriteActivity extends BaseActivity implements OnFavItemSelectLi
     }
 
     private void deleteSelected() {
-        ArrayList<FavouriteRecord> newRecords = new ArrayList<>();
 
-        for(FavouriteRecord fr: mAdapter.getDataList()) {
-            if(!fr.getChecked())
-                newRecords.add(fr);
-            else
-                mPresenter.deleteFavouriteFromDb(fr.getId());
+        int first = 0;//标记第一个被修改的元素，减少重绘
+        int size = mAdapter.getDataList().size();
+        for (int i = 0; i < size; i++) {
+            FavouriteRecord fr = mAdapter.getDataList().get(i);
+            if (fr.getChecked()) {
+                if(first == 0)
+                    first = i;
+                mAdapter.notifyItemRemoved(i);
+                mAdapter.getDataList().remove(i);
+                mPresenter.deleteFavouriteFromDb(mAdapter.getDataList().get(i).getId());
+                i--;
+                size--;//避免数组越界
+            }
         }
-        mAdapter.setDataList(newRecords);
-        mAdapter.notifyDataSetChanged();
+
+            mAdapter.notifyItemRangeChanged(first, mAdapter.getDataList().size() - first);
 
     }
 

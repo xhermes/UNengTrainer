@@ -42,6 +42,7 @@
             android:layout_toRightOf="@id/icon"
             android:layout_width="wrap_content"
             android:layout_marginLeft="10dp"
+            android:textSize="@dimen/text_size_content"
             android:layout_height="wrap_content"
             android:text="name"/>
         <TextView
@@ -49,6 +50,7 @@
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_small"
             android:text="time"/>
         <TextView
             android:id="@+id/swing_angle"
@@ -56,6 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_marginLeft="15dp"
+            android:textSize="@dimen/text_size_small"
             android:layout_height="wrap_content"
             android:text="swing"/>
         <TextView
@@ -63,6 +66,7 @@
             android:layout_marginLeft="15dp"
             android:layout_below="@id/swing_angle"
             android:layout_marginTop="5dp"
+            android:textSize="@dimen/text_size_small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ele"/>
@@ -71,6 +75,7 @@
             android:layout_width="wrap_content"
             android:layout_below="@id/time"
             android:layout_marginLeft="200dp"
+            android:textSize="@dimen/text_size_small"
             android:layout_marginTop="5dp"
             android:layout_height="wrap_content"
             android:text="left"/>
@@ -78,6 +83,7 @@
             android:id="@+id/right_speed"
             android:layout_below="@id/left_speed"
             android:layout_marginLeft="200dp"
+            android:textSize="@dimen/text_size_small"
             android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

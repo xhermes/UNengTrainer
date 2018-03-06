@@ -36,7 +36,7 @@ public class FavouriteRecyclerAdapter extends RecyclerView.Adapter<FavouriteHold
 
     public void setDataList(List<FavouriteRecord> dataList) {
         this.dataList = dataList;
-        notifyDataSetChanged();
+//        notifyDataSetChanged();
     }
 
     public void addDataToList(FavouriteRecord record) {
