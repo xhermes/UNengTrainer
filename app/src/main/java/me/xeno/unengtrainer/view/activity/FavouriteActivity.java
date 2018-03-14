@@ -2,6 +2,7 @@ package me.xeno.unengtrainer.view.activity;
 
 import android.content.Intent;
 import android.support.v7.view.ActionMode;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -77,9 +78,9 @@ public class FavouriteActivity extends BaseActivity implements OnFavItemSelectLi
 
     private void initRecyclerView() {
         Logger.error("设置LinearLayoutManager");
-//        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         //FIXME 测试自定义LayoutManager
-        mRecyclerView.setLayoutManager(new LLayoutManager());
+//        mRecyclerView.setLayoutManager(new LLayoutManager());
 //        mRecyclerView.setPullRefreshEnabled(false);
 //        mRecyclerView.setEmptyView(mEmptyView);//TODO 增加emptyview
 //        mRecyclerView.setRefreshProgressStyle(ProgressStyle.TriangleSkewSpin); //设置下拉刷新Progress的样式
