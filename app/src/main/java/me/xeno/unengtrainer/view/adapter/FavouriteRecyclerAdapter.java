@@ -13,6 +13,7 @@ import java.util.List;
 import me.xeno.unengtrainer.R;
 import me.xeno.unengtrainer.listener.OnFavItemSelectListener;
 import me.xeno.unengtrainer.model.entity.FavouriteRecord;
+import me.xeno.unengtrainer.util.Logger;
 import me.xeno.unengtrainer.view.holder.FavouriteHolder;
 
 /**
@@ -31,6 +32,7 @@ public class FavouriteRecyclerAdapter extends RecyclerView.Adapter<FavouriteHold
     private List<FavouriteRecord> dataList = new ArrayList<>();
 
     public FavouriteRecyclerAdapter(OnFavItemSelectListener listener) {
+        Logger.error("调用FavouriteRecyclerAdapter 构造函数");
         mListener = listener;
     }
 
@@ -50,7 +52,8 @@ public class FavouriteRecyclerAdapter extends RecyclerView.Adapter<FavouriteHold
 
     @Override
     public FavouriteHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.holder_favourite, null);
+        Logger.error("调用onCreateViewHolder()");
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.holder_favourite, parent, false);
         FavouriteHolder holder = new FavouriteHolder(view);
 
         mContext = parent.getContext();
@@ -60,6 +63,7 @@ public class FavouriteRecyclerAdapter extends RecyclerView.Adapter<FavouriteHold
 
     @Override
     public void onBindViewHolder(FavouriteHolder holder, int position) {
+        Logger.error("调用onBindViewHolder()");
         final FavouriteRecord record = dataList.get(position);
 
         holder.getNameView().setText(record.getName());

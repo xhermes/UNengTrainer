@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,8 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.clj.fastble.data.ScanResult;
-import com.github.jdsjlzx.recyclerview.LRecyclerView;
-import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
@@ -33,7 +32,7 @@ public class DeviceRecyclerFragment extends BaseMainFragment implements DeviceRe
 
     private View mRootView;
 
-    private LRecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
     private DeviceRecyclerAdapter mAdapter;
     private View mEmptyView;
 
@@ -60,7 +59,7 @@ public class DeviceRecyclerFragment extends BaseMainFragment implements DeviceRe
         if(mRootView == null) {
             mRootView = inflater.inflate(R.layout.fragment_list_device, container, false);
         }
-        mRecyclerView = (LRecyclerView) mRootView.findViewById(R.id.recycler);
+        mRecyclerView = (RecyclerView) mRootView.findViewById(R.id.recycler);
         mEmptyView = mRootView.findViewById(R.id.empty);
 
         setHasOptionsMenu(true);
@@ -94,13 +93,13 @@ public class DeviceRecyclerFragment extends BaseMainFragment implements DeviceRe
 
     private void initRecyclerView() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.setPullRefreshEnabled(false);
-        mRecyclerView.setEmptyView(mEmptyView);
+//        mRecyclerView.setPullRefreshEnabled(false);
+//        mRecyclerView.setEmptyView(mEmptyView);//TODO 增加emptyView
 //        mRecyclerView.setRefreshProgressStyle(ProgressStyle.TriangleSkewSpin); //设置下拉刷新Progress的样式
 //        mRecyclerView.setArrowImageView(R.drawable.ic_refresh);
         mAdapter = new DeviceRecyclerAdapter(this);
-        LRecyclerViewAdapter lRecyclerViewAdapter = new LRecyclerViewAdapter(mAdapter);
-        mRecyclerView.setAdapter(lRecyclerViewAdapter);
+//        LRecyclerViewAdapter lRecyclerViewAdapter = new LRecyclerViewAdapter(mAdapter);
+        mRecyclerView.setAdapter(mAdapter);
 
     }
 

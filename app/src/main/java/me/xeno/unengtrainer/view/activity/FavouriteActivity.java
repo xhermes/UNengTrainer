@@ -2,18 +2,13 @@ package me.xeno.unengtrainer.view.activity;
 
 import android.content.Intent;
 import android.support.v7.view.ActionMode;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.github.jdsjlzx.recyclerview.LRecyclerView;
-import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
-
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import me.xeno.unengtrainer.R;
@@ -24,6 +19,7 @@ import me.xeno.unengtrainer.presenter.FavouritePresenter;
 import me.xeno.unengtrainer.util.Logger;
 import me.xeno.unengtrainer.util.ToastUtils;
 import me.xeno.unengtrainer.view.adapter.FavouriteRecyclerAdapter;
+import me.xeno.unengtrainer.widget.LLayoutManager;
 
 /**
  * Created by Administrator on 2017/5/14.
@@ -37,7 +33,7 @@ public class FavouriteActivity extends BaseActivity implements OnFavItemSelectLi
 
     private Toolbar mToolbar;
 
-    private LRecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
     private View mEmptyView;
 
     private FavouriteRecyclerAdapter mAdapter;
@@ -50,7 +46,7 @@ public class FavouriteActivity extends BaseActivity implements OnFavItemSelectLi
     @Override
     protected void findViewById() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mRecyclerView = (LRecyclerView) findViewById(R.id.recycler);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler);
         mEmptyView = findViewById(R.id.empty);
     }
 
@@ -80,18 +76,24 @@ public class FavouriteActivity extends BaseActivity implements OnFavItemSelectLi
     }
 
     private void initRecyclerView() {
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setPullRefreshEnabled(false);
-        mRecyclerView.setEmptyView(mEmptyView);
+        Logger.error("设置LinearLayoutManager");
+//        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //FIXME 测试自定义LayoutManager
+        mRecyclerView.setLayoutManager(new LLayoutManager());
+//        mRecyclerView.setPullRefreshEnabled(false);
+//        mRecyclerView.setEmptyView(mEmptyView);//TODO 增加emptyview
 //        mRecyclerView.setRefreshProgressStyle(ProgressStyle.TriangleSkewSpin); //设置下拉刷新Progress的样式
 //        mRecyclerView.setArrowImageView(R.drawable.ic_refresh);
+        Logger.error("创建FavouriteRecyclerAdapter");
         mAdapter = new FavouriteRecyclerAdapter(this);
-        LRecyclerViewAdapter lRecyclerViewAdapter = new LRecyclerViewAdapter(mAdapter);
-        mRecyclerView.setAdapter(lRecyclerViewAdapter);
+//        LRecyclerViewAdapter lRecyclerViewAdapter = new LRecyclerViewAdapter(mAdapter);
+        Logger.error("设置创建FavouriteRecyclerAdapter");
+        mRecyclerView.setAdapter(mAdapter);
 
     }
 
     public void updateRecycler(List<FavouriteRecord> dataList) {
+        Logger.error("调用updateRecycler()和notifyDataSetChanged()更新列表");
         mAdapter.setDataList(dataList);
         mAdapter.notifyDataSetChanged();
     }
