@@ -11,6 +11,7 @@ import me.xeno.unengtrainer.util.Logger;
  */
 
 public class LLayoutManager extends RecyclerView.LayoutManager {
+
     @Override
     public RecyclerView.LayoutParams generateDefaultLayoutParams() {
         //子View没有LayoutParams参数的时候会默认生成一个
@@ -35,6 +36,7 @@ public class LLayoutManager extends RecyclerView.LayoutManager {
         int totalHeight = 0;//记录现在布局到的高度，用于布局下一个view时参考
 
         Logger.info("getItemCount():" + getItemCount());
+        Logger.info("getChildCount():" + getChildCount());
         Logger.info("scrapList size:" + recycler.getScrapList().size());
         //循环布局view，相当于LinearLayoutManager中的layoutTrunk()
         //网文中此处是循环次数是getItemCount，事实上不应该是，getItemCount取到的是总的数据数量，而
@@ -50,6 +52,14 @@ public class LLayoutManager extends RecyclerView.LayoutManager {
             layoutDecorated(v, 0, totalHeight, width, totalHeight + height);
             totalHeight+= height;
         }
+    }
+
+    private void fill() {
+
+    }
+
+    private void layoutChunk() {
+
     }
 
     @Override

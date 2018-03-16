@@ -8,6 +8,7 @@ import android.util.Log;
 public class Logger {
 
     private static final String LOG_TAG = "xeno";
+    public static final String LOG_TEST = "xtest";
 
     public static void info(String msg) {
         Log.i(LOG_TAG, msg);

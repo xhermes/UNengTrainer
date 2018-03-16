@@ -38,7 +38,10 @@ import android.widget.ListView;
 
 import java.util.List;
 
+import me.xeno.unengtrainer.util.Logger;
+
 import static android.support.v7.widget.RecyclerView.NO_POSITION;
+import static me.xeno.unengtrainer.util.Logger.LOG_TEST;
 
 /**
  * A {@link RecyclerView.LayoutManager} implementation which provides
@@ -1171,6 +1174,7 @@ public class TestLayoutManager extends RecyclerView.LayoutManager implements
     }
 
     int scrollBy(int dy, RecyclerView.Recycler recycler, RecyclerView.State state) {
+        Log.i(LOG_TEST, "scrollBy()" + dy);
         if (getChildCount() == 0 || dy == 0) {
             return 0;
         }
@@ -1341,6 +1345,9 @@ public class TestLayoutManager extends RecyclerView.LayoutManager implements
      */
     int fill(RecyclerView.Recycler recycler, LayoutState layoutState,
              RecyclerView.State state, boolean stopOnFocusable) {
+
+        Log.i(LOG_TEST, "fill()调用");
+
         // max offset we should set is mFastScroll + available
         final int start = layoutState.mAvailable;
         if (layoutState.mScrollingOffset != LayoutState.SCOLLING_OFFSET_NaN) {
@@ -1392,6 +1399,9 @@ public class TestLayoutManager extends RecyclerView.LayoutManager implements
 
     void layoutChunk(RecyclerView.Recycler recycler, RecyclerView.State state,
                      LayoutState layoutState, LayoutChunkResult result) {
+
+        Log.i(LOG_TEST, "layoutChunk()调用");
+
         View view = layoutState.next(recycler);
         if (view == null) {
             if (DEBUG && layoutState.mScrapList == null) {
@@ -2010,13 +2020,18 @@ public class TestLayoutManager extends RecyclerView.LayoutManager implements
          * @return View if an item in the current position or direction exists if not null.
          */
         private View nextViewFromScrapList() {
+            Log.i(LOG_TEST, "nextViewFromScrapList()调用");
             final int size = mScrapList.size();
+            Log.i(LOG_TEST, "mScrapList size " + size);
+            Log.i(LOG_TEST, "mScrapList 最后一项的位置 " + ((RecyclerView.LayoutParams)mScrapList.get(size-1).itemView.getLayoutParams()).getViewLayoutPosition());
             for (int i = 0; i < size; i++) {
                 final View view = mScrapList.get(i).itemView;
                 final RecyclerView.LayoutParams lp = (RecyclerView.LayoutParams) view.getLayoutParams();
                 if (lp.isItemRemoved()) {
+                    Log.i(LOG_TEST, "遍历scrapList，isItemRemoved(): " + i);
                     continue;
                 }
+                Log.i(LOG_TEST, "遍历scrapList，mCurrentPosition: " + mCurrentPosition + ", getViewLayoutPosition: " + lp.getViewLayoutPosition());
                 if (mCurrentPosition == lp.getViewLayoutPosition()) {
                     assignPositionFromScrapList(view);
                     return view;
@@ -2030,6 +2045,7 @@ public class TestLayoutManager extends RecyclerView.LayoutManager implements
         }
 
         public void assignPositionFromScrapList(View ignore) {
+            Log.i(LOG_TEST, "assignPositionFromScrapList()调用");
             final View closest = nextViewInLimitedList(ignore);
             if (closest == null) {
                 mCurrentPosition = NO_POSITION;
@@ -2040,7 +2056,9 @@ public class TestLayoutManager extends RecyclerView.LayoutManager implements
         }
 
         public View nextViewInLimitedList(View ignore) {
+            Log.i(LOG_TEST, "nextViewInLimitedList()调用");
             int size = mScrapList.size();
+            Log.i(LOG_TEST, "mScrapList size " + size);
             View closest = null;
             int closestDistance = Integer.MAX_VALUE;
             if (DEBUG && mIsPreLayout) {
