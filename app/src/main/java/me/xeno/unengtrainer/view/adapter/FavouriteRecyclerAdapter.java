@@ -62,7 +62,7 @@ public class FavouriteRecyclerAdapter extends RecyclerView.Adapter<FavouriteHold
     }
 
     @Override
-    public void onBindViewHolder(FavouriteHolder holder, int position) {
+    public void onBindViewHolder(FavouriteHolder holder, final int position) {
         Logger.error("调用onBindViewHolder()");
         final FavouriteRecord record = dataList.get(position);
 
@@ -112,12 +112,44 @@ public class FavouriteRecyclerAdapter extends RecyclerView.Adapter<FavouriteHold
                 return true;
             }
         });
-        holder.getCheckBox().setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//        holder.getRootView().setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View v) {
+//                testAdd();
+//                return true;
+//            }
+//        });
+
+        holder.getCheckBox().setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                record.setChecked(isChecked);
+            public void onClick(View v) {
+                record.setChecked(!record.getChecked());
             }
         });
+
+//        holder.getCheckBox().setOnClickListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                Logger.warning("oncheckedchanged,pos=:" + position + "," + isChecked);
+//
+//            }
+//        });
+    }
+
+    public void testAdd() {
+        //for test
+//        FavouriteRecord fr = new FavouriteRecord();
+//        fr.setId(1000L);
+//        fr.setName("hahaha");
+//        fr.setCreateTime("gwagag");
+//        dataList.add(1, fr);
+//        notifyItemInserted(1);
+
+        FavouriteRecord fr = dataList.get(1);
+        dataList.remove(1);
+        dataList.add(3,fr);
+
+        notifyItemMoved(1,3);
     }
 
     @Override

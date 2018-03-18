@@ -1863,7 +1863,9 @@ public class TestLayoutManager extends RecyclerView.LayoutManager implements
 
     @Override
     public boolean supportsPredictiveItemAnimations() {
+        Logger.warning("mPendingSavedState=" + mPendingSavedState + ",mLastStackFromEnd=" + mLastStackFromEnd + ",mStackFromEnd=" + mStackFromEnd);
         return mPendingSavedState == null && mLastStackFromEnd == mStackFromEnd;
+//        return false;
     }
 
     /**
