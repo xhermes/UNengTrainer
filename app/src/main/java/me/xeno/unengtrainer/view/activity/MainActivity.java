@@ -35,6 +35,7 @@ import me.xeno.unengtrainer.view.fragment.BluetoothDisabledFragment;
 import me.xeno.unengtrainer.view.fragment.DeviceRecyclerFragment;
 import me.xeno.unengtrainer.view.fragment.MainControlFragment;
 import me.xeno.unengtrainer.widget.DashboardView;
+import me.xeno.unengtrainer.widget.LoadingDialog;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -90,6 +91,10 @@ public class MainActivity extends BaseActivity
         setSupportActionBar(mToolbar);
 
         initDrawer();
+
+        //TODO
+        LoadingDialog d= new LoadingDialog(this);
+        d.show();
 
         mNavigationView.setNavigationItemSelectedListener(this);
         mFavouriteBtn.setOnClickListener(new View.OnClickListener() {
