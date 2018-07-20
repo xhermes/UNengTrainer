@@ -5,7 +5,6 @@ import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
-import android.bluetooth.BluetoothProfile;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
@@ -371,7 +370,7 @@ public class BleService extends Service {
                                     mListener.onTurnBrake(mProcessor.handleTurnBrake(finalData));
                                     break;
                                 case Config.DATA_TYPE_MAKE_ZERO:
-                                    mListener.onMakeZeroCompleted(mProcessor.handleMakeZeroCompleted(finalData));
+                                    mListener.onRequestMakeZero(mProcessor.handleRequestMakeZero(finalData));
                                     break;
                                 case Config.DATA_TYPE_SET_AXIS_ANGLE:
                                     mListener.onSetAxisAngle(mProcessor.handleSetAxisAngle(finalData));

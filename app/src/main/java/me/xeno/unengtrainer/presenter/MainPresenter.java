@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.text.InputType;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -23,6 +24,7 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import me.xeno.unengtrainer.R;
 import me.xeno.unengtrainer.application.Config;
 import me.xeno.unengtrainer.application.DataManager;
 import me.xeno.unengtrainer.listener.BleServiceListener;
@@ -62,6 +64,8 @@ public class MainPresenter {
     public static final int STATE_CONNECTING = 1;
     public static final int STATE_CONNECTED = 2;
 
+    private boolean mIgnoreMakeZero = false;//忽略机器后续的校准零位请求
+
     private String mCurrentElevationAngle;
     private String mCurrentSwingAngle;
 
@@ -86,6 +90,7 @@ public class MainPresenter {
 
     private BleService mBleService;
 
+    //注意：此处已经回到主线程
     private BleServiceListener mListener = new BleServiceListener() {
         @Override
         public void onGetStatus(GetStatusWrapper wrapper) {
@@ -111,6 +116,8 @@ public class MainPresenter {
 //                    .title("查询步进电机状态回复")
 //                    .content(content)
 //                    .show();
+
+            //TODO 获取到校准零位结果
         }
 
         @Override
@@ -124,8 +131,37 @@ public class MainPresenter {
         }
 
         @Override
-        public void onMakeZeroCompleted(MakeZeroCompletedWrapper wrapper) {
-
+        public void onRequestMakeZero(MakeZeroCompletedWrapper wrapper) {
+            // 机器开机以后会连续发送向用户确认是否自动校准零位
+            // 此处需要弹出对话框询问是否自动校准
+            // 是：机器开始校准
+            // 否：机器仍会每隔1秒询问是否自动校准，此时需要用户自己通过校准按钮校准（功能仅用于调试）
+            // 选择否后应该忽略后续的机器询问
+            if(!mIgnoreMakeZero) {
+                new MaterialDialog.Builder(mActivity)
+                        .icon(mActivity.getResources().getDrawable(R.drawable.ic_make_zero))
+                        .title("自动校准")
+                        .content("确认机器将自动校准零位，可以在左侧弹出菜单->设置->校准零位，主动发起校准。")
+                        .cancelable(false)
+                        .negativeText("手动调试")
+                        .positiveText("确定")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@android.support.annotation.NonNull MaterialDialog dialog, @android.support.annotation.NonNull DialogAction which) {
+                                //TODO 校准零位时增加loading对话框，getStatus()回调校准成功以后才dismiss
+                                startMakingZero();
+                                dialog.dismiss();
+                            }
+                        })
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@android.support.annotation.NonNull MaterialDialog dialog, @android.support.annotation.NonNull DialogAction which) {
+                                mIgnoreMakeZero = true;
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
+            }
         }
 
         @Override
@@ -218,6 +254,13 @@ public class MainPresenter {
 //        }
 //    }
 
+    public void startMakingZero() {
+        if(mModel != null) {
+            mBleService.writeData(mModel.makeZero());
+
+        }
+    }
+
     /**
      * @param angle1 第一轴角度
      * @param angle2 第二轴角度
@@ -229,9 +272,9 @@ public class MainPresenter {
         }
     }
 
-    public void makeZero() {
-        mBleService.writeData(mModel.makeZero());
-    }
+//    public void makeZero() {
+//        mBleService.writeData(mModel.makeZero());
+//    }
 
     /**
      * 速度分成 100 等份，超过100不执行

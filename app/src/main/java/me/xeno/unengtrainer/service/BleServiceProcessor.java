@@ -94,7 +94,7 @@ public class BleServiceProcessor {
         return new TurnBrakeWrapper();
     }
 
-    public MakeZeroCompletedWrapper handleMakeZeroCompleted(byte[] data) {
+    public MakeZeroCompletedWrapper handleRequestMakeZero(byte[] data) {
 
         byte axis1 = data[0];
         byte axis2 = data[1];

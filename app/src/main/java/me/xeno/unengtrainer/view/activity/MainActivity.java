@@ -153,8 +153,15 @@ public class MainActivity extends BaseActivity
         mDrawer.closeDrawer(GravityCompat.START);
 
         int id = item.getItemId();
-        if (id == R.id.nav_favourite) {
-            FavouriteActivity.goFromActivityForResult(new WeakReference<BaseActivity>(MainActivity.this));
+        switch (id) {
+            case R.id.nav_favourite:
+                FavouriteActivity.goFromActivityForResult(new WeakReference<BaseActivity>(MainActivity.this));
+
+                break;
+            case R.id.nav_setting:
+                //TODO 新建设置界面
+                getPresenter().startMakingZero();
+                break;
         }
         return false;
     }

@@ -23,7 +23,7 @@ public interface BleServiceListener {
     void onGetStatus(GetStatusWrapper wrapper);
     void onEnable(EnableWrapper wrapper);
     void onTurnBrake(TurnBrakeWrapper wrapper);
-    void onMakeZeroCompleted(MakeZeroCompletedWrapper wrapper);
+    void onRequestMakeZero(MakeZeroCompletedWrapper wrapper);
     void onSetAxisAngle(SetAxisAngleWrapper wrapper);
     void onRunAxis(RunAxisWrapper wrapper);
     void onSetAxisSpeed(SetAxisSpeedWrapper wrapper);

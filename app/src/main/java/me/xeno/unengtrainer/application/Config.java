@@ -16,7 +16,7 @@ public class Config {
         return DEBUG_MODE > 0;
     }
 
-    public static final int GET_STATUS_PERIOD = 5;//获取状态间隔，单位秒
+    public static final int GET_STATUS_PERIOD = 2;//获取状态间隔，单位秒，2018.7.15状态加入校准零位是否完成信息
     public static final int GET_BATTERY_PERIOD = 120;//获取电压间隔，单位秒
     public static final int GET_ANGLE_PERIOD = 1500;//获取角度间隔，单位豪秒
     public static final int GET_ANGLE_PERIOD_INFREQUENTLY = 5000;//获取角度间隔，单位豪秒

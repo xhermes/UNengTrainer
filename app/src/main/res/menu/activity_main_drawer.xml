@@ -19,9 +19,13 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_setting"
+            android:id="@+id/nav_feedback"
             android:icon="@drawable/ic_feedback"
             android:title="帮助与反馈" />
+        <item
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/ic_settings"
+            android:title="校准零位" />
         <item
             android:id="@+id/nav_equipment"
             android:icon="@drawable/ic_about"
