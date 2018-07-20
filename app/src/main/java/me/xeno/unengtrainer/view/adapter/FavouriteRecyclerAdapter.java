@@ -138,18 +138,18 @@ public class FavouriteRecyclerAdapter extends RecyclerView.Adapter<FavouriteHold
 
     public void testAdd() {
         //for test
-//        FavouriteRecord fr = new FavouriteRecord();
-//        fr.setId(1000L);
-//        fr.setName("hahaha");
-//        fr.setCreateTime("gwagag");
+        FavouriteRecord fr = new FavouriteRecord();
+        fr.setId(1000L);
+        fr.setName("hahaha");
+        fr.setCreateTime("gwagag");
 //        dataList.add(1, fr);
 //        notifyItemInserted(1);
 
-        FavouriteRecord fr = dataList.get(1);
-        dataList.remove(1);
+//        FavouriteRecord fr = dataList.get(1);
+//        dataList.remove(1);
         dataList.add(3,fr);
 
-        notifyItemMoved(1,3);
+        notifyItemInserted(3);
     }
 
     @Override

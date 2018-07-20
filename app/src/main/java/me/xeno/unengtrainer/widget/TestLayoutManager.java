@@ -636,6 +636,8 @@ public class TestLayoutManager extends RecyclerView.LayoutManager implements
         if (DEBUG) {
             validateChildOrder();
         }
+        Logger.info("layoutChildren结束时：scraplist情况：" + recycler.getScrapList().size());
+//        Logger.info("layoutChildren结束时：recycle pool情况：" + recycler.);
     }
 
     /**
@@ -1174,7 +1176,7 @@ public class TestLayoutManager extends RecyclerView.LayoutManager implements
     }
 
     int scrollBy(int dy, RecyclerView.Recycler recycler, RecyclerView.State state) {
-        Log.i(LOG_TEST, "scrollBy()" + dy);
+//        Log.i(LOG_TEST, "scrollBy()" + dy);
         if (getChildCount() == 0 || dy == 0) {
             return 0;
         }
@@ -1197,6 +1199,7 @@ public class TestLayoutManager extends RecyclerView.LayoutManager implements
             Log.d(TAG, "scroll req: " + dy + " scrolled: " + scrolled);
         }
         mLayoutState.mLastScrollDelta = scrolled;
+        Logger.info("滑动时scrapList情况" + recycler.getScrapList().size());
         return scrolled;
     }
 
@@ -1346,7 +1349,7 @@ public class TestLayoutManager extends RecyclerView.LayoutManager implements
     int fill(RecyclerView.Recycler recycler, LayoutState layoutState,
              RecyclerView.State state, boolean stopOnFocusable) {
 
-        Log.i(LOG_TEST, "fill()调用");
+//        Log.i(LOG_TEST, "fill()调用");
 
         // max offset we should set is mFastScroll + available
         final int start = layoutState.mAvailable;
@@ -2025,7 +2028,6 @@ public class TestLayoutManager extends RecyclerView.LayoutManager implements
             Log.i(LOG_TEST, "nextViewFromScrapList()调用");
             final int size = mScrapList.size();
             Log.i(LOG_TEST, "mScrapList size " + size);
-            Log.i(LOG_TEST, "mScrapList 最后一项的位置 " + ((RecyclerView.LayoutParams)mScrapList.get(size-1).itemView.getLayoutParams()).getViewLayoutPosition());
             for (int i = 0; i < size; i++) {
                 final View view = mScrapList.get(i).itemView;
                 final RecyclerView.LayoutParams lp = (RecyclerView.LayoutParams) view.getLayoutParams();
