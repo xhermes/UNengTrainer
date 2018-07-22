@@ -41,10 +41,10 @@ public class SetSpeedDialogWrapper implements View.OnClickListener {
 
 //    private DialogInterface.OnDismissListener mOndismissListener;
 
-    private int mLeftSpeed;
-    private int mRightSpeed;
+    private float mLeftSpeed;
+    private float mRightSpeed;
 
-    public SetSpeedDialogWrapper(Context context, int leftSpeed, int rightSpeed) {
+    public SetSpeedDialogWrapper(Context context, float leftSpeed, float rightSpeed) {
         mActivity = (MainActivity)context;
         mLeftSpeed = leftSpeed;
         mRightSpeed = rightSpeed;
@@ -120,8 +120,8 @@ public class SetSpeedDialogWrapper implements View.OnClickListener {
 
         mLeftSpeedView.setText(mLeftSpeed + "%");
         mRightSpeedView.setText(mRightSpeed + "%");
-        mLeftSpeedBar.setProgress(mLeftSpeed);
-        mRightSpeedBar.setProgress(mRightSpeed);
+        mLeftSpeedBar.setProgress((int)mLeftSpeed);
+        mRightSpeedBar.setProgress((int)mRightSpeed);
     }
 
 
@@ -134,11 +134,11 @@ public class SetSpeedDialogWrapper implements View.OnClickListener {
         mDialog.setOnDismissListener(listener);
     }
 
-    public int getLeftSpeed() {
+    public float getLeftSpeed() {
         return mLeftSpeed;
     }
 
-    public int getRightSpeed() {
+    public float getRightSpeed() {
         return mRightSpeed;
     }
 
@@ -147,50 +147,50 @@ public class SetSpeedDialogWrapper implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.left_reduce:
                 if(mLeftSpeed > 0)
-               changeLeftSpeed(mLeftSpeed-1);
+               changeLeftSpeed(mLeftSpeed-0.5f);
                 break;
             case R.id.left_reduce_double:
                 if(mLeftSpeed > 4)
-                changeLeftSpeed(mLeftSpeed-5);
+                changeLeftSpeed(mLeftSpeed-2);
                 break;
             case R.id.left_increase:
                 if(mLeftSpeed < 100)
-                changeLeftSpeed(mLeftSpeed+1);
+                changeLeftSpeed(mLeftSpeed+0.5f);
                 break;
             case R.id.left_increase_double:
                 if(mLeftSpeed < 96)
-                changeLeftSpeed(mLeftSpeed+5);
+                changeLeftSpeed(mLeftSpeed+2);
                 break;
             case R.id.right_reduce:
                 if(mRightSpeed > 0)
-                    changeRightSpeed(mRightSpeed-1);
+                    changeRightSpeed(mRightSpeed-0.5f);
                 break;
             case R.id.right_reduce_double:
                 if(mRightSpeed > 4)
-                    changeRightSpeed(mRightSpeed-5);
+                    changeRightSpeed(mRightSpeed-2);
                 break;
             case R.id.right_increase:
                 if(mRightSpeed < 100)
-                changeRightSpeed(mRightSpeed+1);
+                changeRightSpeed(mRightSpeed+0.5f);
                 break;
             case R.id.right_increase_double:
                 if(mRightSpeed < 96)
-                changeRightSpeed(mRightSpeed+5);
+                changeRightSpeed(mRightSpeed+2);
                 break;
         }
     }
 
-    private void changeLeftSpeed(int newSpeed) {
+    private void changeLeftSpeed(float newSpeed) {
         mLeftSpeed = newSpeed;
         mLeftSpeedView.setText(mLeftSpeed + "%");
-        mLeftSpeedBar.setProgress(mLeftSpeed);
+        mLeftSpeedBar.setProgress((int)mLeftSpeed);
         mActivity.getPresenter().setMotorSpeed(mLeftSpeed, mRightSpeed);
     }
 
-    private void changeRightSpeed(int newSpeed) {
+    private void changeRightSpeed(float newSpeed) {
         mRightSpeed = newSpeed;
         mRightSpeedView.setText(mRightSpeed + "%");
-        mRightSpeedBar.setProgress(mRightSpeed);
+        mRightSpeedBar.setProgress((int)mRightSpeed);
         mActivity.getPresenter().setMotorSpeed(mLeftSpeed, mRightSpeed);
     }
 }

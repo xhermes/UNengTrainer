@@ -6,13 +6,4 @@ package me.xeno.unengtrainer.model.entity;
 
 public class MakeZeroCompletedWrapper {
 
-    private GetStatusWrapper.AxisStatus[] axisStatuses;//第一轴 & 第二轴
-
-    public GetStatusWrapper.AxisStatus[] getAxisStatuses() {
-        return axisStatuses;
-    }
-
-    public void setAxisStatuses(GetStatusWrapper.AxisStatus[] axisStatuses) {
-        this.axisStatuses = axisStatuses;
-    }
 }

@@ -11,7 +11,7 @@ public class Config {
     public static final int DEBUG_MODE_BLUETOOTH = 2;//调试蓝牙界面时使用
 
     //TODO 调试模式，发版时记得调成off
-    public static final int DEBUG_MODE = DEBUG_MODE_CTRL;
+    public static final int DEBUG_MODE = DEBUG_MODE_OFF;
     public static boolean isDebugging() {
         return DEBUG_MODE > 0;
     }
@@ -19,7 +19,7 @@ public class Config {
     public static final int GET_STATUS_PERIOD = 2;//获取状态间隔，单位秒，2018.7.15状态加入校准零位是否完成信息
     public static final int GET_BATTERY_PERIOD = 120;//获取电压间隔，单位秒
     public static final int GET_ANGLE_PERIOD = 1500;//获取角度间隔，单位豪秒
-    public static final int GET_ANGLE_PERIOD_INFREQUENTLY = 5000;//获取角度间隔，单位豪秒
+    public static final int GET_ANGLE_PERIOD_INFREQUENTLY = 4000;//获取角度间隔，单位豪秒
 
 
     public static final int STATE_DISCONNECTED = 0;
@@ -36,6 +36,7 @@ public class Config {
     public static final byte DATA_TYPE_GET_AXIS_ANGLE = 0x09;//获取1,2轴当前角度
     public static final byte DATA_TYPE_SET_MOTOR_SPEED = 0x0A;//设置第 1,2 发球电机的速度
     public static final byte DATA_TYPE_GET_BATTERY_VOLTAGE = 0x0B;//获取电池电压
+    public static final byte DATA_TYPE_GET_MOTOR_SPEED = 0x0C;//获取第 1,2 发球电机速度
 
     public static final int RUN_AXIS_STOP = 0;//的运行/停止
     public static final int RUN_AXIS_POSITIVE = 1;//正方向连续运行(直到正限位或者报警)

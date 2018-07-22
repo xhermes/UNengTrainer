@@ -7,6 +7,15 @@ package me.xeno.unengtrainer.model.entity;
 public class GetStatusWrapper {
 
     private AxisStatus[] axisStatuses;//第一轴 & 第二轴
+    private boolean isMakeZeroCompleted;
+
+    public boolean isMakeZeroCompleted() {
+        return isMakeZeroCompleted;
+    }
+
+    public void setMakeZeroCompleted(boolean makeZeroCompleted) {
+        isMakeZeroCompleted = makeZeroCompleted;
+    }
 
     public AxisStatus[] getAxisStatuses() {
         return axisStatuses;
@@ -62,5 +71,7 @@ public class GetStatusWrapper {
         public void setNegativeSpacing(int negativeSpacing) {
             this.negativeSpacing = negativeSpacing;
         }
+
+
     }
 }

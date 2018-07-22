@@ -30,6 +30,7 @@ public interface BleServiceListener {
     void onGetAxisAngle(GetAxisAngleWrapper wrapper);
     void onSetMotorSpeed(SetMotorSpeedWrapper wrapper);
     void onGetBatteryVoltage(GetBatteryVoltageWrapper wrapper);
+    void onGetMotorSpeed(GetAxisAngleWrapper wrapper);
 
     /**
      * 检测到机器断开蓝牙连接

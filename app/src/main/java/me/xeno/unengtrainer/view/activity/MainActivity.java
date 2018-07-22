@@ -2,12 +2,10 @@ package me.xeno.unengtrainer.view.activity;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.content.ComponentName;
+import android.app.Dialog;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.IBinder;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -16,17 +14,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.lang.ref.WeakReference;
 
 import me.xeno.unengtrainer.R;
-import me.xeno.unengtrainer.application.DataManager;
-import me.xeno.unengtrainer.listener.BleServiceListener;
-import me.xeno.unengtrainer.model.BluetoothModel;
-import me.xeno.unengtrainer.model.entity.FavouriteRecord;
 import me.xeno.unengtrainer.presenter.MainPresenter;
-import me.xeno.unengtrainer.service.BleService;
 import me.xeno.unengtrainer.util.ActivityUtils;
 import me.xeno.unengtrainer.util.Logger;
 import me.xeno.unengtrainer.util.NumberUtils;
@@ -35,7 +29,6 @@ import me.xeno.unengtrainer.view.fragment.BluetoothDisabledFragment;
 import me.xeno.unengtrainer.view.fragment.DeviceRecyclerFragment;
 import me.xeno.unengtrainer.view.fragment.MainControlFragment;
 import me.xeno.unengtrainer.widget.DashboardView;
-import me.xeno.unengtrainer.widget.LoadingDialog;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -61,6 +54,39 @@ public class MainActivity extends BaseActivity
     private View mSettingBtn;
 
     private DashboardView mDashboardView;
+
+    private Dialog mRequestMakeZeroDialog;
+
+    public Dialog getRequestMakeZeroDialog() {
+        return mRequestMakeZeroDialog;
+    }
+
+    public void showRequestMakeZeroDialog() {
+        mRequestMakeZeroDialog = new MaterialDialog.Builder(this)
+                .icon(this.getResources().getDrawable(R.drawable.ic_make_zero))
+                .title("自动校准")
+                .content("确认机器将自动校准零位，可以在左侧弹出菜单->设置->校准零位，主动发起校准。")
+                .cancelable(false)
+                .negativeText("手动调试")
+                .positiveText("确定")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@android.support.annotation.NonNull MaterialDialog dialog, @android.support.annotation.NonNull DialogAction which) {
+                        //TODO 校准零位时增加loading对话框，getStatus()回调校准成功以后才dismiss
+                        mPresenter.grantMakingZero();
+                        dialog.dismiss();
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@android.support.annotation.NonNull MaterialDialog dialog, @android.support.annotation.NonNull DialogAction which) {
+                        getPresenter().setIgnoreMakeZero(true);
+                        dialog.dismiss();
+                    }
+                }).build();
+
+                mRequestMakeZeroDialog.show();
+    }
 
     @Override
     protected void setContentView() {
@@ -92,9 +118,9 @@ public class MainActivity extends BaseActivity
 
         initDrawer();
 
-        //TODO
-        LoadingDialog d= new LoadingDialog(this);
-        d.show();
+
+//        LoadingDialog d= new LoadingDialog(this);
+//        d.show();
 
         mNavigationView.setNavigationItemSelectedListener(this);
         mFavouriteBtn.setOnClickListener(new View.OnClickListener() {
@@ -111,6 +137,7 @@ public class MainActivity extends BaseActivity
         prepareFragments();
 //        mTabLayout.setupWithViewPager(mViewPager);
     }
+
 
     @Override
     protected void loadData() {
@@ -165,7 +192,7 @@ public class MainActivity extends BaseActivity
                 break;
             case R.id.nav_setting:
                 //TODO 新建设置界面
-                getPresenter().startMakingZero();
+                getPresenter().grantMakingZero();
                 break;
         }
         return false;
@@ -229,6 +256,11 @@ public class MainActivity extends BaseActivity
         mDashboardView.setCurrentElevationAngle(NumberUtils.showNumber1Decimal(angle2));
     }
 
+    public void displaySpeed(String leftSpeed, String rightSpeed) {
+        mDashboardView.setCurrentLeftSpeed(Float.valueOf(leftSpeed));
+        mDashboardView.setCurrentRightSpeed(Float.valueOf(rightSpeed));
+    }
+
 //    public void stopGetCurrentAngle() {
 //        mMainControlFragment.stopGetCurrentAngle();
 //    }
@@ -241,10 +273,10 @@ public class MainActivity extends BaseActivity
         mDashboardView.showCurrentVoltage(voltage);
     }
 
-    public void refreshCurrentSpeed(int left, int right) {
-        mDashboardView.setCurrentLeftSpeed(left);
-        mDashboardView.setCurrentRightSpeed(right);
-    }
+//    public void refreshCurrentSpeed(int left, int right) {
+//        mDashboardView.setCurrentLeftSpeed(left);
+//        mDashboardView.setCurrentRightSpeed(right);
+//    }
 
     public void showMainControlFragment() {
         mDashboardView.setVisibility(View.VISIBLE);
@@ -252,6 +284,7 @@ public class MainActivity extends BaseActivity
             mMainControlFragment = MainControlFragment.newInstance();
         }
         ActivityUtils.replaceFragment(getSupportFragmentManager(), mMainControlFragment, R.id.frame_content);
+        mPresenter.setOnGetMotorSpeedListener(mMainControlFragment);
     }
     public void showBlueToothFragment() {
         mDashboardView.setVisibility(View.GONE);

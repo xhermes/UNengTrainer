@@ -1,19 +1,16 @@
 package me.xeno.unengtrainer.presenter;
 
-import android.bluetooth.BluetoothAdapter;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import android.os.SystemClock;
-import android.text.InputType;
+import android.util.Log;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.clj.fastble.data.ScanResult;
 import com.clj.fastble.scan.ListScanCallback;
 
-import java.text.ParseException;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -30,7 +27,6 @@ import me.xeno.unengtrainer.application.DataManager;
 import me.xeno.unengtrainer.listener.BleServiceListener;
 import me.xeno.unengtrainer.model.BluetoothModel;
 import me.xeno.unengtrainer.model.entity.EnableWrapper;
-import me.xeno.unengtrainer.model.entity.FavouriteRecord;
 import me.xeno.unengtrainer.model.entity.GetAxisAngleWrapper;
 import me.xeno.unengtrainer.model.entity.GetBatteryVoltageWrapper;
 import me.xeno.unengtrainer.model.entity.GetStatusWrapper;
@@ -41,14 +37,11 @@ import me.xeno.unengtrainer.model.entity.SetAxisSpeedWrapper;
 import me.xeno.unengtrainer.model.entity.SetMotorSpeedWrapper;
 import me.xeno.unengtrainer.model.entity.TurnBrakeWrapper;
 import me.xeno.unengtrainer.service.BleService;
-import me.xeno.unengtrainer.util.CommonUtils;
 import me.xeno.unengtrainer.util.DialogUtils;
 import me.xeno.unengtrainer.util.Logger;
-import me.xeno.unengtrainer.util.RxUtils;
-import me.xeno.unengtrainer.util.SpUtils;
-import me.xeno.unengtrainer.util.TimeUtils;
 import me.xeno.unengtrainer.util.ToastUtils;
 import me.xeno.unengtrainer.view.activity.MainActivity;
+import me.xeno.unengtrainer.widget.LoadingDialog;
 
 import static android.content.Context.BIND_AUTO_CREATE;
 
@@ -66,8 +59,24 @@ public class MainPresenter {
 
     private boolean mIgnoreMakeZero = false;//忽略机器后续的校准零位请求
 
+    public boolean isIgnoreMakeZero() {
+        return mIgnoreMakeZero;
+    }
+
+    public void setIgnoreMakeZero(boolean ignoreMakeZero) {
+        this.mIgnoreMakeZero = ignoreMakeZero;
+    }
+
     private String mCurrentElevationAngle;
     private String mCurrentSwingAngle;
+    private float mCurrentLeftSpeed;
+    private float mCurrentRightSpeed;
+
+    public void setOnGetMotorSpeedListener(OnGetMotorSpeedListener onGetMotorSpeedListener) {
+        this.onGetMotorSpeedListener = onGetMotorSpeedListener;
+    }
+
+    private OnGetMotorSpeedListener onGetMotorSpeedListener;
 
     public String getCurrentElevationAngle() {
         return mCurrentElevationAngle;
@@ -83,6 +92,22 @@ public class MainPresenter {
 
     public void setCurrentSwingAngle(String currentSwingAngle) {
         this.mCurrentSwingAngle = currentSwingAngle;
+    }
+
+    public float getCurrentLeftSpeed() {
+        return mCurrentLeftSpeed;
+    }
+
+    public void setCurrentLeftSpeed(float currentLeftSpeed) {
+        this.mCurrentLeftSpeed = currentLeftSpeed;
+    }
+
+    public float getCurrentRightSpeed() {
+        return mCurrentRightSpeed;
+    }
+
+    public void setCurrentRightSpeed(float currentRightSpeed) {
+        this.mCurrentRightSpeed = currentRightSpeed;
     }
 
     private MainActivity mActivity;
@@ -117,7 +142,11 @@ public class MainPresenter {
 //                    .content(content)
 //                    .show();
 
-            //TODO 获取到校准零位结果
+            //TODO 30秒还没有调零完成的话，要显示失败信息
+
+            if(wrapper.isMakeZeroCompleted()) {
+                mActivity.hideLoadingDialog();
+            }
         }
 
         @Override
@@ -132,35 +161,21 @@ public class MainPresenter {
 
         @Override
         public void onRequestMakeZero(MakeZeroCompletedWrapper wrapper) {
+            Logger.info("接到请求对零");
             // 机器开机以后会连续发送向用户确认是否自动校准零位
             // 此处需要弹出对话框询问是否自动校准
             // 是：机器开始校准
             // 否：机器仍会每隔1秒询问是否自动校准，此时需要用户自己通过校准按钮校准（功能仅用于调试）
             // 选择否后应该忽略后续的机器询问
-            if(!mIgnoreMakeZero) {
-                new MaterialDialog.Builder(mActivity)
-                        .icon(mActivity.getResources().getDrawable(R.drawable.ic_make_zero))
-                        .title("自动校准")
-                        .content("确认机器将自动校准零位，可以在左侧弹出菜单->设置->校准零位，主动发起校准。")
-                        .cancelable(false)
-                        .negativeText("手动调试")
-                        .positiveText("确定")
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@android.support.annotation.NonNull MaterialDialog dialog, @android.support.annotation.NonNull DialogAction which) {
-                                //TODO 校准零位时增加loading对话框，getStatus()回调校准成功以后才dismiss
-                                startMakingZero();
-                                dialog.dismiss();
-                            }
-                        })
-                        .onNegative(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@android.support.annotation.NonNull MaterialDialog dialog, @android.support.annotation.NonNull DialogAction which) {
-                                mIgnoreMakeZero = true;
-                                dialog.dismiss();
-                            }
-                        })
-                        .show();
+            if(mActivity.getRequestMakeZeroDialog()== null) {
+                mActivity.showRequestMakeZeroDialog();
+                return;
+            }
+
+            if(mActivity.getRequestMakeZeroDialog() != null && !mActivity.getRequestMakeZeroDialog().isShowing()) {
+                if(!isIgnoreMakeZero()) {
+                    mActivity.showRequestMakeZeroDialog();
+                }
             }
         }
 
@@ -181,11 +196,12 @@ public class MainPresenter {
 
         @Override
         public void onGetAxisAngle(GetAxisAngleWrapper wrapper) {
+
             Logger.warning("获取角度");
             //任务获取到角度时保存到属性
             setCurrentElevationAngle(wrapper.getAxis1Angle());
             setCurrentSwingAngle(wrapper.getAxis2Angle());
-            mActivity.displayAngle(wrapper.getAxis1Angle(), wrapper.getAxis2Angle());
+
         }
 
         @Override
@@ -200,6 +216,19 @@ public class MainPresenter {
         }
 
         @Override
+        public void onGetMotorSpeed(GetAxisAngleWrapper wrapper) {
+            Logger.warning("获取速度");
+            float leftSpeed=Float.valueOf(wrapper.getAxis1Angle());
+            float rightSpeed = Float.valueOf(wrapper.getAxis2Angle());
+            //现在还有电机速度信息
+            setCurrentLeftSpeed(leftSpeed);
+            setCurrentRightSpeed(rightSpeed);
+            mActivity.displaySpeed(wrapper.getAxis1Angle(), wrapper.getAxis2Angle());
+
+            onGetMotorSpeedListener.onGetSpeed();
+        }
+
+        @Override
         public void onDisconnect() {
 //            mActivity.finish();
             onBleDisconnect();
@@ -207,34 +236,34 @@ public class MainPresenter {
     };
 
 
-    /**
-     * 向机器发送调整姿态命令，参数由用户在界面中设置好
-     * 速度分成 100 等份，超过100不执行
-     *
-     * @param angle1 第一轴角度
-     * @param angle2 第二轴角度
-     * @param speed1 电机1转速
-     * @param speed2 电机2转速
-     */
-    public void send(final double angle1, final double angle2, int speed1, int speed2) {
-        Logger.error("send:=======> angle1=" + angle1 + " angle2=" + angle2 + "speed1=" + speed1 + "speed2=" + speed2);
-
-        //TODO 在机器状态栏显示当前转速，这段可能应该放到机器回调指令到达成功以后再执行
-        mActivity.refreshCurrentSpeed(speed1, speed2);
-
-        setMotorSpeed(speed1, speed2);
-
-        //延时发送调整角度命令，防止机器来不及处理，忽略命令
-        RxUtils.timer(1).subscribe(new Consumer<Long>() {
-            @Override
-            public void accept(@NonNull Long aLong) throws Exception {
-                setAxisAngle(angle1, angle2);
-            }
-        });
-
-
-
-    }
+//    /**
+//     * 向机器发送调整姿态命令，参数由用户在界面中设置好
+//     * 速度分成 100 等份，超过100不执行
+//     *
+//     * @param angle1 第一轴角度
+//     * @param angle2 第二轴角度
+//     * @param speed1 电机1转速
+//     * @param speed2 电机2转速
+//     */
+//    public void send(final double angle1, final double angle2, int speed1, int speed2) {
+//        Logger.error("send:=======> angle1=" + angle1 + " angle2=" + angle2 + "speed1=" + speed1 + "speed2=" + speed2);
+//
+//        //TODO 在机器状态栏显示当前转速，这段可能应该放到机器回调指令到达成功以后再执行
+//        mActivity.refreshCurrentSpeed(speed1, speed2);
+//
+//        setMotorSpeed(speed1, speed2);
+//
+//        //延时发送调整角度命令，防止机器来不及处理，忽略命令
+//        RxUtils.timer(1).subscribe(new Consumer<Long>() {
+//            @Override
+//            public void accept(@NonNull Long aLong) throws Exception {
+//                setAxisAngle(angle1, angle2);
+//            }
+//        });
+//
+//
+//
+//    }
 
 //    public void addToFavourite(String name, double angle1, double angle2, int speed1, int speed2) {
 //        try {
@@ -254,10 +283,15 @@ public class MainPresenter {
 //        }
 //    }
 
-    public void startMakingZero() {
+
+    /**
+     * 同意开始校准
+     */
+    public void grantMakingZero() {
         if(mModel != null) {
             mBleService.writeData(mModel.makeZero());
-
+            //同意以后弹出等待对话框，等待校准完成
+            mActivity.showLoadingDialog();
         }
     }
 
@@ -277,12 +311,12 @@ public class MainPresenter {
 //    }
 
     /**
-     * 速度分成 100 等份，超过100不执行
+     * 速度分成 100 等份，超过100不执行，2018.7.22 加入小数
      *
      * @param motor1 电机1
      * @param motor2 电机2
      */
-    public void setMotorSpeed(int motor1, int motor2) {
+    public void setMotorSpeed(float motor1, float motor2) {
         Logger.warning("调用蓝牙接口：==>设置电机转速");
         if(mModel != null)
             mBleService.writeData(mModel.setMotorSpeed(motor1, motor2));
@@ -345,6 +379,12 @@ public class MainPresenter {
     public void getAxisAngle() {
         if (mModel != null) {
             mBleService.writeData(mModel.getAxisAngle());
+        }
+    }
+
+    public void getMotorSpeed() {
+        if(mModel != null) {
+            mBleService.writeData(mModel.getMotorSpeed());
         }
     }
 
@@ -460,6 +500,7 @@ public class MainPresenter {
 
     public void onBleDisconnect() {
         Logger.error("蓝牙连接已经断开！");
+        //TODO 增加一个重连按钮
         //切换到主线程
         Observable.just(1)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -491,5 +532,9 @@ public class MainPresenter {
 
     public BleService getBleService() {
         return mBleService;
+    }
+
+    public interface OnGetMotorSpeedListener {
+        void onGetSpeed();
     }
 }

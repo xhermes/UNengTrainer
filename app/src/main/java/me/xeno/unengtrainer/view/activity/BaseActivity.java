@@ -8,12 +8,15 @@ import android.support.v7.app.AppCompatActivity;
 import me.xeno.unengtrainer.R;
 import me.xeno.unengtrainer.presenter.MainPresenter;
 import me.xeno.unengtrainer.util.Logger;
+import me.xeno.unengtrainer.widget.LoadingDialog;
 
 /**
  * Created by Administrator on 2017/5/14.
  */
 
 public abstract class BaseActivity extends AppCompatActivity {
+
+    LoadingDialog mLoadingDialog;
 
     public static final int ANIM_LEFT_IN_RIGHT_OUT = 1;
     public static final int ANIM_RIGHT_IN_LEFT_OUT = 2;
@@ -45,12 +48,16 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected abstract void loadData();
 
-    protected void showLoadingDialog() {
-        //TODO
+    public void showLoadingDialog() {
+        if(mLoadingDialog == null)
+            mLoadingDialog = new LoadingDialog(this);
+        if(!mLoadingDialog.isShowing())
+            mLoadingDialog.show();
     }
 
-    protected void hideLoadingDialog() {
-        //TODO
+    public void hideLoadingDialog() {
+        if(mLoadingDialog != null && mLoadingDialog.isShowing())
+            mLoadingDialog.dismiss();
     }
 
     protected static void setJumpingAnim(Activity activity, int animMode) {

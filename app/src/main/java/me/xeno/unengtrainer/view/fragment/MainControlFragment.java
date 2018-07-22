@@ -18,6 +18,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.lang.ref.WeakReference;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -26,6 +28,7 @@ import me.xeno.unengtrainer.R;
 import me.xeno.unengtrainer.application.Config;
 import me.xeno.unengtrainer.application.DataManager;
 import me.xeno.unengtrainer.model.entity.FavouriteRecord;
+import me.xeno.unengtrainer.presenter.MainPresenter;
 import me.xeno.unengtrainer.util.DialogUtils;
 import me.xeno.unengtrainer.util.Logger;
 import me.xeno.unengtrainer.util.RxUtils;
@@ -38,7 +41,7 @@ import me.xeno.unengtrainer.widget.SetSpeedDialogWrapper;
 /**
  * Main UI for the add task screen. Users can enter a task title and description.
  */
-public class MainControlFragment extends BaseMainFragment implements View.OnTouchListener {
+public class MainControlFragment extends BaseMainFragment implements View.OnTouchListener,MainPresenter.OnGetMotorSpeedListener {
 
     private View mRunAxisSwingPositiveView;
     private View mRunAxisSwingNegativeView;
@@ -65,11 +68,6 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 //    private double mElevationAngle;
     private int mLeftSpeed;
     private int mRightSpeed;
-
-//    private double mCurrentSwingAngle;
-//    private double mCurrentElevationAngle;
-    private int mCurrentLeftSpeed;
-    private int mCurrentRightSpeed;
 
     private TextView mCurrentRightSpeedView;
     private TextView mCurrentLeftSpeedView;
@@ -109,6 +107,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
             mBatteryDisposable = getMainActivity().getPresenter().getBatteryVoltage(Config.GET_BATTERY_PERIOD);
         }
         if (mStatusDisposable != null && !mStatusDisposable.isDisposed()) {
+        } else {
             mStatusDisposable = getMainActivity().getPresenter().startGetStatusTask(Config.GET_STATUS_PERIOD);
         }
 
@@ -126,6 +125,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         Logger.info("页面休眠，获取电压循环任务已停止");
         dispose(mBatteryDisposable);
         dispose(mCurrentAngleInfrequentlyDisposable);
+//        dispose(mStatusDisposable);
 
         //TODO 看看要不要在休眠时让获取状态任务也暂停，以节省电量
     }
@@ -196,10 +196,10 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         mStopElectricView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCurrentLeftSpeed = 0;
-                mCurrentRightSpeed = 0;
+                getMainActivity().getPresenter().setCurrentLeftSpeed(0);
+                getMainActivity().getPresenter().setCurrentRightSpeed(0);
                 getMainActivity().getPresenter().setMotorSpeed(0, 0);
-                getMainActivity().refreshCurrentSpeed(0, 0);
+//                getMainActivity().refreshCurrentSpeed(0, 0);
             }
         });
         mReturnToZeroView.setOnClickListener(new View.OnClickListener() {
@@ -324,8 +324,9 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         if(id != 0) {
             final FavouriteRecord record = DataManager.getInstance().getDaoSession().getFavouriteRecordDao().load(id);
 
-            mCurrentLeftSpeed = record.getLeftMotorSpeed();
-            mCurrentRightSpeed = record.getRightMotorSpeed();
+            //TODO 应该异步，在机器设置成功以后再同步速度显示
+            getMainActivity().getPresenter().setCurrentLeftSpeed(record.getLeftMotorSpeed());
+            getMainActivity().getPresenter().setCurrentRightSpeed(record.getRightMotorSpeed());
 
             //请求调整转速
             getMainActivity().getPresenter().setMotorSpeed(record.getLeftMotorSpeed(), record.getRightMotorSpeed());
@@ -338,7 +339,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
                 }
             });
 
-            getMainActivity().refreshCurrentSpeed(record.getLeftMotorSpeed(), record.getRightMotorSpeed());
+//            getMainActivity().refreshCurrentSpeed(record.getLeftMotorSpeed(), record.getRightMotorSpeed());
         } else {
             Logger.error("selectFromFavourite(), id = 0");
         }
@@ -346,15 +347,27 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 
 
     public void showSetMotorSpeedDialog() {
-        Logger.info("弹出对话框， leftspeed: " + mCurrentLeftSpeed + " rightspeed: " + mCurrentRightSpeed);
-        final SetSpeedDialogWrapper ssd = new SetSpeedDialogWrapper(getMainActivity(), mCurrentLeftSpeed, mCurrentRightSpeed);
+
+        //请求电机速度，异步弹出Dialog
+        getMainActivity().getPresenter().getMotorSpeed();
+
+           //弹出对话框前先获取一次速度
+
+    }
+
+    @Override
+    public void onGetSpeed() {
+        float currentLeftSpeed = getMainActivity().getPresenter().getCurrentLeftSpeed();
+        float currentRightSpeed = getMainActivity().getPresenter().getCurrentRightSpeed();
+        Logger.info("弹出对话框， leftspeed: " + currentLeftSpeed + " rightspeed: " + currentRightSpeed);
+        final SetSpeedDialogWrapper ssd = new SetSpeedDialogWrapper(getMainActivity(), currentLeftSpeed, currentRightSpeed);
         ssd.showDialog();
         ssd.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                mCurrentLeftSpeed = ssd.getLeftSpeed();
-                mCurrentRightSpeed = ssd.getRightSpeed();
-                getMainActivity().refreshCurrentSpeed(mCurrentLeftSpeed, mCurrentRightSpeed);
+                getMainActivity().getPresenter().setCurrentLeftSpeed(ssd.getLeftSpeed());
+                getMainActivity().getPresenter().setCurrentRightSpeed(ssd.getRightSpeed());
+//                getMainActivity().refreshCurrentSpeed(mCurrentLeftSpeed, mCurrentRightSpeed);
             }
         });
     }
@@ -405,24 +418,6 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 //        this.mElevationAngle = elevationAngle;
 ////        mElevationAngleView.setText("仰角：" + elevationAngle);
 //    }
-
-    public int getLeftSpeed() {
-        return mLeftSpeed;
-    }
-
-    public void setLeftSpeed(int leftSpeed) {
-        this.mLeftSpeed = leftSpeed;
-//        mLeftSpeedView.setText("左转速：" + leftSpeed);
-    }
-
-    public int getRightSpeed() {
-        return mRightSpeed;
-    }
-
-    public void setRightSpeed(int rightSpeed) {
-        this.mRightSpeed = rightSpeed;
-//        mRightSpeedView.setText("右转速：" + rightSpeed);
-    }
 
     private void dispose(Disposable disposable) {
         if(disposable == mCurrentAngleDisposable) {
@@ -510,4 +505,6 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         //在页面结束时停止获取状态任务
         dispose(mStatusDisposable);
     }
+
+
 }

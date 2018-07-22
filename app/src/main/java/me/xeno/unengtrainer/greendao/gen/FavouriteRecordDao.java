@@ -30,8 +30,8 @@ public class FavouriteRecordDao extends AbstractDao<FavouriteRecord, Long> {
         public final static Property ModifyTime = new Property(3, String.class, "modifyTime", false, "MODIFY_TIME");
         public final static Property SwingAngle = new Property(4, double.class, "swingAngle", false, "SWING_ANGLE");
         public final static Property ElevationAngle = new Property(5, double.class, "elevationAngle", false, "ELEVATION_ANGLE");
-        public final static Property LeftMotorSpeed = new Property(6, int.class, "leftMotorSpeed", false, "LEFT_MOTOR_SPEED");
-        public final static Property RightMotorSpeed = new Property(7, int.class, "rightMotorSpeed", false, "RIGHT_MOTOR_SPEED");
+        public final static Property LeftMotorSpeed = new Property(6, float.class, "leftMotorSpeed", false, "LEFT_MOTOR_SPEED");
+        public final static Property RightMotorSpeed = new Property(7, float.class, "rightMotorSpeed", false, "RIGHT_MOTOR_SPEED");
         public final static Property Checked = new Property(8, boolean.class, "checked", false, "CHECKED");
     }
 
@@ -54,8 +54,8 @@ public class FavouriteRecordDao extends AbstractDao<FavouriteRecord, Long> {
                 "\"MODIFY_TIME\" TEXT," + // 3: modifyTime
                 "\"SWING_ANGLE\" REAL NOT NULL ," + // 4: swingAngle
                 "\"ELEVATION_ANGLE\" REAL NOT NULL ," + // 5: elevationAngle
-                "\"LEFT_MOTOR_SPEED\" INTEGER NOT NULL ," + // 6: leftMotorSpeed
-                "\"RIGHT_MOTOR_SPEED\" INTEGER NOT NULL ," + // 7: rightMotorSpeed
+                "\"LEFT_MOTOR_SPEED\" REAL NOT NULL ," + // 6: leftMotorSpeed
+                "\"RIGHT_MOTOR_SPEED\" REAL NOT NULL ," + // 7: rightMotorSpeed
                 "\"CHECKED\" INTEGER NOT NULL );"); // 8: checked
     }
 
@@ -90,8 +90,8 @@ public class FavouriteRecordDao extends AbstractDao<FavouriteRecord, Long> {
         }
         stmt.bindDouble(5, entity.getSwingAngle());
         stmt.bindDouble(6, entity.getElevationAngle());
-        stmt.bindLong(7, entity.getLeftMotorSpeed());
-        stmt.bindLong(8, entity.getRightMotorSpeed());
+        stmt.bindDouble(7, entity.getLeftMotorSpeed());
+        stmt.bindDouble(8, entity.getRightMotorSpeed());
         stmt.bindLong(9, entity.getChecked() ? 1L: 0L);
     }
 
@@ -120,8 +120,8 @@ public class FavouriteRecordDao extends AbstractDao<FavouriteRecord, Long> {
         }
         stmt.bindDouble(5, entity.getSwingAngle());
         stmt.bindDouble(6, entity.getElevationAngle());
-        stmt.bindLong(7, entity.getLeftMotorSpeed());
-        stmt.bindLong(8, entity.getRightMotorSpeed());
+        stmt.bindDouble(7, entity.getLeftMotorSpeed());
+        stmt.bindDouble(8, entity.getRightMotorSpeed());
         stmt.bindLong(9, entity.getChecked() ? 1L: 0L);
     }
 
@@ -139,8 +139,8 @@ public class FavouriteRecordDao extends AbstractDao<FavouriteRecord, Long> {
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // modifyTime
             cursor.getDouble(offset + 4), // swingAngle
             cursor.getDouble(offset + 5), // elevationAngle
-            cursor.getInt(offset + 6), // leftMotorSpeed
-            cursor.getInt(offset + 7), // rightMotorSpeed
+            cursor.getFloat(offset + 6), // leftMotorSpeed
+            cursor.getFloat(offset + 7), // rightMotorSpeed
             cursor.getShort(offset + 8) != 0 // checked
         );
         return entity;
@@ -154,8 +154,8 @@ public class FavouriteRecordDao extends AbstractDao<FavouriteRecord, Long> {
         entity.setModifyTime(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setSwingAngle(cursor.getDouble(offset + 4));
         entity.setElevationAngle(cursor.getDouble(offset + 5));
-        entity.setLeftMotorSpeed(cursor.getInt(offset + 6));
-        entity.setRightMotorSpeed(cursor.getInt(offset + 7));
+        entity.setLeftMotorSpeed(cursor.getFloat(offset + 6));
+        entity.setRightMotorSpeed(cursor.getFloat(offset + 7));
         entity.setChecked(cursor.getShort(offset + 8) != 0);
      }
     

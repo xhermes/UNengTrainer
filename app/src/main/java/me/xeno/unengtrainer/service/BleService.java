@@ -352,7 +352,7 @@ public class BleService extends Service {
         final byte[] finalData = data;
 
         //如果data为null，直接放弃处理
-        if(finalData != null) {
+        if(finalData != null || type == Config.DATA_TYPE_MAKE_ZERO) {
             Observable.just(new Object())
                     .subscribeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Consumer<Object>() {
@@ -393,6 +393,9 @@ public class BleService extends Service {
                                     break;
                                 case Config.DATA_TYPE_GET_BATTERY_VOLTAGE:
                                     mListener.onGetBatteryVoltage(mProcessor.handleGetBatteryVoltage(finalData));
+                                    break;
+                                case Config.DATA_TYPE_GET_MOTOR_SPEED:
+                                    mListener.onGetMotorSpeed(mProcessor.handleGetMotorSpeed(finalData));
                                     break;
                             }
                         }

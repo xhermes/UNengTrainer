@@ -14,6 +14,7 @@ import me.xeno.unengtrainer.util.Logger;
 
 /**
  * Created by Administrator on 2017/6/24.
+ * 负责蓝牙底层的数据包解析
  */
 
 public class BleServiceProcessor {
@@ -22,7 +23,7 @@ public class BleServiceProcessor {
         return (data & 0x01);
     }
     private int getBit6(byte data) {
-        return ((data & 0x02) >> 1);
+        return ((data & 0x40));
     }
     private int getBit5(byte data) {
         return ((data & 0x04) >> 2);
@@ -66,6 +67,12 @@ public class BleServiceProcessor {
 
         GetStatusWrapper wrapper = new GetStatusWrapper();
         wrapper.setAxisStatuses(axisStatuses);
+        //是否校准零位完成
+        if(getBit6(axis1) > 0) {
+            wrapper.setMakeZeroCompleted(true);
+        } else {
+            wrapper.setMakeZeroCompleted(false);
+        }
 
         return wrapper;
     }
@@ -96,25 +103,25 @@ public class BleServiceProcessor {
 
     public MakeZeroCompletedWrapper handleRequestMakeZero(byte[] data) {
 
-        byte axis1 = data[0];
-        byte axis2 = data[1];
-
+//        byte axis1 = data[0];
+//        byte axis2 = data[1];
+//
         MakeZeroCompletedWrapper wrapper = new MakeZeroCompletedWrapper();
-
-        GetStatusWrapper.AxisStatus[] axisStatuses = new GetStatusWrapper.AxisStatus[2];
-        axisStatuses[0].setRunning(getBit0(axis1));
-        axisStatuses[0].setAbruptStopping(getBit1(axis1));
-        axisStatuses[0].setAlerting(getBit2(axis1));
-        axisStatuses[0].setPositiveSpacing(getBit3(axis1));
-        axisStatuses[0].setNegativeSpacing(getBit4(axis1));
-
-        axisStatuses[1].setRunning(getBit0(axis2));
-        axisStatuses[1].setAbruptStopping(getBit1(axis2));
-        axisStatuses[1].setAlerting(getBit2(axis2));
-        axisStatuses[1].setPositiveSpacing(getBit3(axis2));
-        axisStatuses[1].setNegativeSpacing(getBit4(axis2));
-
-        wrapper.setAxisStatuses(axisStatuses);
+//
+//        GetStatusWrapper.AxisStatus[] axisStatuses = new GetStatusWrapper.AxisStatus[2];
+//        axisStatuses[0].setRunning(getBit0(axis1));
+//        axisStatuses[0].setAbruptStopping(getBit1(axis1));
+//        axisStatuses[0].setAlerting(getBit2(axis1));
+//        axisStatuses[0].setPositiveSpacing(getBit3(axis1));
+//        axisStatuses[0].setNegativeSpacing(getBit4(axis1));
+//
+//        axisStatuses[1].setRunning(getBit0(axis2));
+//        axisStatuses[1].setAbruptStopping(getBit1(axis2));
+//        axisStatuses[1].setAlerting(getBit2(axis2));
+//        axisStatuses[1].setPositiveSpacing(getBit3(axis2));
+//        axisStatuses[1].setNegativeSpacing(getBit4(axis2));
+//
+//        wrapper.setAxisStatuses(axisStatuses);
 
         return wrapper;
     }
@@ -137,7 +144,7 @@ public class BleServiceProcessor {
         GetAxisAngleWrapper wrapper = new GetAxisAngleWrapper();
 
         String dataStr = asciiToString(data);
-        String[] angleStr = new String[2];
+        String[] angleStr;
 
             angleStr = dataStr.split(",");
 
@@ -164,6 +171,24 @@ public class BleServiceProcessor {
 
         if(dataStr != null) {
             wrapper.setVoltage(dataStr);
+        }
+
+        return wrapper;
+    }
+
+    public GetAxisAngleWrapper handleGetMotorSpeed(byte[] data) {
+        GetAxisAngleWrapper wrapper = new GetAxisAngleWrapper();
+
+        String dataStr = asciiToString(data);
+        String[] angleStr;
+
+        angleStr = dataStr.split(",");
+
+        if(angleStr[0] != null) {
+            wrapper.setAxis1Angle(angleStr[0]);
+        }
+        if(angleStr[1] != null) {
+            wrapper.setAxis2Angle(angleStr[1]);
         }
 
         return wrapper;

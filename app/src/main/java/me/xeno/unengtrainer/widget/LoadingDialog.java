@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import me.xeno.unengtrainer.R;
 import me.xeno.unengtrainer.drawable.JumpDrawable;
+import me.xeno.unengtrainer.drawable.SpinDrawable;
 
 /**
  * Created by Administrator on 2018/7/20.
@@ -19,7 +20,7 @@ public class LoadingDialog extends Dialog {
     private ImageView mImageView;
     private TextView mTextView;
 
-    private JumpDrawable drawable;
+    private SpinDrawable drawable;
 
     public LoadingDialog(@NonNull Context context) {
         super(context);
@@ -28,7 +29,7 @@ public class LoadingDialog extends Dialog {
         mImageView = (ImageView) findViewById(R.id.image);
         mTextView = (TextView) findViewById(R.id.text);
 
-        drawable = new JumpDrawable(context.getResources().getDrawable(R.drawable.ic_football));
+        drawable = new SpinDrawable(context.getResources().getDrawable(R.drawable.ic_football));
 
         mImageView.setImageDrawable(drawable);
         drawable.start();

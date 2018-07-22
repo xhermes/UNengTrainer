@@ -29,8 +29,8 @@ public class DashboardView extends LinearLayout {
 
     private String mSwingAngle = "0";
     private String mElevationAngle = "0";
-    private int mLeftSpeed;
-    private int mRightSpeed;
+    private float mLeftSpeed;
+    private float mRightSpeed;
 
     private TextView mLeftMotorSpeedView;
     private TextView mRightMotorSpeedView;
@@ -73,12 +73,12 @@ public class DashboardView extends LinearLayout {
         });
     }
 
-    public void setCurrentLeftSpeed(int speed) {
+    public void setCurrentLeftSpeed(float speed) {
         mLeftSpeed = speed;
         mLeftMotorSpeedView.setText(speed + "%");
     }
 
-    public void setCurrentRightSpeed(int speed) {
+    public void setCurrentRightSpeed(float speed) {
         mRightSpeed = speed;
         mRightMotorSpeedView.setText(speed + "%");
     }
@@ -93,7 +93,7 @@ public class DashboardView extends LinearLayout {
         mElevationAngleView.setText(angle + "°");
     }
 
-    public void addToFavourite(String name, double angle1, double angle2, int speed1, int speed2) {
+    public void addToFavourite(String name, double angle1, double angle2, float speed1, float speed2) {
         try {
             String currentTime = TimeUtils.longToString(System.currentTimeMillis(), "yyyy-MM-dd HH:mm");
             FavouriteRecord record = new FavouriteRecord();

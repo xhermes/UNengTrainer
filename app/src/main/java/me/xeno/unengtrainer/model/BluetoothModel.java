@@ -90,7 +90,8 @@ public class BluetoothModel {
     }
 
     /**
-     * 归零
+     * 同意机器开始校准零位
+     * 同意机器开始校准零位（开启对话框）->机器开始校准零位->完成校准回调onStatus->对话框销毁
      *
      * @return
      */
@@ -98,7 +99,7 @@ public class BluetoothModel {
         return createFrame(Config.DATA_TYPE_MAKE_ZERO, null);
     }
 
-    public byte[] setMotorSpeed(int motor1, int motor2) {
+    public byte[] setMotorSpeed(float motor1, float motor2) {
         StringBuilder sb = new StringBuilder();
         sb.append(String.valueOf(motor1));
         sb.append(",");
@@ -113,6 +114,10 @@ public class BluetoothModel {
 
     public byte[] getBatteryVoltage() {
         return createFrame(Config.DATA_TYPE_GET_BATTERY_VOLTAGE, null);
+    }
+
+    public byte[] getMotorSpeed() {
+        return createFrame(Config.DATA_TYPE_GET_MOTOR_SPEED, null);
     }
 
     /**
