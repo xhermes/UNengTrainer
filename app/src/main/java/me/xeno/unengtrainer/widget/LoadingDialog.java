@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.AppCompatImageView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,7 +18,7 @@ import me.xeno.unengtrainer.drawable.SpinDrawable;
 
 public class LoadingDialog extends Dialog {
 
-    private ImageView mImageView;
+    private AppCompatImageView mImageView;
     private TextView mTextView;
 
     private SpinDrawable drawable;
@@ -26,10 +27,10 @@ public class LoadingDialog extends Dialog {
         super(context);
         setContentView(R.layout.dialog_loading);
 
-        mImageView = (ImageView) findViewById(R.id.image);
+        mImageView = (AppCompatImageView) findViewById(R.id.image);
         mTextView = (TextView) findViewById(R.id.text);
 
-        drawable = new SpinDrawable(context.getResources().getDrawable(R.drawable.ic_football));
+        drawable = new SpinDrawable(context.getResources().getDrawable(R.drawable.ic_football_loading));
 
         mImageView.setImageDrawable(drawable);
         drawable.start();

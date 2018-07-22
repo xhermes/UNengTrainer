@@ -29,11 +29,12 @@ public class SpinDrawable extends Drawable implements Animatable {
         canvas.rotate(mCurrentDegree, getBounds().centerX(), getBounds().centerY());
 
         mDrawable.draw(canvas);
-        invalidateSelf();
         mCurrentDegree+=1;
-        if(mCurrentDegree >= 359){
+        if(mCurrentDegree >= 360){
             mCurrentDegree = 0;
         }
+        invalidateSelf();
+
     }
 
     @Override
