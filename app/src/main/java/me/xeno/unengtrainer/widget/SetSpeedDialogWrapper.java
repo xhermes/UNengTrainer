@@ -183,14 +183,17 @@ public class SetSpeedDialogWrapper implements View.OnClickListener {
     private void changeLeftSpeed(float newSpeed) {
         mLeftSpeed = newSpeed;
         mLeftSpeedView.setText(mLeftSpeed + "%");
-        mLeftSpeedBar.setProgress((int)mLeftSpeed);
+        int leftSpeedInt = (int)mLeftSpeed;
         mActivity.getPresenter().setMotorSpeed(mLeftSpeed, mRightSpeed);
+        mLeftSpeedBar.setProgress(leftSpeedInt);
     }
 
     private void changeRightSpeed(float newSpeed) {
         mRightSpeed = newSpeed;
         mRightSpeedView.setText(mRightSpeed + "%");
-        mRightSpeedBar.setProgress((int)mRightSpeed);
         mActivity.getPresenter().setMotorSpeed(mLeftSpeed, mRightSpeed);
+        mRightSpeedBar.setProgress((int)mRightSpeed);
     }
+
+
 }

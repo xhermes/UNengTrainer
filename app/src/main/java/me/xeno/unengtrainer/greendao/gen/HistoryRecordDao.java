@@ -28,8 +28,8 @@ public class HistoryRecordDao extends AbstractDao<HistoryRecord, Long> {
         public final static Property CreateTime = new Property(1, String.class, "createTime", false, "CREATE_TIME");
         public final static Property SwingAngle = new Property(2, double.class, "swingAngle", false, "SWING_ANGLE");
         public final static Property ElevationAngle = new Property(3, double.class, "elevationAngle", false, "ELEVATION_ANGLE");
-        public final static Property LeftMotorSpeed = new Property(4, int.class, "leftMotorSpeed", false, "LEFT_MOTOR_SPEED");
-        public final static Property RightMotorSpeed = new Property(5, int.class, "rightMotorSpeed", false, "RIGHT_MOTOR_SPEED");
+        public final static Property LeftMotorSpeed = new Property(4, float.class, "leftMotorSpeed", false, "LEFT_MOTOR_SPEED");
+        public final static Property RightMotorSpeed = new Property(5, float.class, "rightMotorSpeed", false, "RIGHT_MOTOR_SPEED");
     }
 
 
@@ -49,8 +49,8 @@ public class HistoryRecordDao extends AbstractDao<HistoryRecord, Long> {
                 "\"CREATE_TIME\" TEXT," + // 1: createTime
                 "\"SWING_ANGLE\" REAL NOT NULL ," + // 2: swingAngle
                 "\"ELEVATION_ANGLE\" REAL NOT NULL ," + // 3: elevationAngle
-                "\"LEFT_MOTOR_SPEED\" INTEGER NOT NULL ," + // 4: leftMotorSpeed
-                "\"RIGHT_MOTOR_SPEED\" INTEGER NOT NULL );"); // 5: rightMotorSpeed
+                "\"LEFT_MOTOR_SPEED\" REAL NOT NULL ," + // 4: leftMotorSpeed
+                "\"RIGHT_MOTOR_SPEED\" REAL NOT NULL );"); // 5: rightMotorSpeed
     }
 
     /** Drops the underlying database table. */
@@ -70,8 +70,8 @@ public class HistoryRecordDao extends AbstractDao<HistoryRecord, Long> {
         }
         stmt.bindDouble(3, entity.getSwingAngle());
         stmt.bindDouble(4, entity.getElevationAngle());
-        stmt.bindLong(5, entity.getLeftMotorSpeed());
-        stmt.bindLong(6, entity.getRightMotorSpeed());
+        stmt.bindDouble(5, entity.getLeftMotorSpeed());
+        stmt.bindDouble(6, entity.getRightMotorSpeed());
     }
 
     @Override
@@ -85,8 +85,8 @@ public class HistoryRecordDao extends AbstractDao<HistoryRecord, Long> {
         }
         stmt.bindDouble(3, entity.getSwingAngle());
         stmt.bindDouble(4, entity.getElevationAngle());
-        stmt.bindLong(5, entity.getLeftMotorSpeed());
-        stmt.bindLong(6, entity.getRightMotorSpeed());
+        stmt.bindDouble(5, entity.getLeftMotorSpeed());
+        stmt.bindDouble(6, entity.getRightMotorSpeed());
     }
 
     @Override
@@ -101,8 +101,8 @@ public class HistoryRecordDao extends AbstractDao<HistoryRecord, Long> {
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // createTime
             cursor.getDouble(offset + 2), // swingAngle
             cursor.getDouble(offset + 3), // elevationAngle
-            cursor.getInt(offset + 4), // leftMotorSpeed
-            cursor.getInt(offset + 5) // rightMotorSpeed
+            cursor.getFloat(offset + 4), // leftMotorSpeed
+            cursor.getFloat(offset + 5) // rightMotorSpeed
         );
         return entity;
     }
@@ -113,8 +113,8 @@ public class HistoryRecordDao extends AbstractDao<HistoryRecord, Long> {
         entity.setCreateTime(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setSwingAngle(cursor.getDouble(offset + 2));
         entity.setElevationAngle(cursor.getDouble(offset + 3));
-        entity.setLeftMotorSpeed(cursor.getInt(offset + 4));
-        entity.setRightMotorSpeed(cursor.getInt(offset + 5));
+        entity.setLeftMotorSpeed(cursor.getFloat(offset + 4));
+        entity.setRightMotorSpeed(cursor.getFloat(offset + 5));
      }
     
     @Override

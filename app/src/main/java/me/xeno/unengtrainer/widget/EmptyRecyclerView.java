@@ -82,8 +82,8 @@ public class EmptyRecyclerView extends RecyclerView implements ObservableView {
         super.setAdapter(adapter);
 
         if (adapter != null) {
-            // TODO 这里用了观察者模式，同时把这个观察者添加进去，
-            // TODO 至于这个模式怎么用，谷歌一下，不多讲了，因为这个涉及到了Adapter的一些原理，感兴趣可以点进去看看源码，还是受益匪浅的
+            // 这里用了观察者模式，同时把这个观察者添加进去，
+            // 至于这个模式怎么用，谷歌一下，不多讲了，因为这个涉及到了Adapter的一些原理，感兴趣可以点进去看看源码，还是受益匪浅的
 //            if(!adapter.hasObservers())
             adapter.registerAdapterDataObserver(emptyObserver);
         }

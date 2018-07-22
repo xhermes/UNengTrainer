@@ -20,8 +20,6 @@ import me.xeno.unengtrainer.presenter.FavouritePresenter;
 import me.xeno.unengtrainer.util.Logger;
 import me.xeno.unengtrainer.util.ToastUtils;
 import me.xeno.unengtrainer.view.adapter.FavouriteRecyclerAdapter;
-import me.xeno.unengtrainer.widget.LLayoutManager;
-import me.xeno.unengtrainer.widget.TestLayoutManager;
 
 /**
  * Created by Administrator on 2017/5/14.
@@ -79,12 +77,11 @@ public class FavouriteActivity extends BaseActivity implements OnFavItemSelectLi
 
     private void initRecyclerView() {
         Logger.error("设置LinearLayoutManager");
-//        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        //FIXME 测试自定义LayoutManager
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 //        mRecyclerView.setLayoutManager(new LLayoutManager());
-        mRecyclerView.setLayoutManager(new TestLayoutManager(this));
+//        mRecyclerView.setLayoutManager(new TestLayoutManager(this));
 //        mRecyclerView.setPullRefreshEnabled(false);
-//        mRecyclerView.setEmptyView(mEmptyView);//TODO 增加emptyview
+//        mRecyclerView.setEmptyView(mEmptyView);
 //        mRecyclerView.setRefreshProgressStyle(ProgressStyle.TriangleSkewSpin); //设置下拉刷新Progress的样式
 //        mRecyclerView.setArrowImageView(R.drawable.ic_refresh);
         Logger.error("创建FavouriteRecyclerAdapter");

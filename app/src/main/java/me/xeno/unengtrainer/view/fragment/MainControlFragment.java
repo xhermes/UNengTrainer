@@ -348,9 +348,12 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 
     public void showSetMotorSpeedDialog() {
 
-        //请求电机速度，异步弹出Dialog
-        getMainActivity().getPresenter().getMotorSpeed();
-
+        if(Config.DEBUG_MODE == Config.DEBUG_MODE_CTRL) {
+            onGetSpeed();
+        } else {
+            //请求电机速度，异步弹出Dialog
+            getMainActivity().getPresenter().getMotorSpeed();
+        }
            //弹出对话框前先获取一次速度
 
     }

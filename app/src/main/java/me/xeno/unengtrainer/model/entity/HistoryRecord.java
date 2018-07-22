@@ -17,11 +17,11 @@ public class HistoryRecord {
 
     private double swingAngle;
     private double elevationAngle;
-    private int leftMotorSpeed;
-    private int rightMotorSpeed;
-    @Generated(hash = 658306288)
+    private float leftMotorSpeed;
+    private float rightMotorSpeed;
+    @Generated(hash = 1259204917)
     public HistoryRecord(long id, String createTime, double swingAngle,
-            double elevationAngle, int leftMotorSpeed, int rightMotorSpeed) {
+            double elevationAngle, float leftMotorSpeed, float rightMotorSpeed) {
         this.id = id;
         this.createTime = createTime;
         this.swingAngle = swingAngle;
@@ -56,16 +56,19 @@ public class HistoryRecord {
     public void setElevationAngle(double elevationAngle) {
         this.elevationAngle = elevationAngle;
     }
-    public int getLeftMotorSpeed() {
+    public float getLeftMotorSpeed() {
         return this.leftMotorSpeed;
     }
-    public void setLeftMotorSpeed(int leftMotorSpeed) {
+    public void setLeftMotorSpeed(float leftMotorSpeed) {
         this.leftMotorSpeed = leftMotorSpeed;
     }
-    public int getRightMotorSpeed() {
+    public float getRightMotorSpeed() {
         return this.rightMotorSpeed;
     }
     public void setRightMotorSpeed(int rightMotorSpeed) {
+        this.rightMotorSpeed = rightMotorSpeed;
+    }
+    public void setRightMotorSpeed(float rightMotorSpeed) {
         this.rightMotorSpeed = rightMotorSpeed;
     }
 }
