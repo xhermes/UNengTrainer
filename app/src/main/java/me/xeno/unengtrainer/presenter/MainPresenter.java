@@ -441,6 +441,7 @@ public class MainPresenter {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             Logger.info("ServiceConnection onServiceConnected()");
+            //此处的onServiceConnected不应该成为蓝牙连接成功的标志，实际应该是BleGattCallback的onConnectSuccess
             sServiceState = STATE_CONNECTED;
             mBleService = ((BleService.BleBinder) service).getService();
 

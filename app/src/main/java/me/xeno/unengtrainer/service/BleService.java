@@ -277,7 +277,7 @@ public class BleService extends Service {
      * {@code BluetoothGattCallback#onConnectionStateChange(android.bluetooth.BluetoothGatt, int, int)}
      * callback.
      * 复位（断开此次蓝牙连接，移除所有回调）
-     */
+     */ 
     public void disconnect() {
         if(!DataManager.getInstance().getBleManager().isBlueEnable()) {
             Logger.warning("disconnect(): bluetooth is NOT activate");

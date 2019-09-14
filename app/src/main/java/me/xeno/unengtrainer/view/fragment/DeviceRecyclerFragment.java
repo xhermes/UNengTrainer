@@ -24,6 +24,7 @@ import me.xeno.unengtrainer.model.BluetoothModel;
 import me.xeno.unengtrainer.util.Logger;
 import me.xeno.unengtrainer.util.ToastUtils;
 import me.xeno.unengtrainer.view.adapter.DeviceRecyclerAdapter;
+import me.xeno.unengtrainer.widget.EmptyRecyclerView;
 
 /**
  * show discovered device list.
@@ -32,7 +33,7 @@ public class DeviceRecyclerFragment extends BaseMainFragment implements DeviceRe
 
     private View mRootView;
 
-    private RecyclerView mRecyclerView;
+    private EmptyRecyclerView mRecyclerView;
     private DeviceRecyclerAdapter mAdapter;
     private View mEmptyView;
 
@@ -59,8 +60,9 @@ public class DeviceRecyclerFragment extends BaseMainFragment implements DeviceRe
         if(mRootView == null) {
             mRootView = inflater.inflate(R.layout.fragment_list_device, container, false);
         }
-        mRecyclerView = (RecyclerView) mRootView.findViewById(R.id.recycler);
+        mRecyclerView = (EmptyRecyclerView) mRootView.findViewById(R.id.recycler);
         mEmptyView = mRootView.findViewById(R.id.empty);
+        mRecyclerView.setEmptyView(mEmptyView);
 
         setHasOptionsMenu(true);
         setRetainInstance(true);
@@ -94,7 +96,7 @@ public class DeviceRecyclerFragment extends BaseMainFragment implements DeviceRe
     private void initRecyclerView() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 //        mRecyclerView.setPullRefreshEnabled(false);
-//        mRecyclerView.setEmptyView(mEmptyView);//TODO 增加emptyView
+        mRecyclerView.setEmptyView(mEmptyView);//TODO 增加emptyView
 //        mRecyclerView.setRefreshProgressStyle(ProgressStyle.TriangleSkewSpin); //设置下拉刷新Progress的样式
 //        mRecyclerView.setArrowImageView(R.drawable.ic_refresh);
         mAdapter = new DeviceRecyclerAdapter(this);

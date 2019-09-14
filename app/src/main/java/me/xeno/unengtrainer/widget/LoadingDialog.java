@@ -26,6 +26,8 @@ public class LoadingDialog extends Dialog {
     public LoadingDialog(@NonNull Context context) {
         super(context);
         setContentView(R.layout.dialog_loading);
+        setCancelable(false);
+        setCanceledOnTouchOutside(false);
 
         mImageView = (AppCompatImageView) findViewById(R.id.image);
         mTextView = (TextView) findViewById(R.id.text);

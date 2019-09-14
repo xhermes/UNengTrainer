@@ -79,7 +79,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
     private Disposable mBatteryDisposable;
     private Disposable mCurrentAngleInfrequentlyDisposable;
 
-    private Disposable mCurrentAngleDisposable;
+    private Disposable mCurrentAngleDisposable;//快速获取角度任务
 
     private Disposable mRunAxisSwingPosDisposable;
     private Disposable mRunAxisSwingNegDisposable;
@@ -440,7 +440,9 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mRunAxisSwingPosDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_POSITIVE, Config.RUN_AXIS_STOP, Config.RUN_AXIS_PERIOD);
 
-                mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
+                //只有在此引用没有值或已被回收时，才开启新任务，确保不会因为发生A任务启动->引用，B任务启动->引用，B任务销毁，A任务产生逃逸现象出现
+                if(mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed())
+                    mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 getMainActivity().getPresenter().stopAxis();
                 dispose(mRunAxisSwingPosDisposable);
@@ -453,7 +455,9 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         if (v == mRunAxisSwingNegativeView) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mRunAxisSwingNegDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_NEGATIVE, Config.RUN_AXIS_STOP, Config.RUN_AXIS_PERIOD);
-                mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
+                //只有在此引用没有值或已被回收时，才开启新任务，确保不会因为发生A任务启动->引用，B任务启动->引用，B任务销毁，A任务产生逃逸现象出现
+                if(mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed())
+                    mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 getMainActivity().getPresenter().stopAxis();
                 dispose(mRunAxisSwingNegDisposable);
@@ -466,7 +470,9 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         if (v == mRunAxisElevationPositiveView) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mRunAxisElevationPosDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_POSITIVE, Config.RUN_AXIS_PERIOD);
-                mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
+                //只有在此引用没有值或已被回收时，才开启新任务，确保不会因为发生A任务启动->引用，B任务启动->引用，B任务销毁，A任务产生逃逸现象出现
+                if(mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed())
+                    mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 getMainActivity().getPresenter().stopAxis();
                 dispose(mRunAxisElevationPosDisposable);
@@ -478,7 +484,9 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         if (v == mRunAxisElevationNegativeView) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mRunAxisElevationNegDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_NEGATIVE, Config.RUN_AXIS_PERIOD);
-                mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
+                //只有在此引用没有值或已被回收时，才开启新任务，确保不会因为发生A任务启动->引用，B任务启动->引用，B任务销毁，A任务产生逃逸现象出现
+                if(mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed())
+                    mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 getMainActivity().getPresenter().stopAxis();
                 dispose(mRunAxisElevationNegDisposable);

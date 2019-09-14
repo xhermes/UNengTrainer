@@ -67,6 +67,7 @@ public class MainActivity extends BaseActivity
                 .icon(this.getResources().getDrawable(R.drawable.ic_make_zero))
                 .title("自动校准")
                 .content("确认机器将自动校准零位，可以在左侧弹出菜单->设置->校准零位，主动发起校准。")
+                .canceledOnTouchOutside(false)
                 .cancelable(false)
                 .negativeText("手动调试")
                 .positiveText("确定")
