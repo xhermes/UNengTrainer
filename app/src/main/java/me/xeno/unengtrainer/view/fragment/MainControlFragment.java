@@ -74,6 +74,8 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 
     private TextView batteryView;
 
+    private TextView mDebugTextView;
+
     private int pick;
 
     private Disposable mBatteryDisposable;
@@ -142,6 +144,8 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_control_main, container, false);
+
+        mDebugTextView = (TextView) root.findViewById(R.id.debug_text_view);
 
         mSetMotorView =  root.findViewById(R.id.set_motor_speed);
         mSetAngleView =  root.findViewById(R.id.set_angle);
@@ -515,6 +519,10 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         super.onDestroy();
         //在页面结束时停止获取状态任务
         dispose(mStatusDisposable);
+    }
+
+    public void showDebugRssi(int rssi) {
+        mDebugTextView.setText(String.valueOf(rssi));
     }
 
 

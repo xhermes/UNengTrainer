@@ -7,7 +7,9 @@ import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.support.annotation.Nullable;
 
 import com.clj.fastble.conn.BleCharacterCallback;
@@ -53,6 +55,20 @@ public class BleService extends Service {
 
     private int mConnectionState = STATE_DISCONNECTED;
 
+    private static final int SIGNAL_STRENGTH_INTERVAL = 2000;
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if(mBluetoothGatt != null) {
+                mBluetoothGatt.readRemoteRssi();
+                Logger.debug("读信号！！！！！！！！！");
+                handler.sendMessageDelayed(Message.obtain(), SIGNAL_STRENGTH_INTERVAL);
+            }
+        }
+    };
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -88,12 +104,18 @@ public class BleService extends Service {
             Logger.info("onConnectFailure() exception = " + exception.toString());
             disconnect();//关闭gatt
             mListener.onDisconnect();
+            mBluetoothGatt = null;//连接断开时置空Gatt
         }
 
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             super.onConnectionStateChange(gatt, status, newState);
-            Logger.info("onConnectionStateChange()");
+            Logger.info("onConnectionStateChange(): status=" + status + ", newState=" + newState);
+
+//            //TODO 连接状态改变的时候读取当前的信号强度，按照stackoverflow说法，可能要增加一点延时
+//            if(!gatt.readRemoteRssi()) {
+//                Logger.debug("onConnectionStateChange readRemoteRssi() failed!");
+//            }
 
             //2017.9.16 如果检测到机器已断开蓝牙连接（比如机器已关机）
 //            if(newState == BluetoothProfile.STATE_DISCONNECTED) {
@@ -119,6 +141,9 @@ public class BleService extends Service {
                     if (mNotifyCharacteristic!=null) {
                         //TODO Demo中在此处向activity发送了标记连接成功的广播，并进行了UI更新。即将执行到此处定义为连接成功
                         mConnectionState = STATE_CONNECTED;
+
+                        //连接上以后每隔一段时间询问一次信号强度直到断开连接
+                        handler.sendMessage(Message.obtain());
 
                         // 使能Notify，开始接收characteristicChange的消息
                         setCharacteristicNotification(mNotifyCharacteristic, true);
@@ -195,7 +220,11 @@ public class BleService extends Service {
         @Override
         public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
             super.onReadRemoteRssi(gatt, rssi, status);
-            Logger.info("onReadRemoteRssi()");
+            //TODO 调试蓝牙信号强度，可能可以在这里实时回调信号强度
+            Logger.info("onReadRemoteRssi(): rssi=" + rssi + ", status=" + status);
+            if(mListener != null) {
+                mListener.onReadRemoteRssi(rssi);
+            }
         }
 
         @Override

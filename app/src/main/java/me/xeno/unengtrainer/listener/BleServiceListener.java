@@ -37,4 +37,6 @@ public interface BleServiceListener {
      */
     void onDisconnect();
 
+    void onReadRemoteRssi(int rssi);
+
 }

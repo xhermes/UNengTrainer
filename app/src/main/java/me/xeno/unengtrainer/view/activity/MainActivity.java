@@ -280,6 +280,10 @@ public class MainActivity extends BaseActivity
 //        mDashboardView.setCurrentRightSpeed(right);
 //    }
 
+    public void showDebugRssi(int rssi) {
+        mMainControlFragment.showDebugRssi(rssi);
+    }
+
     public void showMainControlFragment() {
         mDashboardView.setVisibility(View.VISIBLE);
         if (mMainControlFragment == null) {

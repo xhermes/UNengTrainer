@@ -235,6 +235,11 @@ public class MainPresenter {
 //            mActivity.finish();
             onBleDisconnect();
         }
+
+        @Override
+        public void onReadRemoteRssi(int rssi) {
+            mActivity.showDebugRssi(rssi);
+        }
     };
 
 
