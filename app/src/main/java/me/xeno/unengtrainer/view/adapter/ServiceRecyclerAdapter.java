@@ -7,20 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.clj.fastble.data.ScanResult;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Observer;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
 import me.xeno.unengtrainer.R;
-import me.xeno.unengtrainer.model.BluetoothModel;
-import me.xeno.unengtrainer.model.ConnectionWrapper;
-import me.xeno.unengtrainer.util.Logger;
-import me.xeno.unengtrainer.util.ToastUtils;
-import me.xeno.unengtrainer.view.holder.BluetoothHolder;
 import me.xeno.unengtrainer.view.holder.ServiceHolder;
 
 /**

@@ -6,22 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.clj.fastble.data.ScanResult;
+
+import com.clj.fastble.data.BleDevice;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Observer;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
 import me.xeno.unengtrainer.R;
-import me.xeno.unengtrainer.application.DataManager;
-import me.xeno.unengtrainer.model.BleDevice;
-import me.xeno.unengtrainer.model.BluetoothModel;
-import me.xeno.unengtrainer.model.ConnectionWrapper;
-import me.xeno.unengtrainer.util.Logger;
-import me.xeno.unengtrainer.util.ToastUtils;
-import me.xeno.unengtrainer.view.fragment.DeviceRecyclerFragment;
 import me.xeno.unengtrainer.view.holder.BluetoothHolder;
 
 /**
@@ -35,18 +26,18 @@ public class DeviceRecyclerAdapter extends RecyclerView.Adapter<BluetoothHolder>
     private Context mContext;
     private OnDeviceSelectListener mListener;
 
-    private List<ScanResult> dataList = new ArrayList<>();
+    private List<BleDevice> dataList = new ArrayList<>();
 
     public DeviceRecyclerAdapter(OnDeviceSelectListener listener) {
         mListener = listener;
     }
 
-    public void setDataList(List<ScanResult> dataList) {
+    public void setDataList(List<BleDevice> dataList) {
         this.dataList = dataList;
         notifyDataSetChanged();
     }
 
-    public void addDataToList(ScanResult scanResult) {
+    public void addDataToList(BleDevice scanResult) {
         dataList.add(scanResult);
         notifyDataSetChanged();
     }
@@ -63,7 +54,7 @@ public class DeviceRecyclerAdapter extends RecyclerView.Adapter<BluetoothHolder>
 
     @Override
     public void onBindViewHolder(BluetoothHolder holder, int position) {
-        final ScanResult scanResult = dataList.get(position);
+        final BleDevice scanResult = dataList.get(position);
 
         holder.getNameView().setText(scanResult.getDevice().getName());
         holder.getAddressView().setText(scanResult.getDevice().getAddress());
@@ -83,6 +74,6 @@ public class DeviceRecyclerAdapter extends RecyclerView.Adapter<BluetoothHolder>
     }
 
     public interface OnDeviceSelectListener {
-        void onSelect(ScanResult scanResult);
+        void onSelect(BleDevice scanResult);
     }
 }

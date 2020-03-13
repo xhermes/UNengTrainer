@@ -4,13 +4,13 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import android.util.Log;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.clj.fastble.data.ScanResult;
-import com.clj.fastble.scan.ListScanCallback;
+import com.clj.fastble.callback.BleScanCallback;
+import com.clj.fastble.data.BleDevice;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -21,7 +21,6 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import me.xeno.unengtrainer.R;
 import me.xeno.unengtrainer.application.Config;
 import me.xeno.unengtrainer.application.DataManager;
 import me.xeno.unengtrainer.listener.BleServiceListener;
@@ -438,7 +437,7 @@ public class MainPresenter {
         return null;
     }
 
-    private ScanResult mScanResult;
+    private BleDevice mScanResult;
 
     private static int sServiceState;
 
@@ -472,30 +471,34 @@ public class MainPresenter {
         this.mActivity = activity;
     }
 
-    public Observable<ScanResult> scanForDevices() {
-        return Observable.create(new ObservableOnSubscribe<ScanResult>() {
+    public Observable<BleDevice> scanForDevices() {
+        return Observable.create(new ObservableOnSubscribe<BleDevice>() {
 
             @Override
-            public void subscribe(final @NonNull ObservableEmitter<ScanResult> e) throws Exception {
-                DataManager.getInstance().getBleManager().scanDevice(
-                        new ListScanCallback(SCAN_TIME_OUT_MILLIS) {
-                            @Override
-                            public void onScanning(ScanResult result) {
-                                e.onNext(result);
-                            }
+            public void subscribe(final @NonNull ObservableEmitter<BleDevice> e) throws Exception {
+                DataManager.getInstance().getBleManager().scan(new BleScanCallback() {
+                    @Override
+                    public void onScanFinished(List<BleDevice> list) {
+                        Logger.warning("onScanFinished");
+                        e.onComplete();
+                    }
 
-                            @Override
-                            public void onScanComplete(ScanResult[] results) {
-                                Logger.warning("onScanComplete");
-                                e.onComplete();
-                            }
-                        });
+                    @Override
+                    public void onScanStarted(boolean b) {
+
+                    }
+
+                    @Override
+                    public void onScanning(BleDevice bleDevice) {
+                        e.onNext(bleDevice);
+                    }
+                });
             }
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public void bindService(ScanResult scanResult) {
+    public void bindService(BleDevice scanResult) {
         mScanResult = scanResult;
         Intent intent = new Intent(mActivity, BleService.class);
         mActivity.bindService(intent, mServiceConnection, BIND_AUTO_CREATE);

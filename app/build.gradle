@@ -30,7 +30,7 @@ dependencies {
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
-    compile 'com.clj.fastble:FastBleLib:1.1.1'
+    compile 'com.clj.fastble:FastBleLib:2.3.2'
     //bluetooth lib
     //    compile 'com.github.rorschach:ShaderSeekArc:v1.11'
     //    compile 'com.github.Triggertrap:SeekArc:v1.1'
@@ -41,6 +41,7 @@ dependencies {
     //    compile 'com.github.jdsjlzx:LRecyclerView:1.4.3'
     compile 'org.greenrobot:greendao:3.2.2'
     compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'com.elvishew:xlog:1.6.1'
 }
 
 greendao {

@@ -12,9 +12,9 @@ import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.Nullable;
 
-import com.clj.fastble.conn.BleCharacterCallback;
-import com.clj.fastble.conn.BleGattCallback;
-import com.clj.fastble.data.ScanResult;
+import com.clj.fastble.callback.BleGattCallback;
+import com.clj.fastble.callback.BleWriteCallback;
+import com.clj.fastble.data.BleDevice;
 import com.clj.fastble.exception.BleException;
 
 import java.util.UUID;
@@ -48,7 +48,7 @@ public class BleService extends Service {
 
     private BluetoothGatt mBluetoothGatt;
 
-    private ScanResult mScanResult;
+    private BleDevice mScanResult;
 
     private BluetoothGattCharacteristic mNotifyCharacteristic;
     private BluetoothGattCharacteristic mWriteCharacteristic;
@@ -78,33 +78,33 @@ public class BleService extends Service {
 
     private BleGattCallback mBleGattCallback = new BleGattCallback() {
         @Override
-        public void onNotFoundDevice() {
-            Logger.info("onNotFoundDevice()");
+        public void onStartConnect() {
+
         }
 
         @Override
-        public void onFoundDevice(ScanResult scanResult) {
-            Logger.info("onFoundDevice()");
-        }
-
-        @Override
-        public void onConnectSuccess(BluetoothGatt gatt, int status) {
-            Logger.info("onConnectSuccess() status = " + status);
-
-            //根据demo源码,在此处回调调用
-            //根据网文：小米手机 在gatt 连接上时，在gatt.discoverServices 之前，加上 sleep(500) ，发现断开后在连接 成功率大大提高。
-            gatt.discoverServices();
-            //调用discoverServices()后，如果发现service成功，会进入onServicesDiscovered()回调
-        }
-
-        @Override
-        public void onConnectFailure(BleException exception) {
+        public void onConnectFail(BleDevice bleDevice, BleException exception) {
             //FIXME onConnectFailure() exception = ConnectException{gattStatus=133, bluetoothGatt=android.bluetooth.BluetoothGatt@4bcb88d} BleException { code=201, description='Gatt Exception Occurred! '}
             //FIXME 有时候点击连接设备，已经进入了maincontrol但是会出现以上错误，此时蓝牙连接失败，然而所有按钮都有响应，于是会引起未知错误。
             Logger.info("onConnectFailure() exception = " + exception.toString());
             disconnect();//关闭gatt
             mListener.onDisconnect();
             mBluetoothGatt = null;//连接断开时置空Gatt
+        }
+
+        @Override
+        public void onConnectSuccess(BleDevice bleDevice, BluetoothGatt bluetoothGatt, int status) {
+            Logger.info("onConnectSuccess() status = " + status);
+
+            //根据demo源码,在此处回调调用
+            //根据网文：小米手机 在gatt 连接上时，在gatt.discoverServices 之前，加上 sleep(500) ，发现断开后在连接 成功率大大提高。
+            bluetoothGatt.discoverServices();
+            //调用discoverServices()后，如果发现service成功，会进入onServicesDiscovered()回调
+        }
+
+        @Override
+        public void onDisConnected(boolean b, BleDevice bleDevice, BluetoothGatt bluetoothGatt, int i) {
+
         }
 
         @Override
@@ -236,16 +236,16 @@ public class BleService extends Service {
 
     };
 
-    BleCharacterCallback mBleCharacterCallback = new BleCharacterCallback() {
+    BleWriteCallback mBleCharacterCallback = new BleWriteCallback() {
         @Override
-        public void onSuccess(BluetoothGattCharacteristic characteristic) {
+        public void onWriteSuccess(int i, int i1, byte[] bytes) {
             Logger.debug("BleCharacterCallback onSuccess() ");
         }
 
         @Override
-        public void onFailure(BleException exception) {
+        public void onWriteFailure(BleException e) {
             //FIXME code=301, description='this characteristic not support write!
-            Logger.error("BleCharacterCallback onFailure() exception: " + exception.toString());
+            Logger.error("BleCharacterCallback onFailure() exception: " + e.toString());
             //TODO 每次发送命令如果机器没有响应，这里会抓到错误，考虑要不要在这里加回调
         }
     };
@@ -286,7 +286,7 @@ public class BleService extends Service {
      *         {@code BluetoothGattCallback#onConnectionStateChange(android.bluetooth.BluetoothGatt, int, int)}
      *         callback.
      */
-    public boolean connect(final ScanResult scanResult) {
+    public boolean connect(final BleDevice scanResult) {
         if(!DataManager.getInstance().getBleManager().isBlueEnable()) {
             Logger.warning("connect(): bluetooth is NOT activate");
             return false;
@@ -295,7 +295,7 @@ public class BleService extends Service {
             Logger.warning("connect(): scanResult is NULL");
         }
 
-        DataManager.getInstance().getBleManager().connectDevice(scanResult, AUTO_CONNECT, mBleGattCallback);
+        DataManager.getInstance().getBleManager().connect(scanResult, mBleGattCallback);
 //        mConnectionState = STATE_CONNECTING;
         return true;
     }
@@ -311,7 +311,7 @@ public class BleService extends Service {
         if(!DataManager.getInstance().getBleManager().isBlueEnable()) {
             Logger.warning("disconnect(): bluetooth is NOT activate");
         }
-        DataManager.getInstance().getBleManager().closeBluetoothGatt();
+        DataManager.getInstance().getBleManager().disconnect(mScanResult);
     }
 
     public void writeData(byte[] data) {
@@ -321,7 +321,8 @@ public class BleService extends Service {
 
         //TODO java.lang.NullPointerException: Attempt to invoke virtual method 'java.util.UUID android.bluetooth.BluetoothGattCharacteristic.getUuid()' on a null object reference
         if(mConnectionState == STATE_CONNECTED) {
-            DataManager.getInstance().getBleManager().writeDevice(BleSppGattAttributes.BLE_SPP_Service,
+
+            DataManager.getInstance().getBleManager().write(mScanResult, BleSppGattAttributes.BLE_SPP_Service,
                     mWriteCharacteristic.getUuid().toString(), data, mBleCharacterCallback);
         } else {
             Logger.error("write data: service is not ready, please wait..");
@@ -468,11 +469,11 @@ public class BleService extends Service {
         }
     }
 
-    public ScanResult getScanResult() {
+    public BleDevice getScanResult() {
         return mScanResult;
     }
 
-    public void setScanResult(ScanResult scanResult) {
+    public void setScanResult(BleDevice scanResult) {
         this.mScanResult = scanResult;
     }
 

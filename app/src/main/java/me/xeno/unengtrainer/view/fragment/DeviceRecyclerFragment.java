@@ -1,11 +1,8 @@
 package me.xeno.unengtrainer.view.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,14 +10,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.clj.fastble.data.ScanResult;
+import com.clj.fastble.data.BleDevice;
 
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import me.xeno.unengtrainer.R;
 import me.xeno.unengtrainer.application.Config;
-import me.xeno.unengtrainer.model.BluetoothModel;
 import me.xeno.unengtrainer.util.Logger;
 import me.xeno.unengtrainer.util.ToastUtils;
 import me.xeno.unengtrainer.view.adapter.DeviceRecyclerAdapter;
@@ -116,7 +112,7 @@ public class DeviceRecyclerFragment extends BaseMainFragment implements DeviceRe
         }
 
         getMainActivity().getPresenter()
-                .scanForDevices().subscribe(new Observer<ScanResult>() {
+                .scanForDevices().subscribe(new Observer<BleDevice>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
                 //TODO dispose searching task when fragment exits
@@ -124,7 +120,7 @@ public class DeviceRecyclerFragment extends BaseMainFragment implements DeviceRe
             }
 
             @Override
-            public void onNext(@NonNull ScanResult scanResult) {
+            public void onNext(@NonNull BleDevice scanResult) {
                 addDeviceToList(scanResult);
             }
 
@@ -141,7 +137,7 @@ public class DeviceRecyclerFragment extends BaseMainFragment implements DeviceRe
         });
     }
 
-    public void addDeviceToList(ScanResult scanResult) {
+    public void addDeviceToList(BleDevice scanResult) {
         mAdapter.addDataToList(scanResult);
     }
 
@@ -152,7 +148,7 @@ public class DeviceRecyclerFragment extends BaseMainFragment implements DeviceRe
     }
 
     @Override
-    public void onSelect(ScanResult scanResult) {
+    public void onSelect(BleDevice scanResult) {
         Logger.info("onSelect()");
         //TODO
         getMainActivity().getPresenter().bindService(scanResult);

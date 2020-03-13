@@ -1,5 +1,6 @@
 package me.xeno.unengtrainer.application;
 
+import android.app.Application;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -33,7 +34,8 @@ public class DataManager {
 
     public void init(Context context) {
         //init
-        mBleManager = new BleManager(context);
+        mBleManager = new BleManager();
+        mBleManager.init((Application) context.getApplicationContext());
         setDatabase(context);
     }
 
