@@ -54,8 +54,6 @@ public class MainActivity extends BaseActivity
     private View mFavouriteBtn;
     private View mSettingBtn;
 
-    private DashboardView mDashboardView;
-
     private Dialog mRequestMakeZeroDialog;
 
     public Dialog getRequestMakeZeroDialog() {
@@ -106,7 +104,6 @@ public class MainActivity extends BaseActivity
         mBottomActionBar = findViewById(R.id.bottom_action_bar);
         mFavouriteBtn = findViewById(R.id.favourite_btn);
 
-        mDashboardView = (DashboardView) findViewById(R.id.dashboard);
     }
 
     @Override
@@ -254,13 +251,13 @@ public class MainActivity extends BaseActivity
     }
 
     public void displayAngle(String angle1, String angle2) {
-        mDashboardView.setCurrentSwingAngle(NumberUtils.showNumber1Decimal(angle1));
-        mDashboardView.setCurrentElevationAngle(NumberUtils.showNumber1Decimal(angle2));
+//        mDashboardView.setCurrentSwingAngle(NumberUtils.showNumber1Decimal(angle1));
+//        mDashboardView.setCurrentElevationAngle(NumberUtils.showNumber1Decimal(angle2));
     }
 
     public void displaySpeed(String leftSpeed, String rightSpeed) {
-        mDashboardView.setCurrentLeftSpeed(Float.valueOf(leftSpeed));
-        mDashboardView.setCurrentRightSpeed(Float.valueOf(rightSpeed));
+//        mDashboardView.setCurrentLeftSpeed(Float.valueOf(leftSpeed));
+//        mDashboardView.setCurrentRightSpeed(Float.valueOf(rightSpeed));
     }
 
 //    public void stopGetCurrentAngle() {
@@ -272,7 +269,7 @@ public class MainActivity extends BaseActivity
     }
 
     public void displayBattery(String voltage) {
-        mDashboardView.showCurrentVoltage(voltage);
+//        mDashboardView.showCurrentVoltage(voltage);
     }
 
 //    public void refreshCurrentSpeed(int left, int right) {
@@ -285,7 +282,7 @@ public class MainActivity extends BaseActivity
     }
 
     public void showMainControlFragment() {
-        mDashboardView.setVisibility(View.VISIBLE);
+//        mDashboardView.setVisibility(View.VISIBLE);
         if (mMainControlFragment == null) {
             mMainControlFragment = MainControlFragment.newInstance();
         }
@@ -293,7 +290,7 @@ public class MainActivity extends BaseActivity
         mPresenter.setOnGetMotorSpeedListener(mMainControlFragment);
     }
     public void showBlueToothFragment() {
-        mDashboardView.setVisibility(View.GONE);
+//        mDashboardView.setVisibility(View.GONE);
         if (mBlueToothDisabledFragment == null) {
             mBlueToothDisabledFragment = BluetoothDisabledFragment.newInstance();
         }

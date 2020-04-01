@@ -19,11 +19,11 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-        <me.xeno.unengtrainer.widget.DashboardView
-            android:id="@+id/dashboard"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+        <!--<me.xeno.unengtrainer.widget.DashboardView-->
+            <!--android:id="@+id/dashboard"-->
+            <!--android:visibility="gone"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"/>-->
 
     </android.support.design.widget.AppBarLayout>
 
