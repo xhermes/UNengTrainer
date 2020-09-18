@@ -49,7 +49,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
     private View mRunAxisElevationNegativeView;
 
     private View mStopElectricView;
-    private View mReturnToZeroView;
+//    private View mReturnToZeroView;
     private View mReturnToZero2View;
 
     private View mFromFavView;
@@ -151,7 +151,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         mSetAngleView =  root.findViewById(R.id.set_angle);
 
         mStopElectricView = root.findViewById(R.id.stop_both_electric);
-        mReturnToZeroView = root.findViewById(R.id.return_to_zero);
+//        mReturnToZeroView = root.findViewById(R.id.return_to_zero);
         mReturnToZero2View = root.findViewById(R.id.return_to_zero2);
 
         mFromFavView = root.findViewById(R.id.from_fav);
@@ -206,24 +206,24 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 //                getMainActivity().refreshCurrentSpeed(0, 0);
             }
         });
-        mReturnToZeroView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogUtils.dialog(getMainActivity(), "恢复零位", "确定要恢复到0度位置吗？",
-                        "恢复", "取消", new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@android.support.annotation.NonNull MaterialDialog dialog, @android.support.annotation.NonNull DialogAction which) {
-                                dialog.dismiss();
-                                getMainActivity().getPresenter().setAxisAngle(0, 0);
-                            }
-                        }, new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@android.support.annotation.NonNull MaterialDialog dialog, @android.support.annotation.NonNull DialogAction which) {
-                                dialog.dismiss();
-                            }
-                        });
-            }
-        });
+//        mReturnToZeroView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                DialogUtils.dialog(getMainActivity(), "恢复零位", "确定要恢复到0度位置吗？",
+//                        "恢复", "取消", new MaterialDialog.SingleButtonCallback() {
+//                            @Override
+//                            public void onClick(@android.support.annotation.NonNull MaterialDialog dialog, @android.support.annotation.NonNull DialogAction which) {
+//                                dialog.dismiss();
+//                                getMainActivity().getPresenter().setAxisAngle(0, 0);
+//                            }
+//                        }, new MaterialDialog.SingleButtonCallback() {
+//                            @Override
+//                            public void onClick(@android.support.annotation.NonNull MaterialDialog dialog, @android.support.annotation.NonNull DialogAction which) {
+//                                dialog.dismiss();
+//                            }
+//                        });
+//            }
+//        });
 
         mRunAxisSwingPositiveView.setOnTouchListener(this);
         mRunAxisSwingNegativeView.setOnTouchListener(this);

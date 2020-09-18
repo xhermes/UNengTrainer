@@ -36,7 +36,7 @@ public class DirectionView extends View {
     private void init() {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
-        mPaint.setColor(0xff000000);
+        mPaint.setColor(getResources().getColor(R.color.colorPrimaryLight));
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeWidth(230);
 

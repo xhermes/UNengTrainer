@@ -4,8 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/colorPrimary"
     android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="200dp"/>
 
     <!-- 参数设置，滑动调整 -->
     <LinearLayout
@@ -27,8 +31,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:orientation="horizontal">
+                android:layout_height="100dp">
 
                 <FrameLayout
                     android:id="@+id/set_motor_speed"
@@ -269,22 +272,22 @@
         </LinearLayout>
     </LinearLayout>
 
-    <FrameLayout
-        android:id="@+id/return_to_zero2"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/circle_black"
-        android:orientation="vertical">
+    <!--<FrameLayout-->
+        <!--android:id="@+id/return_to_zero2"-->
+        <!--android:layout_width="80dp"-->
+        <!--android:layout_height="80dp"-->
+        <!--android:layout_marginLeft="20dp"-->
+        <!--android:layout_marginTop="20dp"-->
+        <!--android:background="@drawable/circle_black"-->
+        <!--android:orientation="vertical">-->
 
-        <android.support.v7.widget.AppCompatImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_gravity="center"
-            app:srcCompat="@drawable/ic_return"
-             />
-    </FrameLayout>
+        <!--<android.support.v7.widget.AppCompatImageView-->
+            <!--android:layout_width="35dp"-->
+            <!--android:layout_height="35dp"-->
+            <!--android:layout_gravity="center"-->
+            <!--app:srcCompat="@drawable/ic_return"-->
+             <!--/>-->
+    <!--</FrameLayout>-->
 
     <FrameLayout
         android:id="@+id/stop_both_electric"
@@ -304,50 +307,66 @@
              />
     </FrameLayout>
 
-    <FrameLayout
-        android:id="@+id/return_to_zero"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="@drawable/circle_black"
-        android:orientation="vertical">
+    <!--<FrameLayout-->
+        <!--android:id="@+id/return_to_zero"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_weight="1"-->
+        <!--android:background="@drawable/circle_black"-->
+        <!--android:orientation="vertical">-->
 
-        <android.support.v7.widget.AppCompatImageView
-            android:layout_width="33dp"
-            android:layout_height="33dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="5dp"
-            app:srcCompat="@drawable/ic_return" />
+        <!--<android.support.v7.widget.AppCompatImageView-->
+            <!--android:layout_width="33dp"-->
+            <!--android:layout_height="33dp"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:layout_marginBottom="5dp"-->
+            <!--app:srcCompat="@drawable/ic_return" />-->
 
-    </FrameLayout>
+    <!--</FrameLayout>-->
 
     <LinearLayout
+        android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/black"
+        android:background="@color/colorPrimaryLight"
         android:orientation="horizontal">
 
         <android.support.v7.widget.AppCompatImageView
             android:layout_width="0dp"
-            android:layout_height="35dp"
+            android:layout_height="match_parent"
+            android:paddingTop="30dp"
+            android:paddingBottom="30dp"
             android:layout_gravity="center"
             android:layout_weight="1"
             app:srcCompat="@drawable/ic_motor_speed_primary_dark" />
 
+        <Space
+            android:layout_width="1dp"
+            android:layout_height="match_parent" />
+
         <android.support.v7.widget.AppCompatImageView
             android:layout_width="0dp"
-            android:layout_height="35dp"
+            android:layout_height="match_parent"
+            android:paddingTop="30dp"
+            android:paddingBottom="30dp"
             android:layout_gravity="center"
             android:layout_weight="1"
             app:srcCompat="@drawable/ic_favourite" />
 
+        <Space
+            android:layout_width="1dp"
+            android:layout_height="match_parent" />
+
         <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/return_to_zero2"
             android:layout_width="0dp"
-            android:layout_height="35dp"
+            android:layout_height="match_parent"
+            android:paddingTop="28dp"
+            android:paddingBottom="28dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            app:srcCompat="@drawable/ic_angle" />
+            app:srcCompat="@drawable/ic_return" />
     </LinearLayout>
 
     <!--方向键-->
@@ -355,7 +374,10 @@
         android:id="@+id/direction_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="120dp" />
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_above="@id/bottom_bar"
+        android:layout_marginBottom="20dp" />
 
     <TextView
         android:id="@+id/debug_text_view"

@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimaryLight">#CFD8DC</color>
-    <color name="colorPrimary">#607D8B</color>
+    <!--遥控按钮色-->
+    <color name="colorPrimaryLight">#424B52</color>
+    <!--遥控界面背景色-->
+    <color name="colorPrimary">#2D383E</color>
     <!--<color name="colorPrimaryDark">#455A64</color>-->
-    <color name="colorPrimaryDark">#696969</color>
+    <!--导航栏抽屉等app组件颜色-->
+    <color name="colorPrimaryDark">#273037</color>
     <color name="colorAccent">#FFC400</color>
     <color name="colorAccentLight">#FFD740</color>
     <color name="colorAccentDark">#FFAB00</color>
