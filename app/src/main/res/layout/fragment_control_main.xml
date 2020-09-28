@@ -7,377 +7,193 @@
     android:background="@color/colorPrimary"
     android:orientation="vertical">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="200dp"/>
+    <TextView
+        android:id="@+id/final_speed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:text="110"
+        android:textColor="@color/white"
+        android:textSize="120sp"
+        android:textStyle="bold" />
 
-    <!-- 参数设置，滑动调整 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/final_speed"
+        android:layout_toRightOf="@id/final_speed"
+        android:text="km/h"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:layout_below="@id/final_speed"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginRight="20dp"
+        android:orientation="horizontal">
 
-        <!-- 控制模块：单轴调整+轮速调整 -->
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="20dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="5dp"
-            android:orientation="vertical">
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/left_speed_display"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="80sp" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:textColor="@color/white"
+                android:text="%"/>
+        </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="100dp">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginRight="20dp"
+            android:gravity="right"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/right_speed_display"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="80sp" />
 
-                <FrameLayout
-                    android:id="@+id/set_motor_speed"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/rectangle_rounded_control_button"
-                    android:elevation="2dp"
-                    android:orientation="vertical">
-
-                    <android.support.v7.widget.AppCompatImageView
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="5dp"
-                        app:srcCompat="@drawable/ic_motor_speed_primary_dark" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="25dp"
-                        android:text="调整转速"
-                        android:textSize="@dimen/text_size_minimum" />
-                </FrameLayout>
-
-                <FrameLayout
-                    android:id="@+id/elevation_angle_positive"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/rectangle_rounded_control_button"
-                    android:elevation="2dp"
-                    android:orientation="vertical">
-
-                    <android.support.v7.widget.AppCompatImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="5dp"
-                        app:srcCompat="@drawable/ic_up_chevron" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="25dp"
-                        android:text="增加仰角"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textSize="@dimen/text_size_minimum" />
-                </FrameLayout>
-
-                <FrameLayout
-                    android:id="@+id/set_angle"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/rectangle_rounded_control_button"
-                    android:elevation="2dp"
-                    android:orientation="vertical">
-
-                    <android.support.v7.widget.AppCompatImageView
-                        android:layout_width="42dp"
-                        android:layout_height="42dp"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="5dp"
-                        app:srcCompat="@drawable/ic_angle" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="25dp"
-                        android:text="输入角度"
-                        android:textSize="@dimen/text_size_minimum" />
-                </FrameLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:orientation="horizontal">
-
-                <FrameLayout
-                    android:id="@+id/swing_angle_positive"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/rectangle_rounded_control_button"
-                    android:elevation="2dp"
-                    android:orientation="vertical">
-
-                    <android.support.v7.widget.AppCompatImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="5dp"
-                        app:srcCompat="@drawable/ic_left_chevron" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="25dp"
-                        android:text="减少摆角"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textSize="@dimen/text_size_minimum" />
-                </FrameLayout>
-
-                <FrameLayout
-                    android:id="@+id/from_fav"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/rectangle_rounded_control_button"
-                    android:elevation="2dp"
-                    android:orientation="vertical">
-
-                    <android.support.v7.widget.AppCompatImageView
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="5dp"
-                        app:srcCompat="@drawable/ic_favourite" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="25dp"
-                        android:text="使用收藏"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textSize="@dimen/text_size_minimum" />
-                </FrameLayout>
-
-                <FrameLayout
-                    android:id="@+id/swing_angle_negative"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/rectangle_rounded_control_button"
-                    android:elevation="2dp"
-                    android:orientation="vertical">
-
-                    <android.support.v7.widget.AppCompatImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="5dp"
-                        app:srcCompat="@drawable/ic_right_chevron" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="25dp"
-                        android:text="增加摆角"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textSize="@dimen/text_size_minimum" />
-                </FrameLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:orientation="horizontal">
-
-                <FrameLayout
-                    android:id="@+id/random_mode"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/rectangle_rounded_control_button"
-                    android:elevation="2dp"
-                    android:orientation="vertical">
-
-                    <android.support.v7.widget.AppCompatImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="5dp"
-                        app:srcCompat="@drawable/ic_random" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="25dp"
-                        android:text="随机模式"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textSize="@dimen/text_size_minimum" />
-                </FrameLayout>
-
-                <FrameLayout
-                    android:id="@+id/elevation_angle_negative"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/rectangle_rounded_control_button"
-                    android:elevation="2dp"
-                    android:orientation="vertical">
-
-                    <android.support.v7.widget.AppCompatImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="5dp"
-                        app:srcCompat="@drawable/ic_down_chevron" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="25dp"
-                        android:text="减少仰角"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textSize="@dimen/text_size_minimum" />
-                </FrameLayout>
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
-
-            </LinearLayout>
-
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:textColor="@color/white"
+                android:text="%"/>
         </LinearLayout>
     </LinearLayout>
 
-    <!--<FrameLayout-->
-        <!--android:id="@+id/return_to_zero2"-->
-        <!--android:layout_width="80dp"-->
-        <!--android:layout_height="80dp"-->
-        <!--android:layout_marginLeft="20dp"-->
-        <!--android:layout_marginTop="20dp"-->
-        <!--android:background="@drawable/circle_black"-->
-        <!--android:orientation="vertical">-->
-
-        <!--<android.support.v7.widget.AppCompatImageView-->
-            <!--android:layout_width="35dp"-->
-            <!--android:layout_height="35dp"-->
-            <!--android:layout_gravity="center"-->
-            <!--app:srcCompat="@drawable/ic_return"-->
-             <!--/>-->
-    <!--</FrameLayout>-->
 
     <FrameLayout
-        android:id="@+id/stop_both_electric"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
         android:layout_alignParentRight="true"
-        android:background="@drawable/circle_red"
-        android:orientation="vertical">
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/circle_red">
 
-        <android.support.v7.widget.AppCompatImageView
+        <ImageView
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_gravity="center"
-            app:srcCompat="@drawable/ic_power"
-             />
+            app:srcCompat="@drawable/ic_power" />
     </FrameLayout>
 
-    <!--<FrameLayout-->
-        <!--android:id="@+id/return_to_zero"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_weight="1"-->
-        <!--android:background="@drawable/circle_black"-->
-        <!--android:orientation="vertical">-->
-
-        <!--<android.support.v7.widget.AppCompatImageView-->
-            <!--android:layout_width="33dp"-->
-            <!--android:layout_height="33dp"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:layout_marginBottom="5dp"-->
-            <!--app:srcCompat="@drawable/ic_return" />-->
-
-    <!--</FrameLayout>-->
-
     <LinearLayout
-        android:id="@+id/bottom_bar"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/colorPrimaryLight"
-        android:orientation="horizontal">
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="30dp"
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <android.support.v7.widget.AppCompatImageView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:paddingTop="30dp"
-            android:paddingBottom="30dp"
+        <ImageView
+            android:id="@+id/left_increase_double"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
             android:layout_gravity="center"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/ic_motor_speed_primary_dark" />
+            app:srcCompat="@drawable/ic_up_chevron" />
 
-        <Space
-            android:layout_width="1dp"
-            android:layout_height="match_parent" />
-
-        <android.support.v7.widget.AppCompatImageView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:paddingTop="30dp"
-            android:paddingBottom="30dp"
+        <ImageView
+            android:id="@+id/left_increase"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
             android:layout_gravity="center"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/ic_favourite" />
+            app:srcCompat="@drawable/ic_up" />
 
-        <Space
-            android:layout_width="1dp"
-            android:layout_height="match_parent" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="左轮"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            android:textStyle="bold" />
 
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/return_to_zero2"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:paddingTop="28dp"
-            android:paddingBottom="28dp"
+        <ImageView
+            android:id="@+id/left_reduce"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
             android:layout_gravity="center"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/ic_return" />
+            app:srcCompat="@drawable/ic_down" />
+
+        <ImageView
+            android:id="@+id/left_reduce_double"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_down_chevron" />
     </LinearLayout>
 
-    <!--方向键-->
-    <me.xeno.unengtrainer.widget.DirectionView
-        android:id="@+id/direction_view"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
-        android:layout_above="@id/bottom_bar"
-        android:layout_marginBottom="20dp" />
+        android:layout_marginBottom="30dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/right_increase_double"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_up_chevron" />
+
+        <ImageView
+            android:id="@+id/right_increase"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_up" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="右轮"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/right_reduce"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_down" />
+
+        <ImageView
+            android:id="@+id/right_reduce_double"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_down_chevron" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/debug_text_view"
@@ -388,5 +204,7 @@
         android:elevation="10dp"
         android:textColor="#ff0000"
         android:textSize="15sp"
+        android:visibility="invisible"
         tools:text="ogjiwogjweoa" />
+
 </RelativeLayout>

@@ -26,8 +26,8 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:appcompat-v7:25.4.0'
+    compile 'com.android.support:design:25.4.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
     compile 'com.clj.fastble:FastBleLib:2.3.2'
@@ -40,7 +40,7 @@ dependencies {
     compile 'com.afollestad.material-dialogs:core:0.9.4.5'
     //    compile 'com.github.jdsjlzx:LRecyclerView:1.4.3'
     compile 'org.greenrobot:greendao:3.2.2'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'com.android.support:recyclerview-v7:25.4.0'
     compile 'com.elvishew:xlog:1.6.1'
 }
 

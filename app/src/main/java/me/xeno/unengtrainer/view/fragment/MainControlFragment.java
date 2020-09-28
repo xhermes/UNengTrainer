@@ -41,36 +41,50 @@ import me.xeno.unengtrainer.widget.SetSpeedDialogWrapper;
 /**
  * Main UI for the add task screen. Users can enter a task title and description.
  */
-public class MainControlFragment extends BaseMainFragment implements View.OnTouchListener,MainPresenter.OnGetMotorSpeedListener {
+public class MainControlFragment extends BaseMainFragment implements View.OnTouchListener, MainPresenter.OnGetMotorSpeedListener, View.OnClickListener {
 
-    private View mRunAxisSwingPositiveView;
-    private View mRunAxisSwingNegativeView;
-    private View mRunAxisElevationPositiveView;
-    private View mRunAxisElevationNegativeView;
+    private View mLeftIncreaseDoubleView;
+    private View mLeftIncreaseView;
+    private View mLeftReduceView;
+    private View mLeftReduceDoubleView;
 
-    private View mStopElectricView;
+    private View mRightIncreaseDoubleView;
+    private View mRightIncreaseView;
+    private View mRightReduceView;
+    private View mRightReduceDoubleView;
+
+    private TextView mFinalSpeedView;
+    private TextView mLeftSpeedView;
+    private TextView mRightSpeedView;
+
+//    private View mRunAxisSwingPositiveView;
+//    private View mRunAxisSwingNegativeView;
+//    private View mRunAxisElevationPositiveView;
+//    private View mRunAxisElevationNegativeView;
+
+//    private View mStopElectricView;
 //    private View mReturnToZeroView;
-    private View mReturnToZero2View;
+//    private View mReturnToZero2View;
 
-    private View mFromFavView;
+//    private View mFromFavView;
 
     private View mSetMotorView;//设置左右电机速度
     private View mSetAngleView;//输入设置调整角度
 
-    private View mRandomModeView;
+//    private View mRandomModeView;
 
-    private TextView mCurrentSwingAngleView;
-    private TextView mCurrentElevationAngleView;
+//    private TextView mCurrentSwingAngleView;
+//    private TextView mCurrentElevationAngleView;
 
-    private View mSendView;
+//    private View mSendView;
 
-//    private double mSwingAngle;
+    //    private double mSwingAngle;
 //    private double mElevationAngle;
     private int mLeftSpeed;
     private int mRightSpeed;
 
-    private TextView mCurrentRightSpeedView;
-    private TextView mCurrentLeftSpeedView;
+//    private TextView mCurrentRightSpeedView;
+//    private TextView mCurrentLeftSpeedView;
 
     private TextView batteryView;
 
@@ -114,7 +128,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         }
 
         //开始一个获取角度的任务
-        if(mCurrentAngleInfrequentlyDisposable != null && !mCurrentAngleInfrequentlyDisposable.isDisposed()) {
+        if (mCurrentAngleInfrequentlyDisposable != null && !mCurrentAngleInfrequentlyDisposable.isDisposed()) {
         } else {
             mCurrentAngleInfrequentlyDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD_INFREQUENTLY);
         }
@@ -147,28 +161,51 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 
         mDebugTextView = (TextView) root.findViewById(R.id.debug_text_view);
 
-        mSetMotorView =  root.findViewById(R.id.set_motor_speed);
-        mSetAngleView =  root.findViewById(R.id.set_angle);
+        mLeftIncreaseDoubleView = root.findViewById(R.id.left_increase_double);
+        mLeftIncreaseView = root.findViewById(R.id.left_increase);
+        mLeftReduceDoubleView = root.findViewById(R.id.left_reduce_double);
+        mLeftReduceView = root.findViewById(R.id.left_reduce);
 
-        mStopElectricView = root.findViewById(R.id.stop_both_electric);
+        mRightIncreaseDoubleView = root.findViewById(R.id.right_increase_double);
+        mRightIncreaseView = root.findViewById(R.id.right_increase);
+        mRightReduceDoubleView = root.findViewById(R.id.right_reduce_double);
+        mRightReduceView = root.findViewById(R.id.right_reduce);
+
+        mFinalSpeedView = (TextView) root.findViewById(R.id.final_speed);
+        mLeftSpeedView = (TextView) root.findViewById(R.id.left_speed_display);
+        mRightSpeedView = (TextView) root.findViewById(R.id.right_speed_display);
+
+        mLeftIncreaseDoubleView.setOnClickListener(this);
+        mLeftIncreaseView.setOnClickListener(this);
+        mLeftReduceDoubleView.setOnClickListener(this);
+        mLeftReduceView.setOnClickListener(this);
+        mRightIncreaseDoubleView.setOnClickListener(this);
+        mRightIncreaseView.setOnClickListener(this);
+        mRightReduceDoubleView.setOnClickListener(this);
+        mRightReduceView.setOnClickListener(this);
+
+//        mSetMotorView =  root.findViewById(R.id.set_motor_speed);
+//        mSetAngleView =  root.findViewById(R.id.set_angle);
+
+//        mStopElectricView = root.findViewById(R.id.stop_both_electric);
 //        mReturnToZeroView = root.findViewById(R.id.return_to_zero);
-        mReturnToZero2View = root.findViewById(R.id.return_to_zero2);
+//        mReturnToZero2View = root.findViewById(R.id.return_to_zero2);
 
-        mFromFavView = root.findViewById(R.id.from_fav);
+//        mFromFavView = root.findViewById(R.id.from_fav);
 //        mCurrentElevationAngleView = (TextView) root.findViewById(R.id.current_elevation_angle);
 //        mCurrentSwingAngleView = (TextView) root.findViewById(R.id.current_swing_angle);
 //
 //
-        mRunAxisSwingNegativeView = root.findViewById(R.id.swing_angle_negative);
-        mRunAxisSwingPositiveView = root.findViewById(R.id.swing_angle_positive);
+//        mRunAxisSwingNegativeView = root.findViewById(R.id.swing_angle_negative);
+//        mRunAxisSwingPositiveView = root.findViewById(R.id.swing_angle_positive);
 //        mRunAxisSwingStopView = (AppCompatImageView) root.findViewById(R.id.swing_angle_stop);
-        mRunAxisElevationNegativeView = root.findViewById(R.id.elevation_angle_negative);
-        mRunAxisElevationPositiveView = root.findViewById(R.id.elevation_angle_positive);
+//        mRunAxisElevationNegativeView = root.findViewById(R.id.elevation_angle_negative);
+//        mRunAxisElevationPositiveView = root.findViewById(R.id.elevation_angle_positive);
 ////        mRunAxisElevationStopView = (AppCompatImageView) root.findViewById(R.id.elevation_angle_stop);
 
-        batteryView = (TextView) root.findViewById(R.id.tv_battery);
+//        batteryView = (TextView) root.findViewById(R.id.tv_battery);
 
-        mRandomModeView = root.findViewById(R.id.random_mode);
+//        mRandomModeView = root.findViewById(R.id.random_mode);
 //
 //        mElevationAngleView = (TextView) root.findViewById(R.id.elevation_angle);
 //        mSwingAngleView = (TextView) root.findViewById(R.id.swing_angle);
@@ -186,6 +223,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         return root;
     }
 
+
     private void initView() {
 
 //        mSendView.setOnClickListener(new View.OnClickListener() {
@@ -197,15 +235,15 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 //            }
 //        });
 
-        mStopElectricView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getMainActivity().getPresenter().setCurrentLeftSpeed(0);
-                getMainActivity().getPresenter().setCurrentRightSpeed(0);
-                getMainActivity().getPresenter().setMotorSpeed(0, 0);
+//        mStopElectricView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                getMainActivity().getPresenter().setCurrentLeftSpeed(0);
+//                getMainActivity().getPresenter().setCurrentRightSpeed(0);
+//                getMainActivity().getPresenter().setMotorSpeed(0, 0);
 //                getMainActivity().refreshCurrentSpeed(0, 0);
-            }
-        });
+//            }
+//        });
 //        mReturnToZeroView.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -225,36 +263,36 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 //            }
 //        });
 
-        mRunAxisSwingPositiveView.setOnTouchListener(this);
-        mRunAxisSwingNegativeView.setOnTouchListener(this);
-        mRunAxisElevationPositiveView.setOnTouchListener(this);
-        mRunAxisElevationNegativeView.setOnTouchListener(this);
+//        mRunAxisSwingPositiveView.setOnTouchListener(this);
+//        mRunAxisSwingNegativeView.setOnTouchListener(this);
+//        mRunAxisElevationPositiveView.setOnTouchListener(this);
+//        mRunAxisElevationNegativeView.setOnTouchListener(this);
 
-        mRandomModeView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //FIXME 刚连上蓝牙的时候角度还没有获取到，不能弹出dialog，不然会空指针
-                showRandomModeDialog();
-            }
-        });
+//        mRandomModeView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //FIXME 刚连上蓝牙的时候角度还没有获取到，不能弹出dialog，不然会空指针
+//                showRandomModeDialog();
+//            }
+//        });
 
-        mSetMotorView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showSetMotorSpeedDialog();
-            }
-        });
-
-        mFromFavView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FavouriteActivity.goFromActivityForResult(new WeakReference<BaseActivity>(getMainActivity()));
-            }
-        });
+//        mSetMotorView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                showSetMotorSpeedDialog();
+//            }
+//        });
+//
+//        mFromFavView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                FavouriteActivity.goFromActivityForResult(new WeakReference<BaseActivity>(getMainActivity()));
+//            }
+//        });
 
 
         //进入控制界面后两秒获取一次当前角度信息
-        initCurrentAngle();
+//        initCurrentAngle();
 
     }
 
@@ -278,16 +316,16 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         return super.onOptionsItemSelected(item);
     }
 
-    public void refreshCurrentSpeed(int left, int right) {
-        mCurrentLeftSpeedView.setText(left + "");
-        mCurrentRightSpeedView.setText(right + "");
-    }
+//    public void refreshCurrentSpeed(int left, int right) {
+//        mCurrentLeftSpeedView.setText(left + "");
+//        mCurrentRightSpeedView.setText(right + "");
+//    }
 
     private void initCurrentAngle() {
         RxUtils.timer(3).subscribe(new Consumer<Long>() {
             @Override
             public void accept(@NonNull Long aLong) throws Exception {
-               getMainActivity().getPresenter().getAxisAngle();
+                getMainActivity().getPresenter().getAxisAngle();
 
             }
         });
@@ -303,8 +341,8 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 //        mCurrentSwingAngle = Double.valueOf(angle1);
 //        mCurrentElevationAngle = Double.valueOf(angle2);
 
-        mCurrentElevationAngleView.setText(angle2);
-        mCurrentSwingAngleView.setText(angle1);
+//        mCurrentElevationAngleView.setText(angle2);
+//        mCurrentSwingAngleView.setText(angle1);
     }
 
 //    public void showAddFavouriteDialog() {
@@ -325,7 +363,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 //    }
 
     public void selectFromFavourite(long id) {
-        if(id != 0) {
+        if (id != 0) {
             final FavouriteRecord record = DataManager.getInstance().getDaoSession().getFavouriteRecordDao().load(id);
 
             //TODO 应该异步，在机器设置成功以后再同步速度显示
@@ -352,13 +390,13 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 
     public void showSetMotorSpeedDialog() {
 
-        if(Config.DEBUG_MODE == Config.DEBUG_MODE_CTRL) {
+        if (Config.DEBUG_MODE == Config.DEBUG_MODE_CTRL) {
             onGetSpeed();
         } else {
             //请求电机速度，异步弹出Dialog
             getMainActivity().getPresenter().getMotorSpeed();
         }
-           //弹出对话框前先获取一次速度
+        //弹出对话框前先获取一次速度
 
     }
 
@@ -380,7 +418,7 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
     }
 
     public void showRandomModeDialog() {
-        RandomDialogWrapper rdw = new RandomDialogWrapper(getMainActivity(), getMainActivity().getPresenter().getCurrentElevationAngle() + "", getMainActivity().getPresenter().getCurrentSwingAngle()+ "");
+        RandomDialogWrapper rdw = new RandomDialogWrapper(getMainActivity(), getMainActivity().getPresenter().getCurrentElevationAngle() + "", getMainActivity().getPresenter().getCurrentSwingAngle() + "");
         rdw.showDialog();
     }
 
@@ -427,11 +465,11 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 //    }
 
     private void dispose(Disposable disposable) {
-        if(disposable == mCurrentAngleDisposable) {
+        if (disposable == mCurrentAngleDisposable) {
             Logger.error("尝试销毁快速获取角度任务");
         }
         if (disposable != null && !disposable.isDisposed()) {
-            if(Config.isDebugging()) {
+            if (Config.isDebugging()) {
                 ToastUtils.toast(getActivity().getApplicationContext(), "循环任务已停止");
             }
             disposable.dispose();
@@ -440,65 +478,65 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        if (v == mRunAxisSwingPositiveView) {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                mRunAxisSwingPosDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_POSITIVE, Config.RUN_AXIS_STOP, Config.RUN_AXIS_PERIOD);
-
-                //只有在此引用没有值或已被回收时，才开启新任务，确保不会因为发生A任务启动->引用，B任务启动->引用，B任务销毁，A任务产生逃逸现象出现
-                if(mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed())
-                    mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
-            } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                getMainActivity().getPresenter().stopAxis();
-                dispose(mRunAxisSwingPosDisposable);
-                //抬起时销毁快速获取角度任务
-                dispose(mCurrentAngleDisposable);
-
-                Logger.info("单轴运行任务结束");
-            }
-        }
-        if (v == mRunAxisSwingNegativeView) {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                mRunAxisSwingNegDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_NEGATIVE, Config.RUN_AXIS_STOP, Config.RUN_AXIS_PERIOD);
-                //只有在此引用没有值或已被回收时，才开启新任务，确保不会因为发生A任务启动->引用，B任务启动->引用，B任务销毁，A任务产生逃逸现象出现
-                if(mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed())
-                    mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
-            } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                getMainActivity().getPresenter().stopAxis();
-                dispose(mRunAxisSwingNegDisposable);
-                //抬起时销毁快速获取角度任务
-                dispose(mCurrentAngleDisposable);
-
-                Logger.info("单轴运行任务结束");
-            }
-        }
-        if (v == mRunAxisElevationPositiveView) {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                mRunAxisElevationPosDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_POSITIVE, Config.RUN_AXIS_PERIOD);
-                //只有在此引用没有值或已被回收时，才开启新任务，确保不会因为发生A任务启动->引用，B任务启动->引用，B任务销毁，A任务产生逃逸现象出现
-                if(mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed())
-                    mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
-            } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                getMainActivity().getPresenter().stopAxis();
-                dispose(mRunAxisElevationPosDisposable);
-                //抬起时销毁快速获取角度任务
-                dispose(mCurrentAngleDisposable);
-                     Logger.info("单轴运行任务结束");
-            }
-        }
-        if (v == mRunAxisElevationNegativeView) {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                mRunAxisElevationNegDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_NEGATIVE, Config.RUN_AXIS_PERIOD);
-                //只有在此引用没有值或已被回收时，才开启新任务，确保不会因为发生A任务启动->引用，B任务启动->引用，B任务销毁，A任务产生逃逸现象出现
-                if(mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed())
-                    mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
-            } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                getMainActivity().getPresenter().stopAxis();
-                dispose(mRunAxisElevationNegDisposable);
-                //抬起时销毁快速获取角度任务
-                dispose(mCurrentAngleDisposable);
-                    Logger.info("单轴运行任务结束");
-            }
-        }
+//        if (v == mRunAxisSwingPositiveView) {
+//            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//                mRunAxisSwingPosDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_POSITIVE, Config.RUN_AXIS_STOP, Config.RUN_AXIS_PERIOD);
+//
+//                //只有在此引用没有值或已被回收时，才开启新任务，确保不会因为发生A任务启动->引用，B任务启动->引用，B任务销毁，A任务产生逃逸现象出现
+//                if(mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed())
+//                    mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
+//            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+//                getMainActivity().getPresenter().stopAxis();
+//                dispose(mRunAxisSwingPosDisposable);
+//                //抬起时销毁快速获取角度任务
+//                dispose(mCurrentAngleDisposable);
+//
+//                Logger.info("单轴运行任务结束");
+//            }
+//        }
+//        if (v == mRunAxisSwingNegativeView) {
+//            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//                mRunAxisSwingNegDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_NEGATIVE, Config.RUN_AXIS_STOP, Config.RUN_AXIS_PERIOD);
+//                //只有在此引用没有值或已被回收时，才开启新任务，确保不会因为发生A任务启动->引用，B任务启动->引用，B任务销毁，A任务产生逃逸现象出现
+//                if(mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed())
+//                    mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
+//            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+//                getMainActivity().getPresenter().stopAxis();
+//                dispose(mRunAxisSwingNegDisposable);
+//                //抬起时销毁快速获取角度任务
+//                dispose(mCurrentAngleDisposable);
+//
+//                Logger.info("单轴运行任务结束");
+//            }
+//        }
+//        if (v == mRunAxisElevationPositiveView) {
+//            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//                mRunAxisElevationPosDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_POSITIVE, Config.RUN_AXIS_PERIOD);
+//                //只有在此引用没有值或已被回收时，才开启新任务，确保不会因为发生A任务启动->引用，B任务启动->引用，B任务销毁，A任务产生逃逸现象出现
+//                if(mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed())
+//                    mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
+//            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+//                getMainActivity().getPresenter().stopAxis();
+//                dispose(mRunAxisElevationPosDisposable);
+//                //抬起时销毁快速获取角度任务
+//                dispose(mCurrentAngleDisposable);
+//                     Logger.info("单轴运行任务结束");
+//            }
+//        }
+//        if (v == mRunAxisElevationNegativeView) {
+//            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//                mRunAxisElevationNegDisposable = getMainActivity().getPresenter().runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_NEGATIVE, Config.RUN_AXIS_PERIOD);
+//                //只有在此引用没有值或已被回收时，才开启新任务，确保不会因为发生A任务启动->引用，B任务启动->引用，B任务销毁，A任务产生逃逸现象出现
+//                if(mCurrentAngleDisposable == null || mCurrentAngleDisposable.isDisposed())
+//                    mCurrentAngleDisposable = getMainActivity().getPresenter().startGetAxisAngleTask(Config.GET_ANGLE_PERIOD);
+//            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+//                getMainActivity().getPresenter().stopAxis();
+//                dispose(mRunAxisElevationNegDisposable);
+//                //抬起时销毁快速获取角度任务
+//                dispose(mCurrentAngleDisposable);
+//                    Logger.info("单轴运行任务结束");
+//            }
+//        }
 
 
 //        if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -526,4 +564,85 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
     }
 
 
+    /**
+     * Called when a view has been clicked.
+     *
+     * @param v The view that was clicked.
+     */
+    @Override
+    public void onClick(View v) {
+        if (v == mLeftIncreaseDoubleView) {
+            mLeftSpeed+=5;
+            keepInRange();
+            Logger.debug("on click left ++, current speed: " + mLeftSpeed + ", " + mRightSpeed);
+            getMainActivity().getPresenter().setMotorSpeed(mLeftSpeed, mRightSpeed);
+            updateSpeedDisplay();
+        } else if (v == mLeftIncreaseView) {
+            mLeftSpeed+=2;
+            keepInRange();
+            Logger.debug("on click left +, current speed: " + mLeftSpeed + ", " + mRightSpeed);
+            getMainActivity().getPresenter().setMotorSpeed(mLeftSpeed, mRightSpeed);
+            updateSpeedDisplay();
+        } else if (v == mLeftReduceDoubleView) {
+            mLeftSpeed-=5;
+            keepInRange();
+            Logger.debug("on click left --, current speed: " + mLeftSpeed + ", " + mRightSpeed);
+            getMainActivity().getPresenter().setMotorSpeed(mLeftSpeed, mRightSpeed);
+            updateSpeedDisplay();
+        } else if (v == mLeftReduceView) {
+            mLeftSpeed-=2;
+            keepInRange();
+            Logger.debug("on click left -, current speed: " + mLeftSpeed + ", " + mRightSpeed);
+            getMainActivity().getPresenter().setMotorSpeed(mLeftSpeed, mRightSpeed);
+            updateSpeedDisplay();
+        } else if (v == mRightIncreaseDoubleView) {
+            mRightSpeed+=5;
+            keepInRange();
+            Logger.debug("on click right ++, current speed: " + mLeftSpeed + ", " + mRightSpeed);
+            getMainActivity().getPresenter().setMotorSpeed(mLeftSpeed, mRightSpeed);
+            updateSpeedDisplay();
+        } else if (v == mRightIncreaseView) {
+            mRightSpeed+=2;
+            keepInRange();
+            Logger.debug("on click right +, current speed: " + mLeftSpeed + ", " + mRightSpeed);
+            getMainActivity().getPresenter().setMotorSpeed(mLeftSpeed, mRightSpeed);
+            updateSpeedDisplay();
+        } else if (v == mRightReduceDoubleView) {
+            mRightSpeed-=5;
+            keepInRange();
+            Logger.debug("on click right --, current speed: " + mLeftSpeed + ", " + mRightSpeed);
+            getMainActivity().getPresenter().setMotorSpeed(mLeftSpeed, mRightSpeed);
+            updateSpeedDisplay();
+        } else if (v == mRightReduceView) {
+            mRightSpeed-=2;
+            keepInRange();
+            Logger.debug("on click right -, current speed: " + mLeftSpeed + ", " + mRightSpeed);
+            getMainActivity().getPresenter().setMotorSpeed(mLeftSpeed, mRightSpeed);
+            updateSpeedDisplay();
+        }
+    }
+
+
+    private void keepInRange() {
+        if(mLeftSpeed > 100) {
+            mLeftSpeed = 100;
+        }
+        if(mLeftSpeed < 0) {
+            mLeftSpeed = 0;
+        }
+
+        if(mRightSpeed > 100) {
+            mRightSpeed = 100;
+        }
+        if(mRightSpeed < 0) {
+            mRightSpeed = 0;
+        }
+    }
+
+    private void updateSpeedDisplay() {
+        mLeftSpeedView.setText(mLeftSpeed + "");
+        mRightSpeedView.setText(mRightSpeed + "");
+        int finalSpeed = (mLeftSpeed + mRightSpeed) * 110 / 200;
+        mFinalSpeedView.setText("" + finalSpeed);
+    }
 }

@@ -4,14 +4,12 @@
     android:background="@color/colorPrimary"
     android:layout_height="match_parent">
 
-    <TextView
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:src="@drawable/ic_logo"
+        android:tint="@color/white"
         android:layout_centerInParent="true"
-        android:textColor="@color/white"
-        android:text="LOGO"
-        android:textStyle="bold"
-        android:layout_marginBottom="30dp"
-        android:textSize="80dp"/>
+        android:layout_marginBottom="30dp" />
 
 </RelativeLayout>

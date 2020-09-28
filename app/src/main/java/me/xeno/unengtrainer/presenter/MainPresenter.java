@@ -326,8 +326,7 @@ public class MainPresenter {
         Logger.warning("调用蓝牙接口：==>设置电机转速");
         if(mModel != null)
             mBleService.writeData(mModel.setMotorSpeed(motor1, motor2));
-        //TODO 临时修改，调整转速以后马上更新DashBoardView的转速，往后应该修改为在收到机器回调成功后立即更新DBV的转速显示
-        mActivity.displaySpeed(String.valueOf(motor1), String.valueOf(motor2));
+//        mActivity.displaySpeed(String.valueOf(motor1), String.valueOf(motor2));
     }
 
 
