@@ -185,14 +185,14 @@ public class MainActivity extends BaseActivity
 
         int id = item.getItemId();
         switch (id) {
-            case R.id.nav_favourite:
-                FavouriteActivity.goFromActivityForResult(new WeakReference<BaseActivity>(MainActivity.this));
-
-                break;
-            case R.id.nav_setting:
-                //TODO 新建设置界面
-                getPresenter().grantMakingZero();
-                break;
+//            case R.id.nav_favourite:
+//                FavouriteActivity.goFromActivityForResult(new WeakReference<BaseActivity>(MainActivity.this));
+//
+//                break;
+//            case R.id.nav_setting:
+//                //TODO 新建设置界面
+//                getPresenter().grantMakingZero();
+//                break;
         }
         return false;
     }
