@@ -43,6 +43,8 @@ import me.xeno.unengtrainer.widget.SetSpeedDialogWrapper;
  */
 public class MainControlFragment extends BaseMainFragment implements View.OnTouchListener, MainPresenter.OnGetMotorSpeedListener, View.OnClickListener {
 
+    private View mFullStopBtn;
+
     private View mLeftIncreaseDoubleView;
     private View mLeftIncreaseView;
     private View mLeftReduceView;
@@ -175,6 +177,8 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         mLeftSpeedView = (TextView) root.findViewById(R.id.left_speed_display);
         mRightSpeedView = (TextView) root.findViewById(R.id.right_speed_display);
 
+        mFullStopBtn = root.findViewById(R.id.btn_full_stop);
+
         mLeftIncreaseDoubleView.setOnClickListener(this);
         mLeftIncreaseView.setOnClickListener(this);
         mLeftReduceDoubleView.setOnClickListener(this);
@@ -183,6 +187,8 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         mRightIncreaseView.setOnClickListener(this);
         mRightReduceDoubleView.setOnClickListener(this);
         mRightReduceView.setOnClickListener(this);
+
+        mFullStopBtn.setOnClickListener(this);
 
 //        mSetMotorView =  root.findViewById(R.id.set_motor_speed);
 //        mSetAngleView =  root.findViewById(R.id.set_angle);
@@ -618,6 +624,12 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
             keepInRange();
             Logger.debug("on click right -, current speed: " + mLeftSpeed + ", " + mRightSpeed);
             getMainActivity().getPresenter().setMotorSpeed(mLeftSpeed, mRightSpeed);
+            updateSpeedDisplay();
+        } else if (v == mFullStopBtn){
+            mLeftSpeed = 0;
+            mRightSpeed = 0;
+            Logger.debug("on click full stop -, stop both left and right motors.");
+            getMainActivity().getPresenter().setMotorSpeed(0, 0);
             updateSpeedDisplay();
         }
     }

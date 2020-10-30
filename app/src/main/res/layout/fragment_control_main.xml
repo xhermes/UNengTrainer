@@ -12,9 +12,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="40dp"
         android:text="110"
         android:textColor="@color/white"
-        android:textSize="120sp"
+        android:textSize="100sp"
         android:textStyle="bold" />
 
     <TextView
@@ -85,11 +86,12 @@
 
 
     <FrameLayout
+        android:id="@+id/btn_full_stop"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="40dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginRight="50dp"
         android:background="@drawable/circle_red">
 
         <ImageView
@@ -194,6 +196,25 @@
             android:layout_gravity="center"
             app:srcCompat="@drawable/ic_down_chevron" />
     </LinearLayout>
+
+<!--    电量：暂时不加，先完成主要功能-->
+<!--    <android.support.v7.widget.AppCompatImageView-->
+<!--        android:id="@+id/ic_battery"-->
+<!--        android:layout_width="30dp"-->
+<!--        android:layout_height="30dp"-->
+<!--        android:layout_marginTop="5dp"-->
+<!--        android:layout_marginRight="5dp"-->
+<!--        android:layout_alignParentRight="true"-->
+<!--        app:srcCompat="@drawable/ic_battery_full"/>-->
+<!--    -->
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignBottom="@id/ic_battery"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:textSize="20sp"-->
+<!--        android:layout_toLeftOf="@id/ic_battery"-->
+<!--        android:text="0V"/>-->
 
     <TextView
         android:id="@+id/debug_text_view"
