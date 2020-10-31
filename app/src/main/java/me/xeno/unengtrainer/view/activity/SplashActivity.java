@@ -1,6 +1,11 @@
 package me.xeno.unengtrainer.view.activity;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
+import android.support.v13.app.ActivityCompat;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -36,17 +41,7 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        if(checkBleSupport()) {
-            mTimerDisposable = RxUtils.timer(SPLASH_ENTER_TIME).subscribe(new Consumer<Long>() {
-                @Override
-                public void accept(@io.reactivex.annotations.NonNull Long aLong) throws Exception {
-                  MainActivity.goFromActivity(new WeakReference<BaseActivity>(SplashActivity.this));
-                    finish();
-                }
-            });
-        } else {
-            dialogNotSupport();
-        }
+        requestPermission();
 
     }
 
@@ -78,5 +73,41 @@ public class SplashActivity extends BaseActivity {
         //dispose when exit
         if(CommonUtils.isNotNull(mTimerDisposable))
             mTimerDisposable.dispose();
+    }
+
+    private static final int PERMISSION_REQUEST_CODE = 100;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.e("DEBUG", "PERMISSION_GRANTED");
+                } else {
+                    Log.e("DEBUG", "PERMISSION_DENIED");
+                }
+
+                if(checkBleSupport()) {
+                    mTimerDisposable = RxUtils.timer(SPLASH_ENTER_TIME).subscribe(new Consumer<Long>() {
+                        @Override
+                        public void accept(@io.reactivex.annotations.NonNull Long aLong) throws Exception {
+                            MainActivity.goFromActivity(new WeakReference<BaseActivity>(SplashActivity.this));
+                            finish();
+                        }
+                    });
+                } else {
+                    dialogNotSupport();
+                }
+
+                break;
+        }
+    }
+
+    private void requestPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(SplashActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            Toast.makeText(SplashActivity.this, "Please grante write storage permission", Toast.LENGTH_LONG).show();
+        } else {
+            ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+        }
     }
 }

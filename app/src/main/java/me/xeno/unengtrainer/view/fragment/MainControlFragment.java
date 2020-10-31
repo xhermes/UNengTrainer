@@ -15,8 +15,12 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.elvishew.xlog.XLog;
 
 import java.lang.ref.WeakReference;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
@@ -566,7 +570,12 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
     }
 
     public void showDebugRssi(int rssi) {
-        mDebugTextView.setText(String.valueOf(rssi));
+        Date currentTime = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateString = formatter.format(currentTime);
+
+        mDebugTextView.setText("当前rssi" + rssi);
+        XLog.i(dateString + ", 当前rssi: " + rssi);
     }
 
 
