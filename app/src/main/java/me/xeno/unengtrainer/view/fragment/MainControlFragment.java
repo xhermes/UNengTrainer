@@ -427,11 +427,6 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
         });
     }
 
-    public void showRandomModeDialog() {
-        RandomDialogWrapper rdw = new RandomDialogWrapper(getMainActivity(), getMainActivity().getPresenter().getCurrentElevationAngle() + "", getMainActivity().getPresenter().getCurrentSwingAngle() + "");
-        rdw.showDialog();
-    }
-
     public void showRightSpeedDialog() {
         new MaterialDialog.Builder(getActivity())
                 .title("设置右转速")

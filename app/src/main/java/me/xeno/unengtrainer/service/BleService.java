@@ -104,7 +104,7 @@ public class BleService extends Service {
 
         @Override
         public void onDisConnected(boolean b, BleDevice bleDevice, BluetoothGatt bluetoothGatt, int i) {
-
+            Logger.info("onDisConnected()");
         }
 
         @Override

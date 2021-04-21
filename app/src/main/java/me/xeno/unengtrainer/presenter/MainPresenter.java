@@ -7,6 +7,7 @@ import android.os.IBinder;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.clj.fastble.BleManager;
 import com.clj.fastble.callback.BleScanCallback;
 import com.clj.fastble.data.BleDevice;
 
@@ -475,7 +476,7 @@ public class MainPresenter {
 
             @Override
             public void subscribe(final @NonNull ObservableEmitter<BleDevice> e) throws Exception {
-                DataManager.getInstance().getBleManager().scan(new BleScanCallback() {
+                BleManager.getInstance().scan(new BleScanCallback() {
                     @Override
                     public void onScanFinished(List<BleDevice> list) {
                         Logger.warning("onScanFinished");

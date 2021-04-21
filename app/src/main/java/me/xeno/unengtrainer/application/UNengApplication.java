@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Environment;
 import android.support.v4.content.ContextCompat;
 
+import com.clj.fastble.BleManager;
 import com.elvishew.xlog.LogConfiguration;
 import com.elvishew.xlog.LogLevel;
 import com.elvishew.xlog.XLog;
@@ -30,8 +31,6 @@ public class UNengApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
-
 
         //do init work
         CrashHandler.getInstance().init(this);
