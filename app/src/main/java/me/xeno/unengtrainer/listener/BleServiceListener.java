@@ -1,15 +1,15 @@
 package me.xeno.unengtrainer.listener;
 
-import me.xeno.unengtrainer.model.entity.EnableWrapper;
-import me.xeno.unengtrainer.model.entity.GetAxisAngleWrapper;
-import me.xeno.unengtrainer.model.entity.GetBatteryVoltageWrapper;
-import me.xeno.unengtrainer.model.entity.GetStatusWrapper;
-import me.xeno.unengtrainer.model.entity.MakeZeroCompletedWrapper;
-import me.xeno.unengtrainer.model.entity.RunAxisWrapper;
-import me.xeno.unengtrainer.model.entity.SetAxisAngleWrapper;
-import me.xeno.unengtrainer.model.entity.SetAxisSpeedWrapper;
-import me.xeno.unengtrainer.model.entity.SetMotorSpeedWrapper;
-import me.xeno.unengtrainer.model.entity.TurnBrakeWrapper;
+import me.xeno.unengtrainer.transport.frame.data.EnableWrapper;
+import me.xeno.unengtrainer.transport.frame.data.GetAxisAngleWrapper;
+import me.xeno.unengtrainer.transport.frame.data.GetBatteryVoltageWrapper;
+import me.xeno.unengtrainer.transport.frame.data.GetStatusWrapper;
+import me.xeno.unengtrainer.transport.frame.data.MakeZeroCompletedWrapper;
+import me.xeno.unengtrainer.transport.frame.data.RunAxisWrapper;
+import me.xeno.unengtrainer.transport.frame.data.SetAxisAngleWrapper;
+import me.xeno.unengtrainer.transport.frame.data.SetAxisSpeedWrapper;
+import me.xeno.unengtrainer.transport.frame.data.SetMotorSpeedWrapper;
+import me.xeno.unengtrainer.transport.frame.data.TurnBrakeWrapper;
 
 /**
  * Created by xeno on 2017/5/17.

@@ -23,25 +23,23 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.xeno.unengtrainer.application.Config;
-import me.xeno.unengtrainer.application.DataManager;
 import me.xeno.unengtrainer.listener.BleServiceListener;
-import me.xeno.unengtrainer.model.BluetoothModel;
-import me.xeno.unengtrainer.model.entity.EnableWrapper;
-import me.xeno.unengtrainer.model.entity.GetAxisAngleWrapper;
-import me.xeno.unengtrainer.model.entity.GetBatteryVoltageWrapper;
-import me.xeno.unengtrainer.model.entity.GetStatusWrapper;
-import me.xeno.unengtrainer.model.entity.MakeZeroCompletedWrapper;
-import me.xeno.unengtrainer.model.entity.RunAxisWrapper;
-import me.xeno.unengtrainer.model.entity.SetAxisAngleWrapper;
-import me.xeno.unengtrainer.model.entity.SetAxisSpeedWrapper;
-import me.xeno.unengtrainer.model.entity.SetMotorSpeedWrapper;
-import me.xeno.unengtrainer.model.entity.TurnBrakeWrapper;
+import me.xeno.unengtrainer.transport.frame.data.EnableWrapper;
+import me.xeno.unengtrainer.transport.frame.data.GetAxisAngleWrapper;
+import me.xeno.unengtrainer.transport.frame.data.GetBatteryVoltageWrapper;
+import me.xeno.unengtrainer.transport.frame.data.GetStatusWrapper;
+import me.xeno.unengtrainer.transport.frame.data.MakeZeroCompletedWrapper;
+import me.xeno.unengtrainer.transport.frame.data.RunAxisWrapper;
+import me.xeno.unengtrainer.transport.frame.data.SetAxisAngleWrapper;
+import me.xeno.unengtrainer.transport.frame.data.SetAxisSpeedWrapper;
+import me.xeno.unengtrainer.transport.frame.data.SetMotorSpeedWrapper;
+import me.xeno.unengtrainer.transport.frame.data.TurnBrakeWrapper;
 import me.xeno.unengtrainer.service.BleService;
+import me.xeno.unengtrainer.transport.instruction.InstWriter;
 import me.xeno.unengtrainer.util.DialogUtils;
 import me.xeno.unengtrainer.util.Logger;
 import me.xeno.unengtrainer.util.ToastUtils;
 import me.xeno.unengtrainer.view.activity.MainActivity;
-import me.xeno.unengtrainer.widget.LoadingDialog;
 
 import static android.content.Context.BIND_AUTO_CREATE;
 
@@ -111,7 +109,6 @@ public class MainPresenter {
     }
 
     private MainActivity mActivity;
-    private BluetoothModel mModel;
 
     private BleService mBleService;
 
@@ -295,8 +292,8 @@ public class MainPresenter {
      * 同意开始校准
      */
     public void grantMakingZero() {
-        if(mModel != null) {
-            mBleService.writeData(mModel.makeZero());
+        if(sServiceState == STATE_CONNECTED) {
+            mBleService.writeData(InstWriter.makeZero());
             //同意以后弹出等待对话框，等待校准完成
             mActivity.showLoadingDialog();
         }
@@ -308,8 +305,8 @@ public class MainPresenter {
      */
     public void setAxisAngle(double angle1, double angle2) {
         Logger.warning("调用蓝牙接口：==>设置角度");
-        if(mModel != null) {
-            mBleService.writeData(mModel.setAxisAngle(angle1, angle2));
+        if(sServiceState == STATE_CONNECTED) {
+            mBleService.writeData(InstWriter.setAxisAngle(angle1, angle2));
         }
     }
 
@@ -325,8 +322,8 @@ public class MainPresenter {
      */
     public void setMotorSpeed(float motor1, float motor2) {
         Logger.warning("调用蓝牙接口：==>设置电机转速");
-        if(mModel != null)
-            mBleService.writeData(mModel.setMotorSpeed(motor1, motor2));
+        if(sServiceState == STATE_CONNECTED)
+            mBleService.writeData(InstWriter.setMotorSpeed(motor1, motor2));
 //        mActivity.displaySpeed(String.valueOf(motor1), String.valueOf(motor2));
     }
 
@@ -344,7 +341,7 @@ public class MainPresenter {
      */
     public Disposable runAxis(final int axis1, final int axis2, int period) {
         Logger.info("开启单轴运行/停止任务，间隔：" + period);
-        if(mModel == null)
+        if(sServiceState != STATE_CONNECTED)
             return null;
         return Observable.interval(0, period, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
@@ -352,21 +349,21 @@ public class MainPresenter {
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(@NonNull Long aLong) throws Exception {
-                        mBleService.writeData(mModel.runAxis(axis1, axis2));
+                        mBleService.writeData(InstWriter.runAxis(axis1, axis2));
                     }
                 });
     }
 
     public void stopAxis() {
         Logger.warning("调用蓝牙接口：==>停止1,2单轴运行");
-        if(mModel != null)
-        mBleService.writeData(mModel.runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_STOP));
+        if(sServiceState == STATE_CONNECTED)
+        mBleService.writeData(InstWriter.runAxis(Config.RUN_AXIS_STOP, Config.RUN_AXIS_STOP));
     }
 
 
 
     public Disposable getBatteryVoltage(int periodInSec) {
-        if (mModel != null) {
+        if (sServiceState == STATE_CONNECTED) {
             return Observable.interval(0, periodInSec, TimeUnit.SECONDS)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -374,7 +371,7 @@ public class MainPresenter {
                         @Override
                         public void accept(@NonNull Long aLong) throws Exception {
                             Logger.info("获取电压");
-                            mBleService.writeData(mModel.getBatteryVoltage());
+                            mBleService.writeData(InstWriter.getBatteryVoltage());
                         }
                     });
         }
@@ -385,14 +382,14 @@ public class MainPresenter {
      * 单次获取角度
      */
     public void getAxisAngle() {
-        if (mModel != null) {
-            mBleService.writeData(mModel.getAxisAngle());
+        if (sServiceState == STATE_CONNECTED) {
+            mBleService.writeData(InstWriter.getAxisAngle());
         }
     }
 
     public void getMotorSpeed() {
-        if(mModel != null) {
-            mBleService.writeData(mModel.getMotorSpeed());
+        if(sServiceState == STATE_CONNECTED) {
+            mBleService.writeData(InstWriter.getMotorSpeed());
         }
     }
 
@@ -400,7 +397,7 @@ public class MainPresenter {
      * 启动一个任务，每隔一段时间调用一次获取角度接口
      */
     public Disposable startGetAxisAngleTask(int periodInMilliSec) {
-             if(mModel != null) {
+             if(sServiceState == STATE_CONNECTED) {
                  Logger.info("=========================开启获取角度任务，间隔：" + periodInMilliSec +"毫秒");
                  return Observable.interval(0, periodInMilliSec, TimeUnit.MILLISECONDS)
                     .subscribeOn(Schedulers.io())
@@ -409,7 +406,7 @@ public class MainPresenter {
                         @Override
                         public void accept(@NonNull Long aLong) throws Exception {
                             Logger.warning("调用蓝牙接口：==>获取角度");
-                            mBleService.writeData(mModel.getAxisAngle());
+                            mBleService.writeData(InstWriter.getAxisAngle());
                         }
                     });
         } else {
@@ -422,7 +419,7 @@ public class MainPresenter {
      * 启动一个任务，每隔一段时间调用一次获取状态
      */
     public Disposable startGetStatusTask(int periodInSec) {
-        if(mModel != null) {
+        if(sServiceState == STATE_CONNECTED) {
             return Observable.interval(0, periodInSec, TimeUnit.SECONDS)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -430,7 +427,7 @@ public class MainPresenter {
                         @Override
                         public void accept(@NonNull Long aLong) throws Exception {
                             Logger.info("获取状态");
-                            mBleService.writeData(mModel.getMachineStatus());
+                            mBleService.writeData(InstWriter.getMachineStatus());
                         }
                     });
         }
@@ -449,7 +446,6 @@ public class MainPresenter {
             sServiceState = STATE_CONNECTED;
             mBleService = ((BleService.BleBinder) service).getService();
 
-            mModel = new BluetoothModel();
             // Automatically connects to the device upon successful start-up initialization.
             mBleService.setListener(mListener);
             mBleService.setScanResult(mScanResult);
@@ -537,10 +533,6 @@ public class MainPresenter {
                                 });
                     }
                 });
-    }
-
-    public BluetoothModel getModel() {
-        return mModel;
     }
 
     public BleService getBleService() {

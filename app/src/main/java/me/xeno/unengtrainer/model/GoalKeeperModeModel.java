@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import me.xeno.unengtrainer.util.Logger;
 
 /**
+ * @deprecated
  * Created by xeno on 2018/3/4.
  * 门将训练模式：固定角度以后，循环或随机循环几组左右轮转速，以不可预测的方向射向球门
  */
