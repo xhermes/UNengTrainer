@@ -26,22 +26,22 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.4.0'
-    compile 'com.android.support:design:25.4.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support:appcompat-v7:25.4.0'
+    implementation 'com.android.support:design:25.4.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
-    compile 'com.clj.fastble:FastBleLib:2.3.2'
+    implementation 'com.clj.fastble:FastBleLib:1.2.1'
     //bluetooth lib
     //    compile 'com.github.rorschach:ShaderSeekArc:v1.11'
     //    compile 'com.github.Triggertrap:SeekArc:v1.1'
-    compile 'io.reactivex.rxjava2:rxjava:2.1.0'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'com.h6ah4i.android.widget.verticalseekbar:verticalseekbar:0.7.2'
-    compile 'com.afollestad.material-dialogs:core:0.9.4.5'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'com.h6ah4i.android.widget.verticalseekbar:verticalseekbar:0.7.2'
+    implementation 'com.afollestad.material-dialogs:core:0.9.4.5'
     //    compile 'com.github.jdsjlzx:LRecyclerView:1.4.3'
-    compile 'org.greenrobot:greendao:3.2.2'
-    compile 'com.android.support:recyclerview-v7:25.4.0'
-    compile 'com.elvishew:xlog:1.6.1'
+    implementation 'org.greenrobot:greendao:3.3.0'
+    implementation 'com.android.support:recyclerview-v7:25.4.0'
+    implementation 'com.elvishew:xlog:1.6.1'
 }
 
 greendao {

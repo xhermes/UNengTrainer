@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.clj.fastble.data.BleDevice;
 
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
@@ -19,6 +18,8 @@ import me.xeno.unengtrainer.R;
 import me.xeno.unengtrainer.application.Config;
 import me.xeno.unengtrainer.util.Logger;
 import me.xeno.unengtrainer.util.ToastUtils;
+import com.clj.fastble.data.ScanResult;
+
 import me.xeno.unengtrainer.view.adapter.DeviceRecyclerAdapter;
 import me.xeno.unengtrainer.widget.EmptyRecyclerView;
 
@@ -112,7 +113,7 @@ public class DeviceRecyclerFragment extends BaseMainFragment implements DeviceRe
         }
 
         getMainActivity().getPresenter()
-                .scanForDevices().subscribe(new Observer<BleDevice>() {
+                .scanForDevices().subscribe(new Observer<ScanResult>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
                 //TODO dispose searching task when fragment exits
@@ -120,7 +121,7 @@ public class DeviceRecyclerFragment extends BaseMainFragment implements DeviceRe
             }
 
             @Override
-            public void onNext(@NonNull BleDevice scanResult) {
+            public void onNext(@NonNull ScanResult scanResult) {
                 addDeviceToList(scanResult);
             }
 
@@ -137,7 +138,7 @@ public class DeviceRecyclerFragment extends BaseMainFragment implements DeviceRe
         });
     }
 
-    public void addDeviceToList(BleDevice scanResult) {
+    public void addDeviceToList(ScanResult scanResult) {
         mAdapter.addDataToList(scanResult);
     }
 
@@ -148,7 +149,7 @@ public class DeviceRecyclerFragment extends BaseMainFragment implements DeviceRe
     }
 
     @Override
-    public void onSelect(BleDevice scanResult) {
+    public void onSelect(ScanResult scanResult) {
         Logger.info("onSelect()");
         //TODO
         getMainActivity().getPresenter().bindService(scanResult);

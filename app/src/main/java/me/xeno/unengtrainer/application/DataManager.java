@@ -24,7 +24,7 @@ public class DataManager {
     private DaoSession mDaoSession;
 
     //fastBle
-//    private BleManager mBleManager;
+    private BleManager mBleManager;
 
     public static synchronized DataManager getInstance() {
         if(instance ==null)
@@ -34,7 +34,7 @@ public class DataManager {
 
     public void init(Context context) {
         //init
-        BleManager.getInstance().init((Application) context.getApplicationContext());
+        mBleManager = new BleManager(context);
 //        mBleManager = new BleManager();
 //        mBleManager.init((Application) context.getApplicationContext());
         setDatabase(context);
@@ -62,6 +62,6 @@ public class DataManager {
     }
 
     public BleManager getBleManager() {
-        return BleManager.getInstance();
+        return mBleManager;
     }
 }

@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.clj.fastble.data.BleDevice;
+import com.clj.fastble.data.ScanResult;
 
 import me.xeno.unengtrainer.R;
 import me.xeno.unengtrainer.view.adapter.DeviceRecyclerAdapter;
@@ -71,7 +71,7 @@ public class CharacteristicListFragment extends Fragment {
 
     }
 
-    public void addDeviceToList(BleDevice scanResult) {
+    public void addDeviceToList(ScanResult scanResult) {
         mAdapter.addDataToList(scanResult);
     }
 

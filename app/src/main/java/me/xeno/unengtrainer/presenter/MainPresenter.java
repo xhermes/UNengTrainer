@@ -7,9 +7,8 @@ import android.os.IBinder;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.clj.fastble.BleManager;
-import com.clj.fastble.callback.BleScanCallback;
-import com.clj.fastble.data.BleDevice;
+import com.clj.fastble.data.ScanResult;
+import com.clj.fastble.scan.ListScanCallback;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -23,19 +22,20 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.xeno.unengtrainer.application.Config;
+import me.xeno.unengtrainer.application.DataManager;
 import me.xeno.unengtrainer.listener.BleServiceListener;
-import me.xeno.unengtrainer.transport.frame.data.EnableWrapper;
-import me.xeno.unengtrainer.transport.frame.data.GetAxisAngleWrapper;
-import me.xeno.unengtrainer.transport.frame.data.GetBatteryVoltageWrapper;
-import me.xeno.unengtrainer.transport.frame.data.GetStatusWrapper;
-import me.xeno.unengtrainer.transport.frame.data.MakeZeroCompletedWrapper;
-import me.xeno.unengtrainer.transport.frame.data.RunAxisWrapper;
-import me.xeno.unengtrainer.transport.frame.data.SetAxisAngleWrapper;
-import me.xeno.unengtrainer.transport.frame.data.SetAxisSpeedWrapper;
-import me.xeno.unengtrainer.transport.frame.data.SetMotorSpeedWrapper;
-import me.xeno.unengtrainer.transport.frame.data.TurnBrakeWrapper;
+import me.xeno.unengtrainer.v2.transport.frame.data.EnableWrapper;
+import me.xeno.unengtrainer.v2.transport.frame.data.GetAxisAngleWrapper;
+import me.xeno.unengtrainer.v2.transport.frame.data.GetBatteryVoltageWrapper;
+import me.xeno.unengtrainer.v2.transport.frame.data.GetStatusWrapper;
+import me.xeno.unengtrainer.v2.transport.frame.data.MakeZeroCompletedWrapper;
+import me.xeno.unengtrainer.v2.transport.frame.data.RunAxisWrapper;
+import me.xeno.unengtrainer.v2.transport.frame.data.SetAxisAngleWrapper;
+import me.xeno.unengtrainer.v2.transport.frame.data.SetAxisSpeedWrapper;
+import me.xeno.unengtrainer.v2.transport.frame.data.SetMotorSpeedWrapper;
+import me.xeno.unengtrainer.v2.transport.frame.data.TurnBrakeWrapper;
 import me.xeno.unengtrainer.service.BleService;
-import me.xeno.unengtrainer.transport.instruction.InstWriter;
+import me.xeno.unengtrainer.v2.transport.instruction.InstWriter;
 import me.xeno.unengtrainer.util.DialogUtils;
 import me.xeno.unengtrainer.util.Logger;
 import me.xeno.unengtrainer.util.ToastUtils;
@@ -434,7 +434,7 @@ public class MainPresenter {
         return null;
     }
 
-    private BleDevice mScanResult;
+    private ScanResult mScanResult;
 
     private static int sServiceState;
 
@@ -467,26 +467,22 @@ public class MainPresenter {
         this.mActivity = activity;
     }
 
-    public Observable<BleDevice> scanForDevices() {
-        return Observable.create(new ObservableOnSubscribe<BleDevice>() {
+    public Observable<ScanResult> scanForDevices() {
+        return Observable.create(new ObservableOnSubscribe<ScanResult>() {
 
             @Override
-            public void subscribe(final @NonNull ObservableEmitter<BleDevice> e) throws Exception {
-                BleManager.getInstance().scan(new BleScanCallback() {
-                    @Override
-                    public void onScanFinished(List<BleDevice> list) {
-                        Logger.warning("onScanFinished");
-                        e.onComplete();
-                    }
+            public void subscribe(final @NonNull ObservableEmitter<ScanResult> e) throws Exception {
+                DataManager.getInstance().getBleManager().scanDevice(new ListScanCallback(5000) {
 
                     @Override
-                    public void onScanStarted(boolean b) {
-
-                    }
-
-                    @Override
-                    public void onScanning(BleDevice bleDevice) {
+                    public void onScanning(ScanResult bleDevice) {
                         e.onNext(bleDevice);
+                    }
+
+                    @Override
+                    public void onScanComplete(ScanResult[] results) {
+                        Logger.info("onScanFinished");
+                        e.onComplete();
                     }
                 });
             }
@@ -494,7 +490,7 @@ public class MainPresenter {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public void bindService(BleDevice scanResult) {
+    public void bindService(ScanResult scanResult) {
         mScanResult = scanResult;
         Intent intent = new Intent(mActivity, BleService.class);
         mActivity.bindService(intent, mServiceConnection, BIND_AUTO_CREATE);

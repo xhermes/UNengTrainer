@@ -33,6 +33,7 @@ import me.xeno.unengtrainer.application.Config;
 import me.xeno.unengtrainer.application.DataManager;
 import me.xeno.unengtrainer.model.entity.FavouriteRecord;
 import me.xeno.unengtrainer.presenter.MainPresenter;
+import me.xeno.unengtrainer.service.BleService;
 import me.xeno.unengtrainer.util.DialogUtils;
 import me.xeno.unengtrainer.util.Logger;
 import me.xeno.unengtrainer.util.RxUtils;
@@ -46,6 +47,8 @@ import me.xeno.unengtrainer.widget.SetSpeedDialogWrapper;
  * Main UI for the add task screen. Users can enter a task title and description.
  */
 public class MainControlFragment extends BaseMainFragment implements View.OnTouchListener, MainPresenter.OnGetMotorSpeedListener, View.OnClickListener {
+
+    private static final String TAG = "MainControlFragment";
 
     private View mFullStopBtn;
 
@@ -123,6 +126,12 @@ public class MainControlFragment extends BaseMainFragment implements View.OnTouc
     @Override
     public void onResume() {
         super.onResume();
+
+        if(getMainActivity().getPresenter().getBleService().getConnectionState() != Config.STATE_CONNECTED) {
+            Logger.warning(TAG, "Ble connection is not ready!");
+            return;
+        }
+
         //页面恢复时，重新开始获取电压
         if (mBatteryDisposable != null && !mBatteryDisposable.isDisposed()) {
         } else {

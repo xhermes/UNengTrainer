@@ -14,20 +14,13 @@ import me.xeno.unengtrainer.util.Logger;
 
 /**
  * Created by xeno on 2017/5/15.
+ * @deprecated
  */
 
 public class BluetoothModel {
 
     private static final byte FRAME_HEADER = (byte) 0xFB;
     private static final byte FRAME_END = (byte) 0x0D;
-
-    public void sendInstrustion() {
-
-    }
-
-    public void getBattery() {
-
-    }
 
     public byte[] getMachineStatus() {
       return createFrame(Config.DATA_TYPE_GET_STATUS, new byte[]{});

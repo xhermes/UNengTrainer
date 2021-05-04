@@ -7,12 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-import com.clj.fastble.data.BleDevice;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import me.xeno.unengtrainer.R;
+import com.clj.fastble.data.ScanResult;
+
 import me.xeno.unengtrainer.view.holder.BluetoothHolder;
 
 /**
@@ -26,18 +26,18 @@ public class DeviceRecyclerAdapter extends RecyclerView.Adapter<BluetoothHolder>
     private Context mContext;
     private OnDeviceSelectListener mListener;
 
-    private List<BleDevice> dataList = new ArrayList<>();
+    private List<ScanResult> dataList = new ArrayList<>();
 
     public DeviceRecyclerAdapter(OnDeviceSelectListener listener) {
         mListener = listener;
     }
 
-    public void setDataList(List<BleDevice> dataList) {
+    public void setDataList(List<ScanResult> dataList) {
         this.dataList = dataList;
         notifyDataSetChanged();
     }
 
-    public void addDataToList(BleDevice scanResult) {
+    public void addDataToList(ScanResult scanResult) {
         dataList.add(scanResult);
         notifyDataSetChanged();
     }
@@ -54,7 +54,7 @@ public class DeviceRecyclerAdapter extends RecyclerView.Adapter<BluetoothHolder>
 
     @Override
     public void onBindViewHolder(BluetoothHolder holder, int position) {
-        final BleDevice scanResult = dataList.get(position);
+        final ScanResult scanResult = dataList.get(position);
 
         holder.getNameView().setText(scanResult.getDevice().getName());
         holder.getAddressView().setText(scanResult.getDevice().getAddress());
@@ -74,6 +74,6 @@ public class DeviceRecyclerAdapter extends RecyclerView.Adapter<BluetoothHolder>
     }
 
     public interface OnDeviceSelectListener {
-        void onSelect(BleDevice scanResult);
+        void onSelect(ScanResult scanResult);
     }
 }

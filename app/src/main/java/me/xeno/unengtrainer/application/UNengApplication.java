@@ -18,6 +18,8 @@ import com.elvishew.xlog.printer.file.clean.FileLastModifiedCleanStrategy;
 import com.elvishew.xlog.printer.file.clean.NeverCleanStrategy;
 import com.elvishew.xlog.printer.file.naming.DateFileNameGenerator;
 
+import java.io.File;
+
 import me.xeno.unengtrainer.util.CrashHandler;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
@@ -43,7 +45,8 @@ public class UNengApplication extends Application {
         Printer androidPrinter = new AndroidPrinter();             // 通过 android.util.Log 打印日志的打印器
         Printer consolePrinter = new ConsolePrinter();             // 通过 System.out 打印日志到控制台的打印器
         Printer filePrinter = new FilePrinter                      // 打印日志到文件的打印器
-                .Builder(Environment.getExternalStorageDirectory().getPath())                              // 指定保存日志文件的路径
+                .Builder(new File(Environment.getExternalStorageDirectory(),
+                "Fsense").getPath())                              // 指定保存日志文件的路径
                 .fileNameGenerator(new DateFileNameGenerator())        // 指定日志文件名生成器，默认为 ChangelessFileNameGenerator("log")
                 .backupStrategy(new NeverBackupStrategy())// 指定日志文件备份策略，默认为 FileSizeBackupStrategy(1024 * 1024)
                         .cleanStrategy(new NeverCleanStrategy())     // 指定日志文件清除策略，默认为 NeverCleanStrategy()
